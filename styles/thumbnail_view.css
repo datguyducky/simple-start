@@ -1,7 +1,7 @@
 /* CONTENT STYLES */
 
 #viewContent {
-    padding: 4rem 2rem;
+    padding: 5vh 2vw;
     display: grid;
     grid-template-rows: repeat(2, 1fr);
     grid-template-columns: repeat(3, 1fr);
