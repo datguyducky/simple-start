@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Compact View</title>
+    <link rel="stylesheet" href="../styles/compact_view.css">
+    <link rel="stylesheet" href="../styles/tagsTwo.css">
+    <script src="../script/feather.min.js"></script>
+</head>
+<body>
+    <div id="simpleStartView">
+        <div id="viewHeader">
+            <div id="headerName">simple start</div>
+            <div id="headerTag">
+                <ul>
+                    <li class="tag active">home</li>
+                    <li class="tag" onclick="location.href = 'list_view.html';">work</li>
+                    <li class="tag" onclick="location.href = 'thumbnail_view.html';">fun</li>
+                </ul>
+            </div>
+            <div id="headerUser">
+                <i data-feather="user" onclick="console.log('user')"></i>
+                <i data-feather="menu" onclick="console.log('menu')"></i>
+            </div>
+        </div>
+         <div id="viewContent">
+            <div class="compactCard">
+                <div class="compactFavi" style="background-image: url('https://api.faviconkit.com/reddit.com/32');"></div>
+                <div class="compactName">Reddit</div>    
+            </div>
+            <div class="compactCard">
+                <div class="compactFavi" style="background-image: url('https://api.faviconkit.com/twitter.com/32');"></div>
+                <div class="compactName">Twitter</div>    
+            </div>
+            <div class="compactCard">
+                <div class="compactFavi" style="background-image: url('https://api.faviconkit.com/youtube.com/32');"></div>
+                <div class="compactName">Youtube</div>    
+            </div>
+            <div class="compactCard">
+                <div class="compactFavi" style="background-image: url('https://api.faviconkit.com/soundcloud.com/32');"></div>
+                <div class="compactName">Soundcloud</div>    
+            </div>
+            <div class="compactCard">
+                <div class="compactFavi" style="background-image: url('https://api.faviconkit.com/twitch.com/32');"></div>
+                <div class="compactName">Twitch</div>    
+            </div>
+            <div class="compactCard">
+                <div class="compactFavi" style="background-image: url('https://api.faviconkit.com/github.com/32');"></div>
+                <div class="compactName">Github</div>    
+            </div>
+            <div class="compactCard">
+                <div class="compactFavi" style="background-image: url('https://api.faviconkit.com/stackoverflow.com/32');"></div>
+                <div class="compactName">Stack Overflow</div>    
+            </div>
+            <div class="compactCard">
+                <div class="compactFavi" style="background-image: url('https://api.faviconkit.com/firefox.com/32');"></div>
+                <div class="compactName">Firefox</div>    
+            </div>
+            <div class="compactCard">
+                <div class="compactFavi" style="background-image: url('https://api.faviconkit.com/gmail.com/32');"></div>
+                <div class="compactName">Gmail</div>    
+            </div>
+            <div class="compactCard">
+                <div class="compactFavi" style="background-image: url('https://api.faviconkit.com/protonmail.com/32');"></div>
+                <div class="compactName">Proton Mail</div>    
+            </div>
+            <div class="compactCard">
+                <div class="compactFavi" style="background-image: url('https://api.faviconkit.com/netflix.com/32');"></div>
+                <div class="compactName">Netflix</div>    
+            </div>    
+        </div>
+    </div>
+
+<script>
+    feather.replace()
+</script>
+</body>
+</html>
