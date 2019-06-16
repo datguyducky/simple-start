@@ -28,4 +28,8 @@
      float: left;
      padding: 0 12px;
  }
+
+ .compactCard {
+    min-height: 45px;
+ }
  

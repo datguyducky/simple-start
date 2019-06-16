@@ -3,7 +3,7 @@
 #viewContent {
     padding: 5vh 2vw;
     display: grid;
-    grid-template-rows: repeat(2, 1fr);
+    grid-template-rows: repeat(2, 326px);
     grid-template-columns: repeat(3, 1fr);
     grid-gap: 18px;
 }

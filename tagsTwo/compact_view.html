@@ -11,17 +11,14 @@
 <body>
     <div id="simpleStartView">
         <div id="viewHeader">
-            <div id="headerName">simple start</div>
             <div id="headerTag">
-                <ul>
-                    <li class="tag active">home</li>
-                    <li class="tag" onclick="location.href = 'list_view.html';">work</li>
-                    <li class="tag" onclick="location.href = 'thumbnail_view.html';">fun</li>
-                </ul>
+                <div id="tag1"><i data-feather="home"></i></div>
+                <div id="tag2"><i data-feather="briefcase" onclick="location.href = 'list_view.html';"></i></div>
+                <div id="tag3"><i data-feather="tv" onclick="location.href = 'thumbnail_view.html';"></i></div>
             </div>
             <div id="headerUser">
-                <i data-feather="user" onclick="console.log('user')"></i>
-                <i data-feather="menu" onclick="console.log('menu')"></i>
+                <div id="userMenu"><i data-feather="menu" onclick="console.log('menu')"></i></div>
+                <div id="userUser"><i data-feather="user" onclick="console.log('user')"></i></div>
             </div>
         </div>
          <div id="viewContent">

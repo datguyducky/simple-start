@@ -6,7 +6,8 @@
     <title>Thumbnail View</title>
     <link rel="stylesheet" href="../styles/thumbnail_view.css">
     <link rel="stylesheet" href="../styles/tagsOne.css">
-    <script src="../script/feather.min.js"></script>
+    <script src="/script/feather.min.js"></script>
+    <script src="/script/settings.js" type=""></script>
 </head>
 <body>
     <div id="simpleStartView">
@@ -21,7 +22,14 @@
             </div>
             <div id="headerUser">
                 <i data-feather="user" onclick="console.log('user')"></i>
-                <i data-feather="menu" onclick="console.log('menu')"></i>
+                <i data-feather="menu" onclick="settings()"></i>
+            </div>
+            <div id="headerSettings">
+                <div id="settingsHeader">settings</div>
+                <div id="settingsContent">
+                    <input type="range" min="1" max="52" value="1" id="gridGap">
+                    <input type="range" min="1" max="10" value="1" id="headerSize">
+                </div>
             </div>
         </div>
         <div id="viewContent">
@@ -68,9 +76,23 @@
             </div>
         </div>
     </div>
-
 <script>
     feather.replace()
+
+    // option to change grid gap between thumbnails cards - min. 1 max. 52:
+    var gridGap = document.getElementById('gridGap'); 
+    gridGap.oninput = function() {
+        document.getElementById('viewContent').style.gridGap = this.value +'px';
+    }
+
+    // option to change
+    var headerSize = document.getElementById('headerSize');
+    headerSize.oninput = function() {
+        document.getElementById('simpleStartView').style.gridTemplateRows = this.value +'vh 1fr';
+        console.log(document.getElementById('simpleStartView').style.gridTemplateRows = this.value +'vh 1fr');
+    }
+   
+
 </script>
 </body>
 </html>

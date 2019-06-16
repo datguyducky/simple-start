@@ -38,7 +38,7 @@ h1 {
     text-transform: capitalize;
     font-size: 24px;
     color: #fafafa;
-    background-color: #000000;
+    background-color: #222;
 }
 
 
@@ -89,4 +89,41 @@ h1 {
     margin: 0 2px;
     padding: 4px;
     cursor: pointer;
+}
+
+#headerSettings {
+    background-color: #fafafa;
+    position: absolute;
+    top: 5vh;
+    right: 0;
+    min-width: 368px;
+    z-index: 1000;
+    height: 95vh;
+    box-shadow: 1px 4px 10px 4px #e9e9e9;
+    display: none;
+    align-content: center;
+    flex-direction: column;
+}
+
+#settingsHeader {
+    text-transform: uppercase;
+    height: 3vh;
+    color: #fafafa;
+    background-color: #222;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+}
+
+#settingsContent {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+}
+
+#settingsContent input[type='range'] {
+    width: 50%;
 }
