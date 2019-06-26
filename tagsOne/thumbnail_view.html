@@ -21,14 +21,34 @@
                 </ul>
             </div>
             <div id="headerUser">
-                <i data-feather="user" onclick="console.log('user')"></i>
                 <i data-feather="menu" onclick="settings()"></i>
             </div>
             <div id="headerSettings">
                 <div id="settingsHeader">settings</div>
                 <div id="settingsContent">
-                    <input type="range" min="1" max="52" value="1" id="gridGap">
-                    <input type="range" min="1" max="10" value="1" id="headerSize">
+                    
+                    <div class="settingsSetting">
+                        <span class="settingName">Spacing: </span><input type="range" min="1" max="56" value="1" id="gridGap"><span class="settingResult" id="spacingResult"></span>
+                    </div>
+
+                    <div class="settingsSpacer"></div>
+
+                    <div class="settingsSetting">
+                        <span class="settingName">Header Height: </span><input type="range" min="1" max="3" value="1" id="headerSize"><span class="settingResult" id="headerResult"></span>
+                    </div>
+
+                    <div class="settingsSpacer"></div>
+
+                    <div class="settingsSetting">
+                        <span class="settingName">Columns: </span><input type="range" min="2" max="7" value="3" id="contentColumns"><span class="settingResult" id="columnsResult"></span>
+                    </div>
+
+                    <div class="settingsSpacer"></div>
+                    
+                    <div class="settingsSetting">
+                        <span class="settingName">Card : </span><input type="range" min="2" max="7" value="3" id="contentColumns"><span class="settingResult" id="columnsResult"></span>
+                    </div>
+                    
                 </div>
             </div>
         </div>
@@ -78,21 +98,6 @@
     </div>
 <script>
     feather.replace()
-
-    // option to change grid gap between thumbnails cards - min. 1 max. 52:
-    var gridGap = document.getElementById('gridGap'); 
-    gridGap.oninput = function() {
-        document.getElementById('viewContent').style.gridGap = this.value +'px';
-    }
-
-    // option to change
-    var headerSize = document.getElementById('headerSize');
-    headerSize.oninput = function() {
-        document.getElementById('simpleStartView').style.gridTemplateRows = this.value +'vh 1fr';
-        console.log(document.getElementById('simpleStartView').style.gridTemplateRows = this.value +'vh 1fr');
-    }
-   
-
 </script>
 </body>
 </html>
