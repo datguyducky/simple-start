@@ -1,26 +1,11 @@
-/*function onFulfilled(children) {
-    for (child of children) {
-      console.log(child.title);
-      console.log(child.url);
-    }
-  }
-  
-  function onRejected(error) {
-    console.log(`An error: ${error}`);
-  }
-  
-  var gettingChildren = browser.bookmarks.getChildren("0IPq1lPQNUK7");
-  gettingChildren.then(onFulfilled, onRejected);
+var defaultStorage = " ";
 
-  */
-  var defaultStorage = " ";
-
-  function idSearch(bookmarkItems) {
+function idSearch(bookmarkItems) {
     for (item of bookmarkItems) {
-      console.log(item.id);
-      defaultStorage = item.id;
-      gettingChildren = browser.bookmarks.getChildren(defaultStorage);
-      gettingChildren.then(storageBookmarks, onRejected);
+        console.log(item.id);
+        defaultStorage = item.id;
+        gettingChildren = browser.bookmarks.getChildren(defaultStorage);
+        gettingChildren.then(storageBookmarks, onRejected);
     }
   }
   
@@ -42,6 +27,8 @@ function storageBookmarks(children) {
 }
 
 function cardMaker(url, title) {
+    //var ICON_URL = 'https://besticon-demo.herokuapp.com/icon?url=' + url + '&size=80';
+
     var card_title = document.createElement('div');
     var card_image = document.createElement('div');
     var clickable = document.createElement('a');
@@ -56,37 +43,5 @@ function cardMaker(url, title) {
 
     clickable.href = url;
     card_title.innerHTML = title;
+    //card_image.style.backgroundImage = 'url(' + ICON_URL +')';
 }
- 
-  
-
-
-  
-  /*
-  function logItems(bookmarkItem, indent) {
-    if (bookmarkItem.url) {
-      console.log(bookmarkItem.url);
-    } else {
-      console.log("Folder: " + bookmarkItem.title);
-      indent++;
-    }
-    if (bookmarkItem.children) {
-      for (var child of bookmarkItem.children) {
-        logItems(child, indent);
-      }
-    }
-  }
-  
-  function logSubTree(bookmarkItems) {
-    logItems(bookmarkItems[0], 0);
-  }
-  
-  function onRejected(error) {
-    console.log(`An error: ${error}`);
-  }
-   
-  var subTreeID = "0IPq1lPQNUK7";
-  
-  var gettingSubTree = browser.bookmarks.getSubTree(subTreeID);
-  gettingSubTree.then(logSubTree, onRejected);
-  */
