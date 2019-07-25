@@ -1,13 +1,15 @@
 {
-
     "manifest_version": 2,
     "name": "Simple Start",
-    "version": "0.1",
-  
+    "version": "0.2",
     "description": "...",
-  
-    "background": {
-        "scripts": ["page.js"] 
+
+    "permissions": ["bookmarks"],
+
+    "chrome_url_overrides": {
+        "newtab": "simplestart.html"
+    },
+    "chrome_settings_overrides": {
+        "homepage": "simplestart.html"
     }
-  
   }
