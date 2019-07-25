@@ -114,6 +114,9 @@ html, body {
 .card-image {
     width: 100%;
     height: 80%;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 64px;
 }
 
 .card-title {
