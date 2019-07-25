@@ -1,0 +1,125 @@
+html, body {
+    padding: 0;
+    margin: 0;
+    background-color: #fcfcfc;
+    font-family: 'Arial';
+}
+
+
+#main {
+    height: 100vh;
+    width: 100vw;
+    display: grid;
+    grid-template-rows: 52px 1fr;
+    grid-gap: 23px;
+}
+
+
+#nav {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100vw;
+    background-color: #fafafa;
+    border-bottom: 2px solid #e7e7e7;
+    color: #8a8a8a;
+    box-shadow: 1px 1px 8px 2px #e9e9e9;
+}
+
+#nav-header {
+    margin: 0 16px;
+    color: #222;
+    cursor: pointer;
+}
+
+#nav-header h1 {
+    padding: 0;
+    margin: 0;
+    font-size: 38px;
+}
+
+
+.nav-tags {
+    font-size: 18px;
+}
+
+.nav-tags ul{
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+.nav-tags li {
+    padding: 4px 7px;
+    margin: 0 6px;
+    float: left;
+    cursor: pointer;
+}
+
+
+.active {
+    color: #222;
+    border-bottom: 2px solid #222;
+}
+
+.nav-tags li:hover {
+    color: #222;
+}
+
+
+#nav-user {
+    position: absolute;
+    right: 0;
+    width: 104px;
+    height: 52px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 32px;
+    color: #222;
+    cursor: pointer;
+}
+
+#nav-user ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+#nav-user li {
+    float: left;
+    padding: 6px 7px;
+}
+
+#nav-user li:hover {
+    background-color: #222;
+    color: #fafafa;
+}
+
+#bookmarks {
+   padding: 0 18px;
+}
+
+.card-container {  
+    color: #222;
+    border: 2px solid #e7e7e7;
+    text-decoration: none;
+    /* only for now */
+    height: 200px;
+    width: 200px;
+    float: left;
+    margin: 8px;
+}
+
+.card-image {
+    width: 100%;
+    height: 80%;
+}
+
+.card-title {
+    width: 100%;
+    height: 20%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
