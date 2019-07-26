@@ -19,16 +19,14 @@ function idSearch(bookmarkItems) {
   
 function storageBookmarks(children) {
     for (child of children) {
-        console.log(child.title);
-        console.log(child.url);
+        //console.log(child.title);
+        //console.log(child.url);
 
         cardMaker(child.url, child.title);
     }
 }
 
 function cardMaker(url, title) {
-    //var ICON_URL = 'https://besticon-demo.herokuapp.com/icon?url=' + url + '&size=80';
-
     var card_title = document.createElement('div');
     var card_image = document.createElement('div');
     var clickable = document.createElement('a');
@@ -41,7 +39,12 @@ function cardMaker(url, title) {
     clickable.appendChild(card_title);
     document.getElementById("bookmarks").appendChild(clickable);
 
+    //getting favicons
+    //var new_url = url.split('/');
+    //var CLEAN_ICON_URL = new_url[0] + '//' + new_url[1] + new_url[2] + '/';
+    //var ICON_URL = 'https://besticon-demo.herokuapp.com/icon?url=' + CLEAN_ICON_URL + '&size=80';
+
     clickable.href = url;
     card_title.innerHTML = title;
-    //card_image.style.backgroundImage = 'url(' + ICON_URL +')';
+    card_image.style.backgroundImage = 'url(' + ICON_URL +')';
 }
