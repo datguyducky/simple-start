@@ -1,13 +1,11 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Simple Start</title>
 
     <link rel="stylesheet" href="style.css">
-    <script src="js/main.js"></script>
 </head>
 <body>
     <div id="main">
@@ -28,13 +26,39 @@
             <div id="nav-user">
                 <ul id="user-list">
                     <li>+</li>
-                    <li>=</li>
+                    <li id="user-button-settings">=</li>
                 </ul>
+            </div>
+            <div id="user-settings">
+                <div id="settings-header">
+                    <h2>SETTINGS</h2>
+                </div>
+                <div id="settings">
+                    <p>Bookmarks Style: </p>
+                    <p>Dark Mode: <input type="checkbox" id="dark-chk"></p>
+                    <p>Background:</p>
+                    <ul>
+                        <li>Image:
+                            <ul>
+                                <li>Browse</li>
+                                <li>Unsplash</li>
+                            </ul>
+                        </li>
+                        <li>Solid Color: </li>
+                    </ul>
+                </div>
+                <div id="settings-buttons">
+                    <ul>
+                        <li><div class="settings-btn" id="btn-save">SAVE</div></li>
+                        <li><div class="settings-btn" id="btn-cancel">CANCEL</div></li>
+                    </ul>
+                </div>
             </div>
         </div>
 
         <div id="bookmarks"></div> <!-- generating content for this div via main.js -->
     </div>
 
+    <script src="js/main.js"></script>
 </body>
 </html>
