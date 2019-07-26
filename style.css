@@ -96,6 +96,79 @@ html, body {
     color: #fafafa;
 }
 
+#user-settings {
+    height: calc(100vh - 56px);
+    width: 22em;
+    position: absolute;
+    right: 0;
+    top: 50px;
+    background-color: #fafafa;
+    border: 2px solid #e7e7e7;
+    border-radius: 6px;
+    box-shadow: -4px 10px 8px 2px #e9e9e9;
+    display: flex;
+    align-items: center;
+    color: #222;
+    flex-direction: column;
+    font-size: 1.1rem;
+}
+
+#settings-header {
+    width: 50%;
+    text-align: center;
+}
+
+#settings-header h2 {
+    margin: 8px 0;
+    padding: 0;
+    padding-bottom: 4px;
+    border-bottom: 2px solid #222;
+}
+
+#settings {
+    flex-grow: 1;
+}
+
+#settings-buttons ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+#settings-buttons li {
+    float: left;
+}
+
+.settings-btn {
+    padding: 8px;
+    width: 100px;
+    height: 20px;
+    background-color: black;
+    text-align: center;
+    margin: 12px 8px;
+    border-radius: 8px;
+    font-weight: bold;
+    color: #fafafa;
+    cursor: pointer;
+    background-color: #222;
+    border: 2px solid #222;
+}
+
+
+
+#btn-cancel:hover {
+    background-color: #fafafa;
+    color: #1976D2;
+    border: 2px solid #222;
+    
+}
+
+#btn-save:hover {
+    background-color: #fafafa;
+    color: #388E3C;
+    border: 2px solid #222;
+}
+
 #bookmarks {
    padding: 0 18px;
 }

@@ -4,12 +4,19 @@
     "version": "0.2",
     "description": "...",
 
-    "permissions": ["bookmarks"],
+    "permissions": ["bookmarks", "storage"],
 
     "chrome_url_overrides": {
         "newtab": "simplestart.html"
     },
     "chrome_settings_overrides": {
         "homepage": "simplestart.html"
+    },
+
+
+  "applications": {
+    "gecko": {
+      "id": "addon@example.com"
     }
+  }
   }

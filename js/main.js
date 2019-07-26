@@ -46,5 +46,55 @@ function cardMaker(url, title) {
 
     clickable.href = url;
     card_title.innerHTML = title;
-    card_image.style.backgroundImage = 'url(' + ICON_URL +')';
+    //card_image.style.backgroundImage = 'url(' + ICON_URL +')';
+}
+
+//displaying basic settings menu
+document.getElementById('user-button-settings').onclick = function changeContent() {
+
+    var box = document.getElementById("user-settings");
+
+    if(box.style.display == "flex") {
+        box.style.display = "none";
+    }
+    else{box.style.display = "flex";}
+}
+  
+function restoreOptions() { 
+    function setCurrentChoice(result) {
+        document.getElementsByTagName("body")[0].style.backgroundColor = result.bgColor;
+        document.getElementById("nav").style.backgroundColor = result.navColor;
+        document.getElementById("nav").style.color = result.textColor;
+    }
+
+    function onError(error) {
+        console.log(`Error: ${error}`);
+    }
+
+    var getting = browser.storage.sync.get(["bgColor", "navColor", "textColor"]);
+    getting.then(setCurrentChoice, onError);
+  }
+
+//changing and saving settings:
+document.addEventListener("DOMContentLoaded", restoreOptions);
+document.getElementById('btn-save').onclick = function savingSettings() {
+    var dark = document.getElementById("dark-chk");
+
+    window.location.reload(false); //reloading page when settings are saved
+    
+    if(dark.checked == true) {
+        console.log("weszlo?");
+        browser.storage.sync.set({
+            bgColor: "#363333",
+            navColor: "#272121",
+            textColor: "#fafafa"
+          });
+    }
+    else{
+        browser.storage.sync.set({
+            bgColor: "#fcfcfc",
+            navColor: "#fafafa",
+            textColor: "#333333"
+          });
+    }
 }
