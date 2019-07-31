@@ -1,27 +1,68 @@
-var defaultStorage = " ";
+function idNewTagSearch(bookmarkItems) {
+    for (item of bookmarkItems) {
+        var rootID = item.id;
+
+        var gettingTagsName = browser.bookmarks.getChildren(rootID);
+        gettingTagsName.then(tagMaker);
+    }
+}
+
+var gettingID = browser.bookmarks.search({title : "speeddial"}); //searching for default speeddial bookmarks folder
+gettingID.then(idNewTagSearch);
+
+function tagMaker(children) {
+    for (child of children) {
+      if(child.type == "folder"){
+        console.log(child.title);
+
+        var tagsLeft = document.getElementById("nav-tags-list-left");
+        var tagsRight = document.getElementById("nav-tags-list-right");
+        
+        leftCount = tagsLeft.childElementCount; //getting number of elements for left tag list
+        rightCount = tagsRight.childElementCount; //getting number of elements for right tag list
+
+        if(leftCount == 0){
+            new_tag = document.createElement('li');
+            tagsLeft.appendChild(new_tag);
+
+            new_tag.innerHTML = child.title;
+        }
+        else if(leftCount>rightCount){
+            new_tag = document.createElement('li');
+            tagsRight.appendChild(new_tag);
+
+            new_tag.innerHTML = child.title;
+        }
+        else{
+            new_tag = document.createElement('li');
+            tagsLeft.appendChild(new_tag);
+
+            new_tag.innerHTML = child.title;
+        }
+      }
+    }
+}
 
 function idSearch(bookmarkItems) {
     for (item of bookmarkItems) {
         console.log(item.id);
         defaultStorage = item.id;
         gettingChildren = browser.bookmarks.getChildren(defaultStorage);
-        gettingChildren.then(storageBookmarks, onRejected);
+        gettingChildren.then(storageBookmarks);
     }
   }
   
-  function onRejected(error) {
-    console.log(`An error: ${error}`);
-  }
-  
   var gettingID = browser.bookmarks.search({title : "speeddial"}); //searching for default speeddial bookmarks folder
-  gettingID.then(idSearch, onRejected);
+  gettingID.then(idSearch);
 
   
 function storageBookmarks(children) {
     for (child of children) {
         //console.log(child.title);
         //console.log(child.url);
+        if(child.url){
         cardMaker(child.url, child.title);
+        }
     }
 }
 
@@ -164,8 +205,9 @@ document.getElementById('select-tag').onclick = function newTag() {
                 //console.log(item.id);
 
                 function onCreated(node) {
-                    console.log(node);
                     box.style.display = "none";
+                    window.location.reload(false);
+                    //browser.storage.sync.set({ })
                 }
 
                 var createBookmark = browser.bookmarks.create({
@@ -174,6 +216,7 @@ document.getElementById('select-tag').onclick = function newTag() {
                 });
 
                 createBookmark.then(onCreated);
+                document.getElementById("new-tag-input").value = "";
             }
         }
         
@@ -194,4 +237,29 @@ document.getElementById('select-tag').onclick = function newTag() {
         */
     }
 }
+  
+/*
+  
+  var gettingChildren = browser.bookmarks.getChildren("0IPq1lPQNUK7");
+  gettingChildren.then(onFulfilled, onRejected);*/
 
+
+
+//testing area
+//I. make this shit fully working - so i can get folder id by calling this function from anywhere in code;
+//var x = searchBox("speeddial");
+//console.log(x);
+//searchBox("Home") //02O1xwmFROj9;
+
+/*function searchBox(name) {
+    var thisID = "ala";
+    function newID(bookmarkItems) {
+        for (item of bookmarkItems) {
+            thisID = item.id;
+            console.log(item.title);
+            //return thisID;
+        }
+    }
+    var searching = browser.bookmarks.search({title : name});
+    searching.then(newID);
+}*/
