@@ -53,8 +53,8 @@ function cardMaker(url, title) {
     document.getElementById("bookmarks").appendChild(clickable);
 
     //getting favicons
-    var new_url = url.split('/');
-    var CLEAN_ICON_URL = new_url[1] + new_url[2] + '/';
+    //var new_url = url.split('/');
+    //var CLEAN_ICON_URL = new_url[1] + new_url[2] + '/';
     //faviconkit api + page url + size
     //var ICON_URL = 'https://api.faviconkit.com/' + CLEAN_ICON_URL + '64';
 
@@ -99,7 +99,7 @@ document.getElementById('btn-save').onclick = function savingSettings() {
     var dark = document.getElementById("dark-chk");
 
     browser.storage.sync.set({
-        viewStyle: "chuj"
+        //viewStyle: "chuj"
     })
 
     window.location.reload(false); //reloading page when settings are saved
@@ -165,6 +165,7 @@ document.getElementById('select-tag').onclick = function newTag() {
 
                 function onCreated(node) {
                     console.log(node);
+                    box.style.display = "none";
                 }
 
                 var createBookmark = browser.bookmarks.create({
