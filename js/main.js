@@ -25,9 +25,9 @@ function storageBookmarks(children) {
     }
 }
 
-var i = 0;
+//var i = 0;
 function cardMaker(url, title) {
-    i++;
+    /*i++;
     if(i==1){
         var clickable = document.createElement('a');
         var headerAdd = document.createElement('h1');
@@ -38,7 +38,7 @@ function cardMaker(url, title) {
         
         clickable.appendChild(headerAdd);
         document.getElementById("bookmarks").appendChild(clickable);
-    }
+    }*/
 
     var card_title = document.createElement('div');
     var card_image = document.createElement('div');
@@ -73,6 +73,7 @@ document.getElementById('user-button-settings').onclick = function changeContent
     }
     else{box.style.display = "flex";}
 }
+
   
 function restoreOptions() { 
     function setCurrentChoice(result) {
@@ -136,7 +137,7 @@ document.getElementById('btn-save').onclick = function savingSettings() {
 }
 
 //displaying menu for adding new bookmark or tag.
-document.getElementById('user-button-add').onclick = function newBookmarknTag() {
+document.getElementById('user-button-add').onclick = function selectBookmarknTag() {
     var box = document.getElementById("user-add-select");
 
     if(box.style.display == "flex") {
@@ -146,8 +147,50 @@ document.getElementById('user-button-add').onclick = function newBookmarknTag() 
 
 }
 
-//creating new bookmark with menu or plus card
-function bookmarkMaker() {
+//creating new tag
+document.getElementById('select-tag').onclick = function newTag() {
+    /* displaying menu to create new tag */
+    var box = document.getElementById("new-tag-content");
+    if(box.style.display == "flex") {box.style.display = "none";}
+    else{box.style.display = "flex";}
 
+    /* creating and saving new tag */
+    document.getElementById('new-tag-create').onclick = function tagMaker() {
+
+        var userInput = document.getElementById("new-tag-input").value;
+
+        function idNewSearch(bookmarkItems) {
+            for (item of bookmarkItems) {
+                //console.log(item.id);
+
+                function onCreated(node) {
+                    console.log(node);
+                }
+
+                var createBookmark = browser.bookmarks.create({
+                    title: userInput,
+                    parentId: item.id
+                });
+
+                createBookmark.then(onCreated);
+            }
+        }
+        
+        var gettingID = browser.bookmarks.search({title : "speeddial"});
+        gettingID.then(idNewSearch);
+
+
+        /*function onCreated(node) {
+            console.log(node);
+        }
+        
+        var createBookmark = browser.bookmarks.create({
+            title: userInput,
+            parentId: ""
+        });
+        
+        createBookmark.then(onCreated);
+        */
+    }
 }
 
