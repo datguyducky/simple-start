@@ -1,13 +1,11 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Simple Start</title>
 
     <link rel="stylesheet" href="style.css">
-    <script src="js/main.js"></script>
 </head>
 <body>
     <div id="main">
@@ -27,14 +25,55 @@
             </div>
             <div id="nav-user">
                 <ul id="user-list">
-                    <li>+</li>
-                    <li>=</li>
+                    <li id="user-button-add">+</li>
+                        <div id="user-add-select">
+                            <div id="select-tag" class="select-btn">New Tag</div>
+                            <div id="select-bookmark" class="select-btn">New Bookmark</div>
+                        </div>
+                    <li id="user-button-settings">=</li>
                 </ul>
+                
+            </div>
+            <div id="user-settings">
+                <div id="settings-header">
+                    <h2>SETTINGS</h2>
+                </div>
+                <div id="settings">
+                    <p>Bookmarks Style: </p>
+                    <p>Thumbnail View: <input type="checkbox" id="thumb-chk"></p>
+                    <p>Compact View: <input type="checkbox" id="compact-chk"></p>
+                    <p>List View: <input type="checkbox" id="list-chk"></p>
+                    <p>Dark Mode: <input type="checkbox" id="dark-chk"></p>
+                    <p>Background:</p>
+                    <ul>
+                        <li>Image:
+                            <ul>
+                                <li>Browse</li>
+                                <li>Unsplash</li>
+                            </ul>
+                        </li>
+                        <li>Solid Color: </li>
+                    </ul>
+                </div>
+                <div id="settings-buttons">
+                    <ul>
+                        <li><div class="settings-btn" id="btn-save">SAVE</div></li>
+                        <li><div class="settings-btn" id="btn-cancel">CANCEL</div></li>
+                    </ul>
+                </div>
             </div>
         </div>
-
-        <div id="bookmarks"></div> <!-- generating content for this div via main.js -->
+        <div id="new-tag-content">
+            <h2>CREATE NEW TAG</h2>
+            <input type="text" name="newtag" id="new-tag-input" placeholder="TAG NAME (e.g Work)">
+            <ul>
+                <li class="new-tag-btn" id="new-tag-create">CREATE</li>
+                <li class="new-tag-btn">CANCEL</li>
+            </ul>
+        </div>
+        <div id="bookmarks"><!-- generating content for this div via main.js --></div> 
     </div>
 
+    <script src="js/main.js"></script>
 </body>
 </html>
