@@ -17,7 +17,9 @@ function storageBookmarks(children) {
     for (child of children) {
         //console.log(child.title);
         //console.log(child.url);
+        if(child.url){
         cardMaker(child.url, child.title);
+        }
     }
 }
 
