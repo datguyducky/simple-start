@@ -32,6 +32,7 @@ html, body {
     border-bottom: 2px solid var(--shadowColor);
     color: var(--secondaryTextColor);
     box-shadow: 1px 1px 8px 2px var(--shadowColor);
+    z-index: 2;
 }
 
 #nav-header {
@@ -104,12 +105,37 @@ html, body {
     color: var(--darkColor);
 }
 
+#user-add-select {
+    position: absolute;
+    background-color: var(--darkColor);
+    height: auto;
+    width: 8vw;
+    display: none;
+    right: 0;
+    top: 51px;
+    color: var(--headerColor);
+    font-size: 1.1rem;
+    flex-direction: column;
+    text-align: center;
+    border: 2px solid var(--shadowColor);
+    box-shadow: -4px 4px 8px 0px var(--shadowColor);
+    z-index: 1;
+}
+
+#user-add-select div:first-of-type {
+    border-bottom: 2px solid var(--shadowColor);
+}
+
+.select-btn {
+    padding: 8px 16px;
+}
+
 #user-settings {
     height: calc(100vh - 56px);
     width: 22em;
     position: absolute;
     right: 0;
-    top: 50px;
+    top: 51px;
     background-color: var(--darkColor);
     border: 2px solid var(--shadowColor);
     border-radius: 6px;
