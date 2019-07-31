@@ -26,7 +26,7 @@ function storageBookmarks(children) {
 }
 
 var i = 0;
-function cardMaker(url, title, iMax) {
+function cardMaker(url, title) {
     i++;
     if(i==1){
         var clickable = document.createElement('a');
@@ -56,11 +56,11 @@ function cardMaker(url, title, iMax) {
     var new_url = url.split('/');
     var CLEAN_ICON_URL = new_url[1] + new_url[2] + '/';
     //faviconkit api + page url + size
-    var ICON_URL = 'https://api.faviconkit.com/' + CLEAN_ICON_URL + '64';
+    //var ICON_URL = 'https://api.faviconkit.com/' + CLEAN_ICON_URL + '64';
 
     clickable.href = url;
     card_title.innerHTML = title;
-    card_image.style.backgroundImage = 'url(' + ICON_URL +')';
+    //card_image.style.backgroundImage = 'url(' + ICON_URL +')';
 }
 
 //displaying basic settings menu
@@ -134,3 +134,20 @@ document.getElementById('btn-save').onclick = function savingSettings() {
         console.log("list");
     }
 }
+
+//displaying menu for adding new bookmark or tag.
+document.getElementById('user-button-add').onclick = function newBookmarknTag() {
+    var box = document.getElementById("user-add-select");
+
+    if(box.style.display == "flex") {
+        box.style.display = "none";
+    }
+    else{box.style.display = "flex";}
+
+}
+
+//creating new bookmark with menu or plus card
+function bookmarkMaker() {
+
+}
+
