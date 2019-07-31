@@ -223,6 +223,7 @@ html, body {
 
 #new-tag-content input {
     margin: 12px 0;
+    content: "";
 }
 
 #new-tag-content ul {

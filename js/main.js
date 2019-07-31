@@ -1,4 +1,47 @@
-//var defaultStorage = " ";
+function idNewTagSearch(bookmarkItems) {
+    for (item of bookmarkItems) {
+        var rootID = item.id;
+
+        var gettingTagsName = browser.bookmarks.getChildren(rootID);
+        gettingTagsName.then(tagMaker);
+    }
+}
+
+var gettingID = browser.bookmarks.search({title : "speeddial"}); //searching for default speeddial bookmarks folder
+gettingID.then(idNewTagSearch);
+
+function tagMaker(children) {
+    for (child of children) {
+      if(child.type == "folder"){
+        console.log(child.title);
+
+        var tagsLeft = document.getElementById("nav-tags-list-left");
+        var tagsRight = document.getElementById("nav-tags-list-right");
+        
+        leftCount = tagsLeft.childElementCount; //getting number of elements for left tag list
+        rightCount = tagsRight.childElementCount; //getting number of elements for right tag list
+
+        if(leftCount == 0){
+            new_tag = document.createElement('li');
+            tagsLeft.appendChild(new_tag);
+
+            new_tag.innerHTML = child.title;
+        }
+        else if(leftCount>rightCount){
+            new_tag = document.createElement('li');
+            tagsRight.appendChild(new_tag);
+
+            new_tag.innerHTML = child.title;
+        }
+        else{
+            new_tag = document.createElement('li');
+            tagsLeft.appendChild(new_tag);
+
+            new_tag.innerHTML = child.title;
+        }
+      }
+    }
+}
 
 function idSearch(bookmarkItems) {
     for (item of bookmarkItems) {
@@ -162,8 +205,8 @@ document.getElementById('select-tag').onclick = function newTag() {
                 //console.log(item.id);
 
                 function onCreated(node) {
-                    console.log(node);
                     box.style.display = "none";
+                    window.location.reload(false);
                     //browser.storage.sync.set({ })
                 }
 
@@ -173,6 +216,7 @@ document.getElementById('select-tag').onclick = function newTag() {
                 });
 
                 createBookmark.then(onCreated);
+                document.getElementById("new-tag-input").value = "";
             }
         }
         
@@ -198,64 +242,6 @@ document.getElementById('select-tag').onclick = function newTag() {
   
   var gettingChildren = browser.bookmarks.getChildren("0IPq1lPQNUK7");
   gettingChildren.then(onFulfilled, onRejected);*/
-
-function idNewTagSearch(bookmarkItems) {
-    for (item of bookmarkItems) {
-        var rootID = item.id;
-
-        var gettingTagsName = browser.bookmarks.getChildren(rootID);
-        gettingTagsName.then(tagMaker);
-    }
-}
-
-var gettingID = browser.bookmarks.search({title : "speeddial"}); //searching for default speeddial bookmarks folder
-gettingID.then(idNewTagSearch);
-
-function tagMaker(children) {
-    for (child of children) {
-      if(child.type == "folder"){
-        console.log(child.title);
-
-        var tagsLeft = document.getElementById("nav-tags-list-left");
-        var tagsRight = document.getElementById("nav-tags-list-right");
-        
-        leftCount = tagsLeft.childElementCount; //getting number of elements for left tag list
-        rightCount = tagsRight.childElementCount; //getting number of elements for right tag list
-
-        if(leftCount == 0){
-            new_tag = document.createElement('li');
-            tagsLeft.appendChild(new_tag);
-
-            new_tag.innerHTML = child.title;
-        }
-        else if(leftCount>rightCount){
-            new_tag = document.createElement('li');
-            tagsRight.appendChild(new_tag);
-
-            new_tag.innerHTML = child.title;
-        }
-        else{
-            new_tag = document.createElement('li');
-            tagsLeft.appendChild(new_tag);
-
-            new_tag.innerHTML = child.title;
-        }
-
-        /*var card_title = document.createElement('div');
-        var card_image = document.createElement('div');
-        var clickable = document.createElement('a');
-    
-        clickable.setAttribute("class", "card-container");
-        card_image.setAttribute("class", "card-image");
-        card_title.setAttribute("class", "card-title")
-        
-        clickable.appendChild(card_image);
-        clickable.appendChild(card_title);
-        document.getElementById("bookmarks").appendChild(clickable);*/
-
-      }
-    }
-}
 
 
 
