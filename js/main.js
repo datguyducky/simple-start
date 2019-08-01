@@ -45,11 +45,26 @@ function tagMaker(children) {
     }
 
     function tagSwitch(e) {
-        console.log(this.id);
+        //console.log(this.id);
         for (var i = 0; i < navList.length; i++) {
             navList[i].classList.remove('active');
         }
         document.getElementById(this.id).classList.add('active');
+
+        //var tagIDSearch = browser.bookmarks.search({title : this.id});
+        //tagIDSearch.then(tagFolderID);
+        //checkout(this.id);
+       //console.log(checkout(this.id));
+        
+        var tagIDSearch = browser.bookmarks.search({title : this.id});
+        tagIDSearch.then(tagFolderID);
+    }
+}
+
+function tagFolderID(bookmarkItems) {
+    for (item of bookmarkItems) {
+        tagID = item.title;
+        console.log(tagID);
     }
 }
 
@@ -261,7 +276,8 @@ document.getElementById('select-tag').onclick = function newTag() {
 //console.log(x);
 //searchBox("Home") //02O1xwmFROj9;
 
-/*function searchBox(name) {
+/*
+function searchBox(name) {
     var thisID = "ala";
     function newID(bookmarkItems) {
         for (item of bookmarkItems) {
@@ -272,4 +288,5 @@ document.getElementById('select-tag').onclick = function newTag() {
     }
     var searching = browser.bookmarks.search({title : name});
     searching.then(newID);
-}*/
+}
+*/
