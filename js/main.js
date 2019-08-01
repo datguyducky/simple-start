@@ -13,7 +13,7 @@ gettingID.then(idNewTagSearch);
 function tagMaker(children) {
     for (child of children) {
       if(child.type == "folder"){
-        console.log(child.title);
+        //console.log(child.title);
 
         var tagsLeft = document.getElementById("nav-tags-list-left");
         var tagsRight = document.getElementById("nav-tags-list-right");
@@ -24,26 +24,36 @@ function tagMaker(children) {
         if(leftCount == 0){
             new_tag = document.createElement('li');
             tagsLeft.appendChild(new_tag);
-
-            new_tag.innerHTML = child.title;
         }
         else if(leftCount>rightCount){
             new_tag = document.createElement('li');
             tagsRight.appendChild(new_tag);
-
-            new_tag.innerHTML = child.title;
         }
         else{
             new_tag = document.createElement('li');
             tagsLeft.appendChild(new_tag);
-
-            new_tag.innerHTML = child.title;
         }
+        new_tag.setAttribute("class", "nav-tag-li");
+        new_tag.setAttribute("id", child.title);
+        new_tag.innerHTML = child.title;
       }
+    }
+    //listener for 'click' on nav element
+    var navList = document.getElementsByClassName("nav-tag-li");
+    for (var i = 0; i < navList.length; i++) {
+        navList[i].addEventListener('click', tagSwitch, false);
+    }
+
+    function tagSwitch(e) {
+        console.log(this.id);
+        for (var i = 0; i < navList.length; i++) {
+            navList[i].classList.remove('active');
+        }
+        document.getElementById(this.id).classList.add('active');
     }
 }
 
-function idSearch(bookmarkItems) {
+/*function idSearch(bookmarkItems) {
     for (item of bookmarkItems) {
         console.log(item.id);
         defaultStorage = item.id;
@@ -81,7 +91,7 @@ function cardMaker(url, title) {
         document.getElementById("bookmarks").appendChild(clickable);
     }*/
 
-    var card_title = document.createElement('div');
+    /*var card_title = document.createElement('div');
     var card_image = document.createElement('div');
     var clickable = document.createElement('a');
 
@@ -102,7 +112,7 @@ function cardMaker(url, title) {
     clickable.href = url;
     card_title.innerHTML = title;
     //card_image.style.backgroundImage = 'url(' + ICON_URL +')';
-}
+}*/
 
 //displaying basic settings menu
 document.getElementById('user-button-settings').onclick = function changeContent() {
