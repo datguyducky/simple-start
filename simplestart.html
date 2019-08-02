@@ -29,31 +29,68 @@
                 
             </div>
             <div id="user-settings">
-                <div id="settings-header">
+                <div id="user-settings-header">
                     <h2>SETTINGS</h2>
                 </div>
-                <div id="settings">
-                    <p>Bookmarks Style: </p>
-                    <p>Thumbnail View: <input type="checkbox" id="thumb-chk"></p>
-                    <p>Compact View: <input type="checkbox" id="compact-chk"></p>
-                    <p>List View: <input type="checkbox" id="list-chk"></p>
-                    <p>Dark Mode: <input type="checkbox" id="dark-chk"></p>
-                    <p>Background:</p>
-                    <ul>
-                        <li>Image:
-                            <ul>
-                                <li>Browse</li>
-                                <li>Unsplash</li>
-                            </ul>
-                        </li>
-                        <li>Solid Color: </li>
-                    </ul>
+                <div id="user-settings-content">
+                    <h3 class="settings-area-header">bookmarks style:</h3>
+                    <div class="settings-area" id="bookmarks-style">
+                        <div class="inwork">
+                            <div class="check"></div>
+                            <label for="style-compact">COMPACT<br>VIEW</label>
+                            <input type="radio" name="group-bookmarks-style" id="style-compact" value="style-compact" disabled>                            
+                        </div>
+                        <div>
+                            <div class="check"></div>
+                            <label for="style-compact">THUMBNAIL<br>VIEW</label>
+                            <input type="radio" name="group-bookmarks-style" id="style-thumbnails" value="style-thumbnails" checked>
+                        </div>
+                        <div class="inwork">
+                            <div class="check"></div>
+                            <label for="style-compact">LIST<br>VIEW</label>
+                            <input type="radio" name="group-bookmarks-style" id="style-list" value="style-list" disabled>
+                        </div>
+                    </div>
+                    <h3 class="settings-area-header">background:</h3>
+                    <div class="settings-area" id="bookmarks-background">
+                        <h4>solid color</h4>
+                        <div id="background-solid">
+                            <div id="background-white"></div>
+                            <div id="background-black"></div>
+                            <div id="background-red"></div>
+                            <div id="background-green"></div>
+                            <div id="background-blue"></div>
+                        </div>
+                        <h4>unsplash color</h4>
+                    </div>
+                    <div class="settings-area" id="bookmarks-darkmode">
+                        <h4>dark mode: </h4>
+                        <input type="checkbox" name="darkmode" id="darkmode">
+                    </div>
+                    <div class="settings-area" id="bookmarks-gridgap">
+                        <label for="gridgap">Gap between cards: </label>
+                        <input type="range" name="gridgap" id="gridgap" min="0" max="18" value="14">
+                        <span id="gridgap-curret">16</span>
+                    </div>
+                    <div class="settings-area" id="bookmarks-iconsize">
+                        <label for="iconsize">Icons size: </label>
+                        <input type="range" name="iconsize" id="iconsize" min="16" max="64" value="64" step="16">
+                        <span id="iconsize-curret"></span>
+                    </div>
                 </div>
-                <div id="settings-buttons">
+                <div id="user-settings-buttons">
                     <ul>
-                        <li><div class="settings-btn" id="btn-save">SAVE</div></li>
-                        <li><div class="settings-btn" id="btn-cancel">CANCEL</div></li>
+                        <li><div class="user-settings-btn" id="btn-save">SAVE</div></li>
+                        <li><div class="user-settings-btn" id="btn-cancel">CANCEL</div></li>
                     </ul>
+                    <div id="full-settings">CLICK FOR MORE SETTINGS</div>
+                </div>
+                <div id="user-settings-footer">
+                    <p id="footer-info">
+                        <a href="https://github.com/datguysheepy/"><span>Simple Start</span></a>
+                        <span> || </span>
+                        <a href="https://github.com/datguysheepy/"><span>© 2019, @datguysheepy</span></a>
+                    </p>
                 </div>
             </div>
         </div>
