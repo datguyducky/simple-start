@@ -133,7 +133,6 @@ html, body {
 }
 
 #user-settings {
-    height: calc(100vh - 56px);
     width: 20em;
     position: absolute;
     right: 0;
