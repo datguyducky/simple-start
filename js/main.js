@@ -51,13 +51,12 @@ function tagMaker(children) {
             navList[i].classList.remove('active');
         }
         document.getElementById(this.id).classList.add('active');
-        var tagIDSearch = browser.bookmarks.search({
-            title: this.id
-        });
-
+        
         browser.storage.sync.set({
             defaultStorage: this.id
         })
+
+        window.location.reload(false);
     }
 }
 
@@ -68,14 +67,11 @@ function tagMaker(children) {
     }
 }*/
 
-browser.storage.sync.set({
-    defaultStorage: "speeddial"
-})
-
 var defaultStorage = browser.storage.sync.get("defaultStorage");
 
 function idSet(result) {
     var forSearch = result.defaultStorage;
+    console.log(forSearch);
     var gettingID = browser.bookmarks.search(forSearch);
     gettingID.then(idSearch);
 }
@@ -117,8 +113,16 @@ function cardMaker(url, title) {
         clickable.appendChild(headerAdd);
         document.getElementById("bookmarks").appendChild(clickable);
     }*/
+    var activeTag = browser.storage.sync.get("defaultStorage");
 
-var card_title = document.createElement('div');
+    function activeTagSet(name){
+        console.log(name.defaultStorage);
+        document.getElementById(name.defaultStorage).classList.add('active');
+    }
+
+    activeTag.then(activeTagSet);
+
+    var card_title = document.createElement('div');
     var card_image = document.createElement('div');
     var clickable = document.createElement('a');
 
