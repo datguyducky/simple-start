@@ -54,29 +54,44 @@ function tagMaker(children) {
         var tagIDSearch = browser.bookmarks.search({
             title: this.id
         });
-        tagIDSearch.then(tagFolderID);
+
+        browser.storage.sync.set({
+            defaultStorage: this.id
+        })
     }
 }
 
-function tagFolderID(bookmarkItems) {
+/*function tagFolderID(bookmarkItems) {
     for (item of bookmarkItems) {
         tagID = item.title;
         console.log(tagID);
     }
+}*/
+
+browser.storage.sync.set({
+    defaultStorage: "speeddial"
+})
+
+var defaultStorage = browser.storage.sync.get("defaultStorage");
+
+function idSet(result) {
+    var forSearch = result.defaultStorage;
+    var gettingID = browser.bookmarks.search(forSearch);
+    gettingID.then(idSearch);
 }
 
-/*function idSearch(bookmarkItems) {
+defaultStorage.then(idSet);
+
+ //searching for default speeddial bookmarks folder
+
+function idSearch(bookmarkItems) {
     for (item of bookmarkItems) {
-        console.log(item.id);
+        console.log(item.title);
         defaultStorage = item.id;
         gettingChildren = browser.bookmarks.getChildren(defaultStorage);
         gettingChildren.then(storageBookmarks);
     }
   }
-  
-  var gettingID = browser.bookmarks.search({title : "speeddial"}); //searching for default speeddial bookmarks folder
-  gettingID.then(idSearch);
-
   
 function storageBookmarks(children) {
     for (child of children) {
@@ -103,7 +118,7 @@ function cardMaker(url, title) {
         document.getElementById("bookmarks").appendChild(clickable);
     }*/
 
-/*var card_title = document.createElement('div');
+var card_title = document.createElement('div');
     var card_image = document.createElement('div');
     var clickable = document.createElement('a');
 
@@ -124,7 +139,7 @@ function cardMaker(url, title) {
     clickable.href = url;
     card_title.innerHTML = title;
     //card_image.style.backgroundImage = 'url(' + ICON_URL +')';
-}*/
+}
 
 //displaying basic settings menu
 document.getElementById('user-button-settings').onclick = function changeContent() {
