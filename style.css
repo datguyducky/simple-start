@@ -3,7 +3,7 @@
 
 :root {
     --firstBgColor: #fafafa;
-    --secondBgColor: #fcfcfc;
+    --documentBgColor: #fcfcfc;
     
     --firstTextColor: #333333;
     --secondTextColor: #8a8a8a;
@@ -20,7 +20,7 @@
 html, body {
     padding: 0;
     margin: 0;
-    background-color: var(--secondBgColor);
+    background-color: var(--documentBgColor);
     font-family: 'Roboto', sans-serif;
     /*font-family: 'Blinker', 'Nunito', 'Oxygen'*/
 }
@@ -148,7 +148,7 @@ html, body {
     border: 2px solid var(--shadowColor);
     border-radius: 6px;
     box-shadow: -2px 2px 8px 2px var(--shadowColor);
-    display: flex;
+    display: none;
     align-items: center;
     color: var(--firstTextColor);
     flex-direction: column;
