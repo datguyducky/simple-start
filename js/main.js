@@ -209,7 +209,7 @@ document.getElementById('user-button-add').onclick = function selectBookmarknTag
 
 }
 
-//creating new tag
+//creating new tag via nav menu
 document.getElementById('select-tag').onclick = function newTag() {
     /* displaying menu to create new tag */
     var box = document.getElementById("new-tag-content");
@@ -250,12 +250,69 @@ document.getElementById('select-tag').onclick = function newTag() {
             gettingID.then(idNewSearch);
 
         } else {
-            document.getElementById("input-error").style.display = "block";
+            var error = document.getElementsByClassName("input-error");
+            error[0].style.display = "block";
         }
     }
 
     document.getElementById('new-tag-cancel').onclick = function tagCancel() {
         box.style.display = "none";
     }
+}
 
+//creating new bookmark via nav menu
+document.getElementById('select-bookmark').onclick = function newTag() {
+    /* displaying menu to create new tag */
+    var box = document.getElementById("new-bookmark-content");
+    if (box.style.display == "flex") {
+        box.style.display = "none";
+    } else {
+        box.style.display = "flex";
+    }
+
+    /* creating and saving new tag */
+    document.getElementById('new-bookmark-create').onclick = function tagMaker() {
+
+        var userInputName = document.getElementById("new-bookmark-input").value;
+        var userInputURL = document.getElementById("new-bookmark-url-input").value;
+
+        if(userInputName.length != "" && userInputURL.length != "") {
+
+            function idNewSearch(bookmarkItems) {
+                for (item of bookmarkItems) {
+                    //console.log(item.id);
+
+                    function onCreated(node) {
+                        box.style.display = "none";
+                        window.location.reload(false);
+                        //browser.storage.sync.set({ })
+                    }
+
+                    var createBookmark = browser.bookmarks.create({
+                        title: userInputName,
+                        url: userInputURL,
+                        parentId: item.id
+                    });
+
+                    createBookmark.then(onCreated);
+                    document.getElementById("new-bookmark-input").value = "";
+                    document.getElementById("new-bookmark-url-input").value = "";
+                }
+            }
+
+            var gettingID = browser.bookmarks.search({
+                title: "speeddial"
+            });
+            gettingID.then(idNewSearch);
+
+        } else {
+            var error = document.getElementsByClassName("input-error");
+            error[1].style.display = "block";
+            console.log("w errorze");
+        }
+    }
+
+    document.getElementById('new-bookmark-cancel').onclick = function tagCancel() {
+        box.style.display = "none";
+    }
 }
