@@ -88,12 +88,22 @@ function idSearch(bookmarkItems) {
   }
   
 function storageBookmarks(children) {
+    var activeTag = browser.storage.sync.get("defaultStorage");
+    activeTag.then(activeTagSet);
+    
     for (child of children) {
         //console.log(child.title);
         //console.log(child.url);
         if(child.url){
         cardMaker(child.url, child.title);
         }
+    }
+}
+
+function activeTagSet(name){
+    //console.log(name.defaultStorage);
+    if(name.defaultStorage != "speeddial"){
+        document.getElementById(name.defaultStorage).classList.add('active');
     }
 }
 
@@ -112,13 +122,6 @@ function cardMaker(url, title) {
         document.getElementById("bookmarks").appendChild(clickable);
     }*/
     var activeTag = browser.storage.sync.get("defaultStorage");
-
-    function activeTagSet(name){
-        //console.log(name.defaultStorage);
-        if(name.defaultStorage != "speeddial"){
-            document.getElementById(name.defaultStorage).classList.add('active');
-        }
-    }
 
     activeTag.then(activeTagSet);
 
