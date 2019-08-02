@@ -292,6 +292,7 @@ html, body {
     align-items: center;
     border-top: 2px solid var(--shadowColor);
     font-size: 1.2rem;
+    text-align: center;
 }
 
 #bookmarks-add-content {
