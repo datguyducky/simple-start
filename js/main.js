@@ -166,11 +166,13 @@ function restoreOptions() {
         document.documentElement.style.setProperty('--btnBgBorderColor', result.btnBgBorderColor);
         document.documentElement.style.setProperty('--btnTextColor', result.btnTextColor);
         document.documentElement.style.setProperty('--btnShadowColor', result.btnShadowColor);
+        document.documentElement.style.setProperty('--documentBgColor', result.documentBgColor);
 
         document.getElementById('bookmarks').style.gridGap = result.gridGap + 'px';
         document.getElementById('gridgap-current').innerHTML = result.gridGap + ' px';
 
         document.getElementById('iconsize-current').innerHTML = result.iconSize + ' px';
+
     }
 
     var getting = browser.storage.sync.get([
@@ -183,7 +185,8 @@ function restoreOptions() {
         "btnTextColor",
         "btnShadowColor",
         "gridGap",
-        "iconSize"
+        "iconSize",
+        "documentBgColor"
     ]);
     getting.then(setCurrentChoice);
 }
@@ -192,6 +195,16 @@ function restoreOptions() {
 document.addEventListener("DOMContentLoaded", restoreOptions);
 document.getElementById('btn-save').onclick = function savingSettings() {
     window.location.reload(false); //reloading page when settings are saved
+
+    var solid_color = document.getElementsByName('solid-color');
+    for(var i = 0; i < solid_color.length; i++){
+        if(solid_color[i].checked){
+            solid_color[i].setAttribute('checked', 'checked');
+            browser.storage.sync.set({
+                documentBgColor: solid_color[i].value
+            });
+        }
+    }
     
     var gridgap = document.getElementById('gridgap').value;
     browser.storage.sync.set({
