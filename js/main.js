@@ -1,8 +1,3 @@
-document.getElementById("del").onclick = function rem() {
-    let removingItem = browser.storage.sync.remove("defaultStorage");
-    window.location.reload(false);
-}
-
 function idNewTagSearch(bookmarkItems) {
     for (item of bookmarkItems) {
         var rootID = item.id;
