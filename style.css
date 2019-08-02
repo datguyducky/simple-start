@@ -289,13 +289,13 @@ html, body {
 
 .settings-area#bookmarks-iconsize {
     display: grid;
-    grid-template-columns: 1fr 40% 52px;
+    grid-template-columns: 1fr 40% 46px;
     text-align: center;
 }
 
 .settings-area#bookmarks-iconsize input {
     align-self: flex-start;
-    margin: 0;
+    margin: 0 4px;
 }
 
 #user-settings-buttons {

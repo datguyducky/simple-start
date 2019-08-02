@@ -109,44 +109,38 @@ function activeTagSet(name){
 
 //var i = 0;
 function cardMaker(url, title) {
-    /*i++;
-    if(i==1){
+    function cardMaking(size) {
+        var activeTag = browser.storage.sync.get("defaultStorage");
+
+        activeTag.then(activeTagSet);
+
+        var card_title = document.createElement('div');
+        var card_image = document.createElement('div');
         var clickable = document.createElement('a');
-        var headerAdd = document.createElement('h1');
-    
+
         clickable.setAttribute("class", "card-container");
-        clickable.setAttribute("id", "bookmarks-add-content");
-        headerAdd.setAttribute("id", "bookmarks-add");
-        
-        clickable.appendChild(headerAdd);
+        card_image.setAttribute("class", "card-image");
+        card_title.setAttribute("class", "card-title")
+
+        clickable.appendChild(card_image);
+        clickable.appendChild(card_title);
         document.getElementById("bookmarks").appendChild(clickable);
-    }*/
 
-    var activeTag = browser.storage.sync.get("defaultStorage");
+        //getting favicons
+        //var new_url = url.split('/');
+        //var CLEAN_ICON_URL = new_url[1] + new_url[2] + '/';
+        //faviconkit api + page url + size
+        //var ICON_URL = 'https://api.faviconkit.com/' + CLEAN_ICON_URL + size.iconSize;
 
-    activeTag.then(activeTagSet);
+        clickable.href = url;
+        card_title.innerHTML = title;
+        //card_image.style.backgroundImage = 'url(' + ICON_URL +')';
+    }
 
-    var card_title = document.createElement('div');
-    var card_image = document.createElement('div');
-    var clickable = document.createElement('a');
-
-    clickable.setAttribute("class", "card-container");
-    card_image.setAttribute("class", "card-image");
-    card_title.setAttribute("class", "card-title")
-
-    clickable.appendChild(card_image);
-    clickable.appendChild(card_title);
-    document.getElementById("bookmarks").appendChild(clickable);
-
-    //getting favicons
-    var new_url = url.split('/');
-    var CLEAN_ICON_URL = new_url[1] + new_url[2] + '/';
-    //faviconkit api + page url + size
-    var ICON_URL = 'https://api.faviconkit.com/' + CLEAN_ICON_URL + '64';
-
-    clickable.href = url;
-    card_title.innerHTML = title;
-    card_image.style.backgroundImage = 'url(' + ICON_URL +')';
+    var getting = browser.storage.sync.get([
+        "iconSize"
+    ]);
+    getting.then(cardMaking);
 }
 
 //displaying basic settings menu
@@ -175,6 +169,8 @@ function restoreOptions() {
 
         document.getElementById('bookmarks').style.gridGap = result.gridGap + 'px';
         document.getElementById('gridgap-current').innerHTML = result.gridGap + ' px';
+
+        document.getElementById('iconsize-current').innerHTML = result.iconSize + ' px';
     }
 
     var getting = browser.storage.sync.get([
@@ -186,7 +182,8 @@ function restoreOptions() {
         "btnBgBorderColor", 
         "btnTextColor",
         "btnShadowColor",
-        "gridGap"
+        "gridGap",
+        "iconSize"
     ]);
     getting.then(setCurrentChoice);
 }
@@ -200,7 +197,11 @@ document.getElementById('btn-save').onclick = function savingSettings() {
     browser.storage.sync.set({
         gridGap: gridgap
     });
-    
+
+    var iconsize = document.getElementById('iconsize').value;
+    browser.storage.sync.set({
+        iconSize: iconsize
+    });
     
     var darkmode = document.getElementById("darkmode");
 
@@ -236,8 +237,16 @@ document.getElementById('gridgap').oninput = function changeGap() {
  }
 
 document.getElementById('iconsize').oninput = function changeIconSize() {
-    
-    
+    var card_image = document.getElementsByClassName("card-image");
+    /*for (var i = 0; i < card_image.length; i++) {
+        var url = card_image[i].parentElement.href;
+        var new_url = url.split('/');
+        var CLEAN_ICON_URL = new_url[1] + new_url[2] + '/';
+        //faviconkit api + page url + size
+        var ICON_URL = 'https://api.faviconkit.com/' + CLEAN_ICON_URL + this.value;
+        card_image[i].style.backgroundImage = 'url(' + ICON_URL +')';
+    }*/
+    document.getElementById('iconsize-current').innerHTML = this.value + ' px';
 }
 
 document.getElementById('btn-cancel').onclick = function showSidebar(){
