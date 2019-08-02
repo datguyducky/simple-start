@@ -150,7 +150,7 @@ function cardMaker(url, title) {
 }
 
 //displaying basic settings menu
-document.getElementById('user-button-settings').onclick = function changeContent() {
+document.getElementById('user-button-settings').onclick = function showSidebar() {
 
     var box = document.getElementById("user-settings");
 
@@ -164,60 +164,85 @@ document.getElementById('user-button-settings').onclick = function changeContent
 
 function restoreOptions() {
     function setCurrentChoice(result) {
-        document.documentElement.style.setProperty('--darkColor', result.navColor);
-        document.documentElement.style.setProperty('--headerColor', result.textColor);
-        document.documentElement.style.setProperty('--secondaryTextColor', result.secondaryTextColor);
+        document.documentElement.style.setProperty('--firstBgColor', result.firstBgColor);
+        document.documentElement.style.setProperty('--firstTextColor', result.firstTextColor);
+        document.documentElement.style.setProperty('--secondTextColor', result.secondTextColor);
         document.documentElement.style.setProperty('--activeColor', result.activeColor);
         document.documentElement.style.setProperty('--shadowColor', result.shadowColor);
-        document.documentElement.style.setProperty('--lighterColor', result.bgColor);
+        document.documentElement.style.setProperty('--btnBgBorderColor', result.btnBgBorderColor);
+        document.documentElement.style.setProperty('--btnTextColor', result.btnTextColor);
+        document.documentElement.style.setProperty('--btnShadowColor', result.btnShadowColor);
+
+        document.getElementById('bookmarks').style.gridGap = result.gridGap + 'px';
+        document.getElementById('gridgap-current').innerHTML = result.gridGap + ' px';
     }
 
-    var getting = browser.storage.sync.get(["bgColor", "navColor", "textColor", "secondaryTextColor", "activeColor", "shadowColor"]);
+    var getting = browser.storage.sync.get([
+        "firstBgColor", 
+        "firstTextColor", 
+        "secondTextColor", 
+        "activeColor", 
+        "shadowColor", 
+        "btnBgBorderColor", 
+        "btnTextColor",
+        "btnShadowColor",
+        "gridGap"
+    ]);
     getting.then(setCurrentChoice);
 }
 
 //changing and saving settings:
 document.addEventListener("DOMContentLoaded", restoreOptions);
 document.getElementById('btn-save').onclick = function savingSettings() {
-    var thumb = document.getElementById("thumb-chk");
-    var compact = document.getElementById("compact-chk");
-    var list = document.getElementById("list-chk");
-
-    var dark = document.getElementById("dark-chk");
-
-    browser.storage.sync.set({
-        //viewStyle: "chuj"
-    })
-
     window.location.reload(false); //reloading page when settings are saved
+    
+    var gridgap = document.getElementById('gridgap').value;
+    browser.storage.sync.set({
+        gridGap: gridgap
+    });
+    
+    
+    var darkmode = document.getElementById("darkmode");
 
-    if (dark.checked == true) {
+    if (darkmode.checked == true) {
         browser.storage.sync.set({
-            bgColor: "#3d3d3d",
-            navColor: "#212121",
-            textColor: "#fafafa",
-            secondaryTextColor: "#bcbcbc",
+            firstBgColor: "#212121",
+            firstTextColor: "#fafafa",
+            secondTextColor: "#bcbcbc",
             activeColor: "#f0f0f0",
-            shadowColor: "#494949"
+            shadowColor: "#494949",
+            btnBgBorderColor: "#383838",
+            btnTextColor: "#fafafa",
+            btnShadowColor: "#444444"
         });
     } else {
         browser.storage.sync.set({
-            bgColor: "#fcfcfc",
-            navColor: "#fafafa",
-            textColor: "#333333",
-            secondaryTextColor: "#8a8a8a",
+            firstBgColor: "#fafafa",
+            firstTextColor: "#333333",
+            secondTextColor: "#8a8a8a",
             activeColor: "#3f3f3f",
-            shadowColor: "#e9e9e9"
+            shadowColor: "#e9e9e9",
+            btnBgBorderColor: "#333333",
+            btnTextColor: "#fafafa",
+            btnShadowColor: "#8a8a8a"
         });
     }
+}
 
-    if (thumb.checked == true) {
-        console.log("thumb");
-    } else if (compact.checked == true) {
-        console.log("compact");
-    } else if (list.checked == true) {
-        console.log("list");
-    }
+document.getElementById('gridgap').oninput = function changeGap() {
+        document.getElementById('bookmarks').style.gridGap = this.value +'px';
+        document.getElementById('gridgap-current').innerHTML = this.value + ' px';
+        //document.getElementById('spacingResult').innerHTML = this.value + 'px';
+ }
+
+document.getElementById('iconsize').oninput = function changeIconSize() {
+    
+    
+}
+
+document.getElementById('btn-cancel').onclick = function showSidebar(){
+    var box = document.getElementById("user-settings");
+    box.style.display = "none";
 }
 
 //displaying menu for adding new bookmark or tag.
