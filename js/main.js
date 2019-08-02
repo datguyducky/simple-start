@@ -253,4 +253,9 @@ document.getElementById('select-tag').onclick = function newTag() {
             document.getElementById("input-error").style.display = "block";
         }
     }
+
+    document.getElementById('new-tag-cancel').onclick = function tagCancel() {
+        box.style.display = "none";
+    }
+
 }
