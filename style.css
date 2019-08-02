@@ -221,6 +221,12 @@ html, body {
     margin: 0;
 }
 
+.new-content h3 {
+    margin: 0;
+    padding: 0;
+    font-size: 0.8rem;
+}
+
 .new-content input {
     margin: 12px 0 0 0;
     content: "";
@@ -272,7 +278,9 @@ html, body {
 .card-container {  
     color: var(--activeColor);
     border: 2px solid var(--shadowColor);
+    background-color: var(--darkColor);
     border-radius: 8px;
+    box-shadow: 1px 2px 8px 0px var(--shadowColor);
     text-decoration: none;
     /* only for now */
 }

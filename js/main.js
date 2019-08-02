@@ -45,7 +45,7 @@ function tagMaker(children) {
         navList[i].addEventListener('click', tagSwitch, false);
     }
 
-    function tagSwitch(e) {
+    function tagSwitch() {
         //console.log(this.id);
         for (var i = 0; i < navList.length; i++) {
             navList[i].classList.remove('active');
@@ -121,6 +121,7 @@ function cardMaker(url, title) {
         clickable.appendChild(headerAdd);
         document.getElementById("bookmarks").appendChild(clickable);
     }*/
+
     var activeTag = browser.storage.sync.get("defaultStorage");
 
     activeTag.then(activeTagSet);
@@ -132,20 +133,20 @@ function cardMaker(url, title) {
     clickable.setAttribute("class", "card-container");
     card_image.setAttribute("class", "card-image");
     card_title.setAttribute("class", "card-title")
-    
+
     clickable.appendChild(card_image);
     clickable.appendChild(card_title);
     document.getElementById("bookmarks").appendChild(clickable);
 
     //getting favicons
-    //var new_url = url.split('/');
-    //var CLEAN_ICON_URL = new_url[1] + new_url[2] + '/';
+    var new_url = url.split('/');
+    var CLEAN_ICON_URL = new_url[1] + new_url[2] + '/';
     //faviconkit api + page url + size
-    //var ICON_URL = 'https://api.faviconkit.com/' + CLEAN_ICON_URL + '64';
+    var ICON_URL = 'https://api.faviconkit.com/' + CLEAN_ICON_URL + '64';
 
     clickable.href = url;
     card_title.innerHTML = title;
-    //card_image.style.backgroundImage = 'url(' + ICON_URL +')';
+    card_image.style.backgroundImage = 'url(' + ICON_URL +')';
 }
 
 //displaying basic settings menu
@@ -293,7 +294,8 @@ document.getElementById('select-bookmark').onclick = function newTag() {
     }
 
     /* creating and saving new tag */
-    document.getElementById('new-bookmark-create').onclick = function tagMaker() {
+    document.getElementById('new-bookmark-create').onclick = function bookmarkMaker() {
+        console.log(defaultStorage);
 
         var userInputName = document.getElementById("new-bookmark-input").value;
         var userInputURL = document.getElementById("new-bookmark-url-input").value;
@@ -322,10 +324,15 @@ document.getElementById('select-bookmark').onclick = function newTag() {
                 }
             }
 
-            var gettingID = browser.bookmarks.search({
-                title: "speeddial"
-            });
-            gettingID.then(idNewSearch);
+            var defaultStorage = browser.storage.sync.get("defaultStorage");
+
+            function idSearch(result) {
+                var forSearch = result.defaultStorage;
+                var gettingID = browser.bookmarks.search(forSearch);
+                gettingID.then(idNewSearch);
+            }
+
+            defaultStorage.then(idSearch);
 
         } else {
             var error = document.getElementsByClassName("input-error");
