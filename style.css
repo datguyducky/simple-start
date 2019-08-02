@@ -228,7 +228,11 @@ html, body {
     display: grid;
     grid-template-columns: repeat(5, 1fr);
     grid-auto-rows: minmax(50px, auto);
-    grid-gap: 2px;
+    grid-gap: 4px;
+}
+
+#background-solid input {
+        display: none;
 }
 
 #background-solid>div {
@@ -254,6 +258,16 @@ html, body {
 
 #background-solid>#background-blue {
     background-color: #708DB4;
+}
+
+#background-solid .radio-add{
+    display: inline-block;
+    cursor: pointer;
+    opacity: 0.4;
+}
+
+#background-solid input:checked + .radio-add{
+    opacity: 1;
 }
 
 .settings-area#bookmarks-darkmode {
@@ -342,12 +356,12 @@ html, body {
     width: 160px;
     text-align: center;
     margin: 0 auto;
-    color: var(--secondTextColor);
+    color: var(--firstTextColor);
     cursor: pointer;
 }
 
 #full-settings:hover {
-    color: var(--firstTextColor);
+    color: var(--secondTextColor);
 }
 
 #user-settings-footer {
