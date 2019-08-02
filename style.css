@@ -1,4 +1,5 @@
 @import url('https://fonts.googleapis.com/css?family=Roboto&display=swap');
+@import url('https://fonts.googleapis.com/css?family=Nunito&display=swap');
 
 :root {
     --darkColor: #fafafa;
@@ -13,7 +14,8 @@ html, body {
     padding: 0;
     margin: 0;
     background-color: var(--lighterColor);
-    font-family: 'Roboto';
+    font-family: 'Roboto', sans-serif;
+    /*font-family: 'Blinker', 'Nunito', 'Oxygen'*/
 }
 
 
@@ -233,7 +235,7 @@ html, body {
 }
 
 #new-bookmark-content input {
-    width: 52%;
+    width: 62%;
 }
 
 .input-error {
@@ -301,6 +303,8 @@ html, body {
     border-top: 2px solid var(--shadowColor);
     font-size: 1.2rem;
     text-align: center;
+    background-color: var(--darkColor);
+    font-family: 'Nunito', sans-serif;
 }
 
 #bookmarks-add-content {
