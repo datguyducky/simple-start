@@ -1,3 +1,8 @@
+document.getElementById("del").onclick = function rem() {
+    let removingItem = browser.storage.sync.remove("defaultStorage");
+    window.location.reload(false);
+}
+
 function idNewTagSearch(bookmarkItems) {
     for (item of bookmarkItems) {
         var rootID = item.id;
@@ -60,26 +65,24 @@ function tagMaker(children) {
     }
 }
 
-/*function tagFolderID(bookmarkItems) {
-    for (item of bookmarkItems) {
-        tagID = item.title;
-        console.log(tagID);
-    }
-}*/
-
 var defaultStorage = browser.storage.sync.get("defaultStorage");
 
 function idSet(result) {
     var forSearch = result.defaultStorage;
-    console.log(forSearch);
-    var gettingID = browser.bookmarks.search(forSearch);
-    gettingID.then(idSearch);
+    if(forSearch == null){
+        let defaultSet = browser.storage.sync.set({
+            defaultStorage: "speeddial"
+        })
+        defaultSet.then(idSet);
+    } else {
+        var gettingID = browser.bookmarks.search(forSearch);
+        gettingID.then(idSearch);
+    }
 }
 
 defaultStorage.then(idSet);
 
- //searching for default speeddial bookmarks folder
-
+//searching for default speeddial bookmarks folder
 function idSearch(bookmarkItems) {
     for (item of bookmarkItems) {
         console.log(item.title);
@@ -116,8 +119,10 @@ function cardMaker(url, title) {
     var activeTag = browser.storage.sync.get("defaultStorage");
 
     function activeTagSet(name){
-        console.log(name.defaultStorage);
-        document.getElementById(name.defaultStorage).classList.add('active');
+        //console.log(name.defaultStorage);
+        if(name.defaultStorage != "speeddial"){
+            document.getElementById(name.defaultStorage).classList.add('active');
+        }
     }
 
     activeTag.then(activeTagSet);
