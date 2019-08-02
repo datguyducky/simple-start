@@ -57,13 +57,23 @@
                 </div>
             </div>
         </div>
-        <div id="new-tag-content">
+        <div class="new-content" id="new-tag-content">
             <h2>CREATE NEW TAG</h2>
             <input type="text" name="newtag" id="new-tag-input" placeholder="TAG NAME (e.g Work)">
-            <p id="input-error">Tag name must be at least 1 character long</p>
+            <p class="input-error">Tag name must be at least 1 character long</p>
             <ul>
-                <li class="new-tag-btn" id="new-tag-create">CREATE</li>
-                <li class="new-tag-btn" id="new-tag-cancel">CANCEL</li>
+                <li class="new-btn" id="new-tag-create">CREATE</li>
+                <li class="new-btn" id="new-tag-cancel">CANCEL</li>
+            </ul>
+        </div>
+        <div class="new-content" id="new-bookmark-content">
+            <h2>CREATE NEW BOOKMARK</h2>
+            <input type="text" name="newbookmark" id="new-bookmark-input" placeholder="BOOKMARK NAME (e.g Google)">
+            <input type="text" name="newbookmark" id="new-bookmark-url-input" placeholder="BOOKMARK URL (e.g https://google.com)">
+            <p class="input-error">Bookmark name must be at least 1 character long and URL can't be empty.</p>
+            <ul>
+                <li class="new-btn" id="new-bookmark-create">CREATE</li>
+                <li class="new-btn" id="new-bookmark-cancel">CANCEL</li>
             </ul>
         </div>
         <div id="bookmarks"><!-- generating content for this div via main.js --></div> 
