@@ -50,12 +50,6 @@ function tagMaker(children) {
             navList[i].classList.remove('active');
         }
         document.getElementById(this.id).classList.add('active');
-
-        //var tagIDSearch = browser.bookmarks.search({title : this.id});
-        //tagIDSearch.then(tagFolderID);
-        //checkout(this.id);
-       //console.log(checkout(this.id));
-        
         var tagIDSearch = browser.bookmarks.search({title : this.id});
         tagIDSearch.then(tagFolderID);
     }
@@ -224,7 +218,7 @@ document.getElementById('select-tag').onclick = function newTag() {
     document.getElementById('new-tag-create').onclick = function tagMaker() {
 
         var userInput = document.getElementById("new-tag-input").value;
-
+        if(userInput.length != 0) {
         function idNewSearch(bookmarkItems) {
             for (item of bookmarkItems) {
                 //console.log(item.id);
@@ -248,45 +242,9 @@ document.getElementById('select-tag').onclick = function newTag() {
         var gettingID = browser.bookmarks.search({title : "speeddial"});
         gettingID.then(idNewSearch);
 
-
-        /*function onCreated(node) {
-            console.log(node);
         }
-        
-        var createBookmark = browser.bookmarks.create({
-            title: userInput,
-            parentId: ""
-        });
-        
-        createBookmark.then(onCreated);
-        */
-    }
-}
-  
-/*
-  
-  var gettingChildren = browser.bookmarks.getChildren("0IPq1lPQNUK7");
-  gettingChildren.then(onFulfilled, onRejected);*/
-
-
-
-//testing area
-//I. make this shit fully working - so i can get folder id by calling this function from anywhere in code;
-//var x = searchBox("speeddial");
-//console.log(x);
-//searchBox("Home") //02O1xwmFROj9;
-
-/*
-function searchBox(name) {
-    var thisID = "ala";
-    function newID(bookmarkItems) {
-        for (item of bookmarkItems) {
-            thisID = item.id;
-            console.log(item.title);
-            //return thisID;
+        else{
+            document.getElementById("input-error").style.display = "block";
         }
     }
-    var searching = browser.bookmarks.search({title : name});
-    searching.then(newID);
 }
-*/
