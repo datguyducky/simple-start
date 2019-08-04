@@ -450,14 +450,20 @@ html, body {
 
 
 .new-btn {
-    font-size: 18px;
+    text-align: center;
+    margin: 0;
+    margin-top: 12px;
+    padding: 0.2rem 0.8rem;
+    border-radius: 0.4rem;
+    color: var(--firstTextColor);
+    cursor: pointer;
+    background-color: var(--firstBgColor);
+    border: 2px solid var(--btnBgBorderColor);
+}
+
+.new-btn:hover {
     background-color: var(--firstTextColor);
     color: var(--firstBgColor);
-    margin: 16px 6px;
-    padding: 6px;
-    border: 2px solid var(--firstTextColor);
-    border-radius: 6px;
-    cursor: pointer;
 }
 
 #bookmarks {
