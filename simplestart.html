@@ -35,20 +35,20 @@
                 <div id="user-settings-content">
                     <h3 class="settings-area-header">bookmarks style:</h3>
                     <div class="settings-area" id="bookmarks-style">
-                        <div class="inwork">
-                            <div class="check"></div>
-                            <label for="style-compact">COMPACT<br>VIEW</label>
-                            <input type="radio" name="group-bookmarks-style" id="style-compact" value="style-compact" disabled>                            
+                        <div>
+                            <input type="radio" name="group-bookmarks-style" id="style-compact" value="style-compact" disabled>
+                            <label for="style-compact" class="bookmarks-style-radio"></label>
+                            <p>Compact<br>View</p>
+                        </div>
+                        <div>               
+                            <input type="radio" name="group-bookmarks-style" id="style-thumbnails" value="style-thumbnails" checked="checked">
+                            <label for="style-thumbnails" class="bookmarks-style-radio"></label>
+                            <p>Thumbnails<br>View</p>
                         </div>
                         <div>
-                            <div class="check"></div>
-                            <label for="style-compact">THUMBNAIL<br>VIEW</label>
-                            <input type="radio" name="group-bookmarks-style" id="style-thumbnails" value="style-thumbnails" checked>
-                        </div>
-                        <div class="inwork">
-                            <div class="check"></div>
-                            <label for="style-compact">LIST<br>VIEW</label>
                             <input type="radio" name="group-bookmarks-style" id="style-list" value="style-list" disabled>
+                            <label for="style-list" class="bookmarks-style-radio"></label>
+                            <p>List<br>View</p>
                         </div>
                     </div>
                     <h3 class="settings-area-header">background:</h3>
