@@ -394,3 +394,7 @@ document.getElementById('select-bookmark').onclick = function newTag() {
         box.style.display = "none";
     }
 }
+
+document.getElementById('full-settings').onclick = function openFullSettings() {
+    browser.runtime.openOptionsPage();
+}
