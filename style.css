@@ -337,24 +337,19 @@ html, body {
 }
 
 .user-settings-btn {
-    padding: 2px;
-    width: 85px;
-    height: 20px;
     text-align: center;
     margin: 12px 8px;
-    border-radius: 4px;
-    font-weight: bold;
-    color: var(--btnTextColor);
+    padding: 0.6rem 1rem;
+    border-radius: 0.4rem;
+    color: var(--firstTextColor);
     cursor: pointer;
-    background-color: var(--btnBgBorderColor);
+    background-color: var(--firstBgColor);
     border: 2px solid var(--btnBgBorderColor);
-    box-shadow:  3px 3px 3px 0px var(--btnShadowColor);
 }
 
 .user-settings-btn:hover {
-    background-color: var(--btnTextColor);
-    border: 2px solid var(--btnBgBorderColor);
-    color: var(--btnBgBorderColor);
+    background-color: var(--firstTextColor);
+    color: var(--firstBgColor);
 }
 
 #full-settings {
