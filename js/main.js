@@ -1,3 +1,5 @@
+var settingUrl = browser.runtime.setUninstallURL('https://google.com')
+
 function idNewTagSearch(bookmarkItems) {
     for (item of bookmarkItems) {
         var rootID = item.id;
