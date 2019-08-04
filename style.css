@@ -1,5 +1,5 @@
-/*@import url('https://fonts.googleapis.com/css?family=Roboto&display=swap');
-@import url('https://fonts.googleapis.com/css?family=Nunito&display=swap');*/
+@import url('https://fonts.googleapis.com/css?family=Roboto&display=swap');
+@import url('https://fonts.googleapis.com/css?family=Nunito&display=swap');
 
 :root {
     --firstBgColor: #fafafa;
@@ -118,7 +118,7 @@ html, body {
     position: absolute;
     background-color: var(--firstBgColor);
     height: auto;
-    width: 8vw;
+    min-width: 8vw;
     display: none;
     right: 0;
     top: 51px;
@@ -129,6 +129,7 @@ html, body {
     border: 2px solid var(--shadowColor);
     box-shadow: -4px 4px 8px 0px var(--shadowColor);
     z-index: 1;
+    white-space: nowrap
 }
 
 #user-add-select div:first-of-type {
@@ -189,31 +190,35 @@ html, body {
     display: flex;
     justify-content: center;
     align-items: center;
+    text-align: center;
+}
+
+.settings-area#bookmarks-style input {
+    display: none;
 }
 
 .settings-area#bookmarks-style>div {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
     margin: 0 12px;
+}
+
+.settings-area#bookmarks-style p {
+    margin: 2px 0;
+}
+
+.settings-area#bookmarks-style .bookmarks-style-radio{
+    display: inline-block;
+    cursor: pointer;
+    height: 60px;
+    width: 60px;
+    background-color: #f68c8c;
+}
+
+.settings-area#bookmarks-style input:checked + .bookmarks-style-radio{
+    background-color: #D95B5B;
 }
 
 .inwork {
     opacity: 0.5;
-}
-
-.settings-area#bookmarks-style>div>label{
-    margin-top: 4px;
-    font-size: 0.8rem;
-    text-align: center;
-}
-
-.check {
-    border-radius: 6px;
-    width: 60px;
-    height: 60px;
-    background-color: #f6b1b1;
 }
 
 .settings-area#bookmarks-background h4{
@@ -232,12 +237,12 @@ html, body {
 }
 
 #background-solid input {
-        display: none;
+    display: none;
 }
 
-#background-solid>div {
+/*#background-solid>div {
     border-radius: 4px;
-}
+}*/
 
 #background-solid>#background-white {
     border: 1px solid #c8c8c8;
