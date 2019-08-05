@@ -12,7 +12,7 @@ function idNewTagSearch(bookmarkItems) {
 //searching for default speeddial bookmarks folder
 var gettingID = browser.bookmarks.search({
     title: "speeddial"
-}); 
+});
 gettingID.then(idNewTagSearch);
 
 function tagMaker(children) {
@@ -53,7 +53,7 @@ function tagMaker(children) {
             navList[i].classList.remove('active');
         }
         document.getElementById(this.id).classList.add('active');
-        
+
         browser.storage.sync.set({
             defaultStorage: this.id
         })
@@ -66,7 +66,7 @@ var defaultStorage = browser.storage.sync.get("defaultStorage");
 
 function idSet(result) {
     var forSearch = result.defaultStorage;
-    if(forSearch == null){
+    if (forSearch == null) {
         let defaultSet = browser.storage.sync.set({
             defaultStorage: "speeddial"
         })
@@ -87,24 +87,24 @@ function idSearch(bookmarkItems) {
         gettingChildren = browser.bookmarks.getChildren(defaultStorage);
         gettingChildren.then(storageBookmarks);
     }
-  }
-  
+}
+
 function storageBookmarks(children) {
     var activeTag = browser.storage.sync.get("defaultStorage");
     activeTag.then(activeTagSet);
-    
+
     for (child of children) {
         //console.log(child.title);
         //console.log(child.url);
-        if(child.url){
-        cardMaker(child.url, child.title);
+        if (child.url) {
+            cardMaker(child.url, child.title);
         }
     }
 }
 
-function activeTagSet(name){
+function activeTagSet(name) {
     //console.log(name.defaultStorage);
-    if(name.defaultStorage != "speeddial"){
+    if (name.defaultStorage != "speeddial") {
         document.getElementById(name.defaultStorage).classList.add('active');
     }
 }
@@ -162,7 +162,7 @@ function restoreOptions() {
     function setCurrentChoice(result) {
         document.documentElement.style.setProperty('--shadowColor', result.shadowColor);
 
-        if(result.documentBgColor != "#fcfcfc" && result.documentBgColor != "#3d3d3d"){
+        if (result.documentBgColor != "#fcfcfc" && result.documentBgColor != "#3d3d3d") {
             document.documentElement.style.setProperty('--shadowColor', "none");
         }
         document.documentElement.style.setProperty('--firstBgColor', result.firstBgColor);
@@ -182,12 +182,12 @@ function restoreOptions() {
     }
 
     var getting = browser.storage.sync.get([
-        "firstBgColor", 
-        "firstTextColor", 
-        "secondTextColor", 
-        "activeColor", 
-        "shadowColor", 
-        "btnBgBorderColor", 
+        "firstBgColor",
+        "firstTextColor",
+        "secondTextColor",
+        "activeColor",
+        "shadowColor",
+        "btnBgBorderColor",
         "btnTextColor",
         "btnShadowColor",
         "gridGap",
@@ -204,15 +204,15 @@ document.getElementById('btn-save').onclick = function savingSettings() {
     window.location.reload(false); //reloading page when settings are saved
 
     var solid_color = document.getElementsByName('solid-color');
-    for(var i = 0; i < solid_color.length; i++){
-        if(solid_color[i].checked){
+    for (var i = 0; i < solid_color.length; i++) {
+        if (solid_color[i].checked) {
             solid_color[i].setAttribute('checked', 'checked');
             browser.storage.sync.set({
                 documentBgColor: solid_color[i].value
             });
         }
     }
-    
+
     var gridgap = document.getElementById('gridgap').value;
     browser.storage.sync.set({
         gridGap: gridgap
@@ -222,7 +222,7 @@ document.getElementById('btn-save').onclick = function savingSettings() {
     browser.storage.sync.set({
         iconSize: iconsize
     });
-    
+
     var darkmode = document.getElementById("darkmode");
 
     if (darkmode.checked == true) {
@@ -253,10 +253,10 @@ document.getElementById('btn-save').onclick = function savingSettings() {
 }
 
 document.getElementById('gridgap').oninput = function changeGap() {
-        document.getElementById('bookmarks').style.gridGap = this.value +'px';
-        document.getElementById('gridgap-current').innerHTML = this.value + ' px';
-        //document.getElementById('spacingResult').innerHTML = this.value + 'px';
- }
+    document.getElementById('bookmarks').style.gridGap = this.value + 'px';
+    document.getElementById('gridgap-current').innerHTML = this.value + ' px';
+    //document.getElementById('spacingResult').innerHTML = this.value + 'px';
+}
 
 document.getElementById('iconsize').oninput = function changeIconSize() {
     var card_image = document.getElementsByClassName("card-image");
@@ -271,7 +271,7 @@ document.getElementById('iconsize').oninput = function changeIconSize() {
     document.getElementById('iconsize-current').innerHTML = this.value + ' px';
 }
 
-document.getElementById('btn-cancel').onclick = function showSidebar(){
+document.getElementById('btn-cancel').onclick = function showSidebar() {
     var box = document.getElementById("user-settings");
     box.style.display = "none";
 }
@@ -356,7 +356,7 @@ document.getElementById('select-bookmark').onclick = function newTag() {
         var userInputName = document.getElementById("new-bookmark-input").value;
         var userInputURL = document.getElementById("new-bookmark-url-input").value;
 
-        if(userInputName.length != "" && userInputURL.length != "") {
+        if (userInputName.length != "" && userInputURL.length != "") {
 
             function idNewSearch(bookmarkItems) {
                 for (item of bookmarkItems) {
