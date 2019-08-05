@@ -160,11 +160,16 @@ document.getElementById('user-button-settings').onclick = function showSidebar()
 
 function restoreOptions() {
     function setCurrentChoice(result) {
+        document.documentElement.style.setProperty('--shadowColor', result.shadowColor);
+
+        if(result.documentBgColor != "#fcfcfc" && result.documentBgColor != "#3d3d3d"){
+            document.documentElement.style.setProperty('--shadowColor', "none");
+        }
         document.documentElement.style.setProperty('--firstBgColor', result.firstBgColor);
         document.documentElement.style.setProperty('--firstTextColor', result.firstTextColor);
         document.documentElement.style.setProperty('--secondTextColor', result.secondTextColor);
         document.documentElement.style.setProperty('--activeColor', result.activeColor);
-        document.documentElement.style.setProperty('--shadowColor', result.shadowColor);
+        document.documentElement.style.setProperty('--borderColor', result.borderColor);
         document.documentElement.style.setProperty('--btnBgBorderColor', result.btnBgBorderColor);
         document.documentElement.style.setProperty('--btnTextColor', result.btnTextColor);
         document.documentElement.style.setProperty('--btnShadowColor', result.btnShadowColor);
@@ -174,7 +179,6 @@ function restoreOptions() {
         document.getElementById('gridgap-current').innerHTML = result.gridGap + ' px';
 
         document.getElementById('iconsize-current').innerHTML = result.iconSize + ' px';
-
     }
 
     var getting = browser.storage.sync.get([
@@ -188,7 +192,8 @@ function restoreOptions() {
         "btnShadowColor",
         "gridGap",
         "iconSize",
-        "documentBgColor"
+        "documentBgColor",
+        "borderColor"
     ]);
     getting.then(setCurrentChoice);
 }
@@ -227,6 +232,7 @@ document.getElementById('btn-save').onclick = function savingSettings() {
             secondTextColor: "#bcbcbc",
             activeColor: "#f0f0f0",
             shadowColor: "#494949",
+            borderColor: "#494949",
             btnBgBorderColor: "#383838",
             btnTextColor: "#fafafa",
             btnShadowColor: "#444444"
@@ -238,6 +244,7 @@ document.getElementById('btn-save').onclick = function savingSettings() {
             secondTextColor: "#8a8a8a",
             activeColor: "#3f3f3f",
             shadowColor: "#e9e9e9",
+            borderColor: "#e9e9e9",
             btnBgBorderColor: "#333333",
             btnTextColor: "#fafafa",
             btnShadowColor: "#8a8a8a"
