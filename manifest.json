@@ -3,10 +3,6 @@
     "name": "Simple Start",
     "version": "0.2",
     "description": "...",
-    "options_ui": {
-      "page": "options.html",
-      "open_in_tab": true
-    },
 
     "permissions": ["bookmarks", "storage"],
 
