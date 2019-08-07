@@ -15,12 +15,11 @@ html, body {
     margin: 0 2em;
     grid-template-columns: 1fr;
     grid-template-rows: 54vh 180px 1fr;
-    grid-row-gap: 32px;
 }
 
 nav {
     margin: auto 0;
-    margin-bottom: 0;
+    margin-bottom: 32px;
 }
 
 #nav-header {
@@ -54,7 +53,6 @@ nav {
     justify-content: center;
     align-items: center;
     flex-direction: column;
-    margin-bottom: 0;
 }
 
 #get-buttons p {
@@ -83,4 +81,19 @@ nav {
     font-size: 1.4rem;
     text-align: center;
     font-style: italic;
+    margin-bottom: 32px;
+}
+
+#features-breakdown {
+    display: grid;
+    grid-auto-columns: 1fr;
+    grid-auto-rows: 140px;
+    grid-gap: 12px;
+    margin: 0 18px;
+}
+
+.feature-card {
+    border: 1px solid #666;
+    box-shadow: 1px 1px 2px #9b9b9b;
+    border-radius: 12px;
 }
