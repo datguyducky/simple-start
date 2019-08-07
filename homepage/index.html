@@ -1,51 +1,42 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
-        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-
-    <title>Hello, world!</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Simple Start — Homepage</title>
     <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
-    <nav class="navbar navbar-expand-md sticky-top navbar-light bg-light">
-        <a class="navbar-brand" href="#">
-          <img src="icon.svg" width="30" height="30" class="d-inline-block align-middle" alt="">
-          SIMPLE START
-        </a>
+    <div class="main-container">
+        <nav>
+            <div id="nav-header">
+                <h1>SIMPLE START</h1>
+                <h2>Minimalistic new tab page extension</h2>
+            </div>
+            <span id="aa"></span>
+        </nav>
 
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-     
-        <div class="collapse navbar-collapse justify-content-end" id="navbarNavAltMarkup">
-            <div class="navbar-nav">
-                <a class="nav-item nav-link active" href="#">Home <span class="sr-only">(current)</span></a>
-                <a class="nav-item nav-link" href="#">Features</a>
-                <a class="nav-item nav-link" href="#">Changelog</a>
-                <a class="nav-item nav-link" href="#">Support</a>
+        <div id="get-buttons">
+            <p>
+                <a class="get-btn" href="google.com">Get for Chrome</a>
+            </p>
+            <p>
+                <a class="get-btn" href="https://twitter.com/firefox">Get for Firefox</a>
+            </p>
+        </div>
+
+        <div id="features">
+            <p id="about">
+                Simple Start is minimalistic extension for Chrome and Firefox that lets you have all the bookmarks you need every time you open new tab.
+            </p>
+
+            <div id="features-breakdown">
+                
             </div>
         </div>
-    </nav>
-
-    <!-- Optional JavaScript -->
-    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
-        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous">
-    </script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
-        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous">
-    </script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
-        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous">
-    </script>
+        <div id="support"></div>
+        <div id="changelog"></div>
+    </div>
 </body>
-
 </html>
