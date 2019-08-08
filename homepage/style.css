@@ -23,8 +23,8 @@ nav {
 }
 
 #nav-header {
-    border-top: 2px solid #333;
-    border-bottom: 2px solid #333;
+    border-top: 2px solid #474747;
+    border-bottom: 2px solid #474747;
     padding: 32px 0;
     display: flex;
     justify-content: center;
@@ -85,15 +85,30 @@ nav {
 }
 
 #features-breakdown {
+    margin-top: 92px;
     display: grid;
     grid-auto-columns: 1fr;
-    grid-auto-rows: 140px;
-    grid-gap: 12px;
-    margin: 0 18px;
+    grid-auto-rows: 1fr;
+    grid-template-rows: repeat(5, auto);
+    grid-gap: 21px;
+    width: 100%;
 }
 
 .feature-card {
-    border: 1px solid #666;
-    box-shadow: 1px 1px 2px #9b9b9b;
-    border-radius: 12px;
+    display: flex;
+    justify-content: center;
+    border-top: 2px solid #d8d8d8;
+    padding-top: 21px;
+    flex-direction: column;
+    font-size: 1.2rem;
+    height: auto;
+}
+
+.feature-card-title {
+    font-weight: bold;
+    font-size: 1.3rem;
+}
+
+.feature-card-details p{
+    margin-top: 4px;
 }
