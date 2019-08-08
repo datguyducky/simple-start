@@ -402,6 +402,6 @@ document.getElementById('select-bookmark').onclick = function newTag() {
     }
 }
 
-document.getElementById('full-settings').onclick = function openFullSettings() {
+/*document.getElementById('full-settings').onclick = function openFullSettings() {
     browser.runtime.openOptionsPage();
-}
+}*/
