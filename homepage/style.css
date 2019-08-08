@@ -92,6 +92,7 @@ nav {
     grid-template-rows: repeat(5, auto);
     grid-gap: 21px;
     width: 100%;
+    margin-bottom: 32px;
 }
 
 .feature-card {
