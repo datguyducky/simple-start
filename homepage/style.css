@@ -8,7 +8,7 @@ html, body {
     color: #333;
 }
 
-.main-container {
+#home {
     min-height: 100vh;
     display: grid;
     padding: 0;
@@ -146,4 +146,46 @@ nav {
 
 .feature-card-details p{
     margin-top: 4px;
+}
+
+/* for faq.html */
+#faq {
+    margin: 0 32px;
+}
+
+
+#faq input[type='checkbox'] {
+    display: none;
+}
+
+#faq .lbl-faq {
+    display: block;
+    cursor: pointer;
+    transition: all 0.25s ease-out;
+}
+
+#faq ol {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+/* creating that arrow on left */
+#faq .lbl-faq::before {
+    content: ' ';
+    display: inline-block;
+    border-top: 5px solid transparent;
+    border-bottom: 5px solid transparent;
+    border-left: 5px solid currentColor;
+    margin-right: 4px;
+}
+
+.collapsible-content {
+    max-height: 0px;
+    overflow: hidden;
+    transition: max-height .25s ease-in-out;
+}
+
+.faq:checked + .lbl-faq + .collapsible-content {
+    max-height: 350px;
 }
