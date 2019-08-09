@@ -183,6 +183,15 @@ nav {
     margin-bottom: 8px;
 }
 
+#support p #browser {
+    font-weight: 600;
+}
+
+#support p a{
+    color: inherit;
+    font-weight: 600;
+}
+
 #support input[type='checkbox'] {
     display: none;
 }
