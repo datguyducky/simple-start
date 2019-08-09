@@ -73,11 +73,10 @@ nav {
     cursor: pointer;
     float: left;
     margin: 0 4px;
-    border-bottom: 2px solid transparent;
 }
 
 #scroll-nav a:hover {
-    border-bottom: 1px solid transparent;
+    text-decoration: underline;
 }
 
 #get-buttons {
