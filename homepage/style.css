@@ -49,6 +49,7 @@ nav {
 }
 
 #scroll-nav {
+    z-index: 10;
     background-color: #f5f5f5;
     border-bottom: #d8d8d8;
     box-shadow: 0px 0px 6px #b6b6b6;
@@ -153,7 +154,6 @@ nav {
     margin: 0 32px;
 }
 
-
 #faq input[type='checkbox'] {
     display: none;
 }
@@ -170,7 +170,7 @@ nav {
     margin: 0;
 }
 
-/* creating that arrow on left */
+/* creating that triangle on left */
 #faq .lbl-faq::before {
     content: ' ';
     display: inline-block;
@@ -180,12 +180,24 @@ nav {
     margin-right: 4px;
 }
 
+/*hidden content via max-height */
 .collapsible-content {
     max-height: 0px;
     overflow: hidden;
     transition: max-height .25s ease-in-out;
 }
 
+/*displaying content via max-height */
 .faq:checked + .lbl-faq + .collapsible-content {
     max-height: 350px;
+}
+
+/* rotating traingle when content is displayed */
+.faq:checked + .lbl-faq::before {
+    transform: rotate(90deg) translateX(-3px);
+}
+  
+.faq:checked + .lbl-faq {
+    border-bottom-right-radius: 0;
+    border-bottom-left-radius: 0;
 }
