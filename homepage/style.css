@@ -164,16 +164,24 @@ nav {
 
 #support h2 {
     font-size: 1.6rem;
+    margin-bottom: 8px;
 }
 
-#support label {
-    font-size: 1.2rem;
-    margin: 6px 0;
+#support label:hover {
+    text-decoration: underline;
+}
+
+#support li {
+    border-bottom: 1px dotted #a8a8a8;
+    padding: 6px;
 }
 
 #support p {
     margin: 0;
     padding: 0;
+    font-size: 1.2rem;
+    margin-top: 2px;
+    margin-bottom: 8px;
 }
 
 #support input[type='checkbox'] {
@@ -181,9 +189,11 @@ nav {
 }
 
 #support .lbl-faq {
+    font-size: 1.3rem;
     display: block;
     cursor: pointer;
     transition: all 0.25s ease-out;
+    padding: 0 4px;
 }
 
 #support ol {
@@ -199,7 +209,7 @@ nav {
     border-top: 5px solid transparent;
     border-bottom: 5px solid transparent;
     border-left: 5px solid currentColor;
-    margin-right: 4px;
+    margin-right: 8px;
 }
 
 /*hidden content via max-height */
@@ -212,6 +222,10 @@ nav {
 /*displaying content via max-height */
 #support .faq:checked + .lbl-faq + .collapsible-content {
     max-height: 350px;
+}
+
+#support .faq:checked + .lbl-faq {
+    text-decoration: underline;
 }
 
 /* rotating traingle when content is displayed */
