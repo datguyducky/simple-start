@@ -12,7 +12,7 @@ html, body {
     min-height: 100vh;
     display: grid;
     padding: 0;
-    margin: 0 2em;
+    margin: 0 1.5em;
     grid-template-columns: 1fr;
     grid-template-rows: 54vh 180px 1fr;
 }
@@ -150,28 +150,50 @@ nav {
 }
 
 /* for faq.html */
-#faq {
-    margin: 0 32px;
+#support {
+    margin: 0 1.5em;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
-#faq input[type='checkbox'] {
+#support h1 {
+    text-align: center;
+    font-size: 2.1rem;
+}
+
+#support h2 {
+    font-size: 1.6rem;
+}
+
+#support label {
+    font-size: 1.2rem;
+    margin: 6px 0;
+}
+
+#support p {
+    margin: 0;
+    padding: 0;
+}
+
+#support input[type='checkbox'] {
     display: none;
 }
 
-#faq .lbl-faq {
+#support .lbl-faq {
     display: block;
     cursor: pointer;
     transition: all 0.25s ease-out;
 }
 
-#faq ol {
+#support ol {
     list-style-type: none;
     padding: 0;
     margin: 0;
 }
 
 /* creating that triangle on left */
-#faq .lbl-faq::before {
+#support .lbl-faq::before {
     content: ' ';
     display: inline-block;
     border-top: 5px solid transparent;
@@ -181,23 +203,23 @@ nav {
 }
 
 /*hidden content via max-height */
-.collapsible-content {
+#support .collapsible-content {
     max-height: 0px;
     overflow: hidden;
     transition: max-height .25s ease-in-out;
 }
 
 /*displaying content via max-height */
-.faq:checked + .lbl-faq + .collapsible-content {
+#support .faq:checked + .lbl-faq + .collapsible-content {
     max-height: 350px;
 }
 
 /* rotating traingle when content is displayed */
-.faq:checked + .lbl-faq::before {
+#support .faq:checked + .lbl-faq::before {
     transform: rotate(90deg) translateX(-3px);
 }
   
-.faq:checked + .lbl-faq {
+#support .faq:checked + .lbl-faq {
     border-bottom-right-radius: 0;
     border-bottom-left-radius: 0;
 }
