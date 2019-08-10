@@ -1,13 +1,11 @@
-function testing() {
+//Search for 'simplestart' folder, if not found - create it and refresh page
+function defaultStorageCreator() {
     var gettingID = browser.bookmarks.search({
         title: "simplestart"
     });
     gettingID.then(idNewTagSearch)
 }
-
-testing ();
-
-var settingUrl = browser.runtime.setUninstallURL('https://google.com')
+defaultStorageCreator();
 
 function idNewTagSearch(bookmarkItems) {
     if (bookmarkItems.length){
@@ -21,14 +19,15 @@ function idNewTagSearch(bookmarkItems) {
     else {
         console.log("can't find default storage folder!")
         
-        var createDefaultStorage = browser.bookmarks.create({
+        browser.bookmarks.create({
             title: "simplestart"
         });
+        browser.storage.sync.set({
+            defaultStorage: "simplestart"
+        })
         window.location.reload(false);
     }
 }
-
-//searching for default simplestart bookmarks folder
 
 function tagMaker(children) {
     for (child of children) {
@@ -392,3 +391,5 @@ document.getElementById('select-bookmark').onclick = function newTag() {
 /*document.getElementById('full-settings').onclick = function openFullSettings() {
     browser.runtime.openOptionsPage();
 }*/
+
+var settingUrl = browser.runtime.setUninstallURL('https://google.com');
