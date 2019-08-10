@@ -111,7 +111,6 @@ function activeTagSet(name) {
 
 //var i = 0;
 function cardMaker(url, title) {
-    function cardMaking(size) {
         var activeTag = browser.storage.sync.get("defaultStorage");
 
         activeTag.then(activeTagSet);
@@ -130,19 +129,13 @@ function cardMaker(url, title) {
 
         //getting favicons
         //var new_url = url.split('/');
-        //var CLEAN_ICON_URL = new_url[1] + new_url[2] + '/';
-        //faviconkit api + page url + size
-        //var ICON_URL = 'https://api.faviconkit.com/' + CLEAN_ICON_URL + size.iconSize;
+        ///var CLEAN_ICON_URL = new_url[1] + new_url[2];
+        //api + page url without https and other shit
+        //var ICON_URL = 'https://besticon-demo.herokuapp.com/icon?url=' + CLEAN_ICON_URL + '&size=32..120..250';
 
         clickable.href = url;
         card_title.innerHTML = title;
         //card_image.style.backgroundImage = 'url(' + ICON_URL +')';
-    }
-
-    var getting = browser.storage.sync.get([
-        "iconSize"
-    ]);
-    getting.then(cardMaking);
 }
 
 //displaying basic settings menu
@@ -177,8 +170,6 @@ function restoreOptions() {
 
         document.getElementById('bookmarks').style.gridGap = result.gridGap + 'px';
         document.getElementById('gridgap-current').innerHTML = result.gridGap + ' px';
-
-        document.getElementById('iconsize-current').innerHTML = result.iconSize + ' px';
     }
 
     var getting = browser.storage.sync.get([
@@ -191,7 +182,6 @@ function restoreOptions() {
         "btnTextColor",
         "btnShadowColor",
         "gridGap",
-        "iconSize",
         "documentBgColor",
         "borderColor"
     ]);
@@ -216,11 +206,6 @@ document.getElementById('btn-save').onclick = function savingSettings() {
     var gridgap = document.getElementById('gridgap').value;
     browser.storage.sync.set({
         gridGap: gridgap
-    });
-
-    var iconsize = document.getElementById('iconsize').value;
-    browser.storage.sync.set({
-        iconSize: iconsize
     });
 
     var darkmode = document.getElementById("darkmode");
@@ -256,19 +241,6 @@ document.getElementById('gridgap').oninput = function changeGap() {
     document.getElementById('bookmarks').style.gridGap = this.value + 'px';
     document.getElementById('gridgap-current').innerHTML = this.value + ' px';
     //document.getElementById('spacingResult').innerHTML = this.value + 'px';
-}
-
-document.getElementById('iconsize').oninput = function changeIconSize() {
-    var card_image = document.getElementsByClassName("card-image");
-    /*for (var i = 0; i < card_image.length; i++) {
-        var url = card_image[i].parentElement.href;
-        var new_url = url.split('/');
-        var CLEAN_ICON_URL = new_url[1] + new_url[2] + '/';
-        //faviconkit api + page url + size
-        var ICON_URL = 'https://api.faviconkit.com/' + CLEAN_ICON_URL + this.value;
-        card_image[i].style.backgroundImage = 'url(' + ICON_URL +')';
-    }*/
-    document.getElementById('iconsize-current').innerHTML = this.value + ' px';
 }
 
 document.getElementById('btn-cancel').onclick = function showSidebar() {
