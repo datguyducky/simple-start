@@ -305,17 +305,6 @@ body {
     margin: 0 4px;
 }
 
-.settings-area#bookmarks-iconsize {
-    display: grid;
-    grid-template-columns: 1fr 40% 46px;
-    text-align: center;
-}
-
-.settings-area#bookmarks-iconsize input {
-    align-self: flex-start;
-    margin: 0 4px;
-}
-
 #user-settings-buttons {
     display: flex;
     align-items: center;
