@@ -1,19 +1,34 @@
+function testing() {
+    var gettingID = browser.bookmarks.search({
+        title: "simplestart"
+    });
+    gettingID.then(idNewTagSearch)
+}
+
+testing ();
+
 var settingUrl = browser.runtime.setUninstallURL('https://google.com')
 
 function idNewTagSearch(bookmarkItems) {
-    for (item of bookmarkItems) {
-        var rootID = item.id;
+    if (bookmarkItems.length){
+        for (item of bookmarkItems) {
+            var rootID = item.id;
 
-        var gettingTagsName = browser.bookmarks.getChildren(rootID);
-        gettingTagsName.then(tagMaker);
+            var gettingTagsName = browser.bookmarks.getChildren(rootID);
+            gettingTagsName.then(tagMaker);
+        }
+    }
+    else {
+        console.log("can't find default storage folder!")
+        
+        var createDefaultStorage = browser.bookmarks.create({
+            title: "simplestart"
+        });
+        window.location.reload(false);
     }
 }
 
-//searching for default speeddial bookmarks folder
-var gettingID = browser.bookmarks.search({
-    title: "speeddial"
-});
-gettingID.then(idNewTagSearch);
+//searching for default simplestart bookmarks folder
 
 function tagMaker(children) {
     for (child of children) {
@@ -68,7 +83,7 @@ function idSet(result) {
     var forSearch = result.defaultStorage;
     if (forSearch == null) {
         let defaultSet = browser.storage.sync.set({
-            defaultStorage: "speeddial"
+            defaultStorage: "simplestart"
         })
         defaultSet.then(idSet);
     } else {
@@ -79,7 +94,7 @@ function idSet(result) {
 
 defaultStorage.then(idSet);
 
-//searching for default speeddial bookmarks folder
+//searching for default simplestart bookmarks folder
 function idSearch(bookmarkItems) {
     for (item of bookmarkItems) {
         console.log(item.title);
@@ -104,7 +119,7 @@ function storageBookmarks(children) {
 
 function activeTagSet(name) {
     //console.log(name.defaultStorage);
-    if (name.defaultStorage != "speeddial") {
+    if (name.defaultStorage != "simplestart") {
         document.getElementById(name.defaultStorage).classList.add('active');
     }
 }
@@ -296,7 +311,7 @@ document.getElementById('select-tag').onclick = function newTag() {
             }
 
             var gettingID = browser.bookmarks.search({
-                title: "speeddial"
+                title: "simplestart"
             });
             gettingID.then(idNewSearch);
 
