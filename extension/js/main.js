@@ -1,45 +1,60 @@
-//Search for 'simplestart' folder, if not found - create it and refresh page
-function defaultStorageCreator() {
-    var gettingID = browser.bookmarks.search({
-        title: "simplestart"
-    });
-    gettingID.then(idNewTagSearch)
-}
-defaultStorageCreator();
-
-function idNewTagSearch(bookmarkItems) {
-    if (bookmarkItems.length){
-        for (item of bookmarkItems) {
-            var rootID = item.id;
-
-            var gettingTagsName = browser.bookmarks.getChildren(rootID);
-            gettingTagsName.then(tagMaker);
+//function to search for folders or bookmarks id's - that is needed to make, delete, edit or search for bookmark/folder.
+function idSearch(bookmarkItems) {
+    for (item of bookmarkItems) {
+        //making sure that we will get folder.
+        if (!item.url) {
+            return item.id;
+        } else {
+            //console.log(item.title);
         }
     }
+}
+
+//searching for default extension folder, if not found - create it.
+var defaultStorage = browser.bookmarks.search("simplestart");
+defaultStorage.then(idSearch).then(function (res) {
+    //getting all folders and bookmarks inside default folder.
+    if (res) {
+        gettingChildren(res);
+    }
+    //creating default folder if wasn't found; refreshing page so script can get id of it.
     else {
-        console.log("can't find default storage folder!")
-        
         browser.bookmarks.create({
             title: "simplestart"
         });
-        browser.storage.sync.set({
-            defaultStorage: "simplestart"
-        })
         window.location.reload(false);
+    }
+});
+
+//getting an array of items inside folder with specified id.
+function childrenLog(children) {
+    for (child of children) {
+        return children;
     }
 }
 
-function tagMaker(children) {
-    for (child of children) {
-        if (child.type == "folder") {
-            //console.log(child.title);
+//
+function gettingChildren(ROOT_ID) {
+    var gettingChildren = browser.bookmarks.getChildren(ROOT_ID);
+    gettingChildren.then(childrenLog).then(function (res) {
+        tagMaker(res);
+        bookmarksForActive(res);
+    });
+}
 
+//creating tags which names are showed on navbar.
+function tagMaker(children) {
+    for (i = 0; i < children.length; i++) {
+        if (children[i].type == 'folder') {
+            console.log(children[i].title);
+            //getting all elements on left and right of header on navbar.
             var tagsLeft = document.getElementById("nav-tags-list-left");
             var tagsRight = document.getElementById("nav-tags-list-right");
 
-            leftCount = tagsLeft.childElementCount; //getting number of elements for left tag list
-            rightCount = tagsRight.childElementCount; //getting number of elements for right tag list
+            leftCount = tagsLeft.childElementCount; //getting number of tags on left side of header.
+            rightCount = tagsRight.childElementCount; //getting number of tags on right side of header.
 
+            //first tag is always created on left side.
             if (leftCount == 0) {
                 new_tag = document.createElement('li');
                 tagsLeft.appendChild(new_tag);
@@ -51,110 +66,104 @@ function tagMaker(children) {
                 tagsLeft.appendChild(new_tag);
             }
             new_tag.setAttribute("class", "nav-tag-li");
-            new_tag.setAttribute("id", child.title);
-            new_tag.innerHTML = child.title;
+            //making element id is as same as name of folder is created for. Easier to get id of it for Firefox Api by this way.
+            new_tag.setAttribute("id", children[i].title);
+            new_tag.innerHTML = children[i].title;
         }
     }
-    //listener for 'click' on nav element
+
     var navList = document.getElementsByClassName("nav-tag-li");
     for (var i = 0; i < navList.length; i++) {
+        //listening for click on one of the tags that're shown on navbar.
         navList[i].addEventListener('click', tagSwitch, false);
     }
 
     function tagSwitch() {
-        //console.log(this.id);
-        for (var i = 0; i < navList.length; i++) {
-            navList[i].classList.remove('active');
-        }
-        document.getElementById(this.id).classList.add('active');
-
+        //saving name of tag that is set as active. Using it to remember which tag is selected as active every time that page is reloaded.
         browser.storage.sync.set({
-            defaultStorage: this.id
+            activeTag: this.id
         })
 
+        //realoding page to show bookmarks-cards for active tag + to show which tag is active on navbar  .
         window.location.reload(false);
     }
 }
 
-var defaultStorage = browser.storage.sync.get("defaultStorage");
+//getting name of selected tag and assigning active class to it + getting id of it.
+function bookmarksForActive(children) {
+    var activeTag = browser.storage.sync.get("activeTag");
+    //function addActiveClass is used to assign active class to selected tag + returns name of it.
+    activeTag.then(addActiveClass).then(function (res) {
+        var activeTagName = res;
+        for (i = 0; i < children.length; i++) {
+            //loop for all elements inside folder, checking if names is same as name of active tag.
+            if (activeTagName == children[i].title) {
+                //if yes - sending id of it to cardMaker function.
+                cardMaker(children[i].id);
+            }
+        }
+    });
+}
 
-function idSet(result) {
-    var forSearch = result.defaultStorage;
-    if (forSearch == null) {
-        let defaultSet = browser.storage.sync.set({
-            defaultStorage: "simplestart"
-        })
-        defaultSet.then(idSet);
-    } else {
-        var gettingID = browser.bookmarks.search(forSearch);
-        gettingID.then(idSearch);
+//assign active class to selected tag by user. Return name of it.
+function addActiveClass(name) {
+    if (name.activeTag != "simplestart") {
+        document.getElementById(name.activeTag).classList.add('active');
+        return name.activeTag;
     }
 }
 
-defaultStorage.then(idSet);
+//logging items inside currently active tag, creating bookmark-cards.
+function cardMaker(activeID) {
+    //logging items inside currently active tag.
+    var gettingChildren = browser.bookmarks.getChildren(activeID);
+    gettingChildren.then(childrenLog).then(function (res) {
+        createCard(res);
+    });
 
-//searching for default simplestart bookmarks folder
-function idSearch(bookmarkItems) {
-    for (item of bookmarkItems) {
-        console.log(item.title);
-        defaultStorage = item.id;
-        gettingChildren = browser.bookmarks.getChildren(defaultStorage);
-        gettingChildren.then(storageBookmarks);
-    }
-}
+    function createCard(children) {
+        //checking if there're any bookmarks inside currently selected tag (folder).
+        if (!children) {
+            console.log("no bookmarks were find")
+        } else {
+            //loop for every item and making bookmark-card for it.
+            for (i = 0; i < children.length; i++) {
+                //making sure is a bookmark, not folder or something else.
+                if (children[i].type == 'bookmark') {
+                    let title = children[i].title; //item title.
+                    let url = children[i].url; //item url.
+                    //console.log(url, title);
 
-function storageBookmarks(children) {
-    var activeTag = browser.storage.sync.get("defaultStorage");
-    activeTag.then(activeTagSet);
+                    var card_title = document.createElement('div'); //here name of bookmark is stored.
+                    var card_image = document.createElement('div'); //here goes favicon of site.
+                    var clickable = document.createElement('a'); //making whole card clickable which sends back to site which we have bookmarked.
 
-    for (child of children) {
-        //console.log(child.title);
-        //console.log(child.url);
-        if (child.url) {
-            cardMaker(child.url, child.title);
+                    //assigning appropriate classes to elements.
+                    clickable.setAttribute("class", "card-container");
+                    card_image.setAttribute("class", "card-image");
+                    card_title.setAttribute("class", "card-title")
+
+                    clickable.appendChild(card_image);
+                    clickable.appendChild(card_title);
+                    document.getElementById("bookmarks").appendChild(clickable);
+
+                    //getting favicons
+                    //var new_url = url.split('/');
+                    ///var CLEAN_ICON_URL = new_url[1] + new_url[2];
+                    //api + page url without https and other shit
+                    //var ICON_URL = 'https://besticon-demo.herokuapp.com/icon?url=' + CLEAN_ICON_URL + '&size=32..120..250';
+
+                    clickable.href = url;
+                    card_title.innerHTML = title;
+                    //card_image.style.backgroundImage = 'url(' + ICON_URL +')';
+                }
+            }
         }
     }
 }
 
-function activeTagSet(name) {
-    //console.log(name.defaultStorage);
-    if (name.defaultStorage != "simplestart") {
-        document.getElementById(name.defaultStorage).classList.add('active');
-    }
-}
-
-//var i = 0;
-function cardMaker(url, title) {
-        var activeTag = browser.storage.sync.get("defaultStorage");
-
-        activeTag.then(activeTagSet);
-
-        var card_title = document.createElement('div');
-        var card_image = document.createElement('div');
-        var clickable = document.createElement('a');
-
-        clickable.setAttribute("class", "card-container");
-        card_image.setAttribute("class", "card-image");
-        card_title.setAttribute("class", "card-title")
-
-        clickable.appendChild(card_image);
-        clickable.appendChild(card_title);
-        document.getElementById("bookmarks").appendChild(clickable);
-
-        //getting favicons
-        //var new_url = url.split('/');
-        ///var CLEAN_ICON_URL = new_url[1] + new_url[2];
-        //api + page url without https and other shit
-        //var ICON_URL = 'https://besticon-demo.herokuapp.com/icon?url=' + CLEAN_ICON_URL + '&size=32..120..250';
-
-        clickable.href = url;
-        card_title.innerHTML = title;
-        //card_image.style.backgroundImage = 'url(' + ICON_URL +')';
-}
-
-//displaying basic settings menu
-document.getElementById('user-button-settings').onclick = function showSidebar() {
-
+//displaying basic settings menu.
+document.getElementById('user-button-settings').onclick = function () {
     var box = document.getElementById("user-settings");
 
     if (box.style.display == "flex") {
@@ -162,6 +171,12 @@ document.getElementById('user-button-settings').onclick = function showSidebar()
     } else {
         box.style.display = "flex";
     }
+}
+
+//hiding basic settings menu when 'cancel' inside of it is clicked.
+document.getElementById('btn-cancel').onclick = function () {
+    var box = document.getElementById("user-settings");
+    box.style.display = "none";
 }
 
 
@@ -199,6 +214,7 @@ function restoreOptions() {
         "documentBgColor",
         "borderColor"
     ]);
+
     getting.then(setCurrentChoice);
 }
 
@@ -251,18 +267,13 @@ document.getElementById('btn-save').onclick = function savingSettings() {
     }
 }
 
-document.getElementById('gridgap').oninput = function changeGap() {
+//real-time preview of changing gap size.
+document.getElementById('gridgap').oninput = function () {
     document.getElementById('bookmarks').style.gridGap = this.value + 'px';
     document.getElementById('gridgap-current').innerHTML = this.value + ' px';
-    //document.getElementById('spacingResult').innerHTML = this.value + 'px';
 }
 
-document.getElementById('btn-cancel').onclick = function showSidebar() {
-    var box = document.getElementById("user-settings");
-    box.style.display = "none";
-}
-
-//displaying menu for adding new bookmark or tag.
+//displaying menu with button to create new bookmark or tag.
 document.getElementById('user-button-add').onclick = function selectBookmarknTag() {
     var box = document.getElementById("user-add-select");
 
@@ -271,12 +282,11 @@ document.getElementById('user-button-add').onclick = function selectBookmarknTag
     } else {
         box.style.display = "flex";
     }
-
 }
 
-//creating new tag via nav menu
+//creating new tag via nav menu.
 document.getElementById('select-tag').onclick = function newTag() {
-    /* displaying menu to create new tag */
+    //displaying/hiding new tag creator.
     var box = document.getElementById("new-tag-content");
     if (box.style.display == "flex") {
         box.style.display = "none";
@@ -284,50 +294,55 @@ document.getElementById('select-tag').onclick = function newTag() {
         box.style.display = "flex";
     }
 
-    /* creating and saving new tag */
-    document.getElementById('new-tag-create').onclick = function tagMaker() {
-
+    //creating and saving new tag 
+    document.getElementById('new-tag-create').onclick = function () {
+        //getting what user typed.
         var userInput = document.getElementById("new-tag-input").value;
+        //checking if name user type is at least 1 long.
         if (userInput.length != 0) {
-            function idNewSearch(bookmarkItems) {
+            function tagCreator(bookmarkItems) {
                 for (item of bookmarkItems) {
-                    //console.log(item.id);
-
-                    function onCreated(node) {
-                        box.style.display = "none";
-                        window.location.reload(false);
-                        //browser.storage.sync.set({ })
+                    function onCreated() {
+                        window.location.reload(false); //refreshing page. Menus are hidden again because of it + Tag can be seen on navbar.
+                        browser.storage.sync.set({
+                            activeTag: userInput
+                        }) //setting freshly created bookmark as active tag.
                     }
 
                     var createBookmark = browser.bookmarks.create({
+                        //name of new tag.
                         title: userInput,
+                        //making sure that this tag (folder) is created inside default extension folder.
                         parentId: item.id
                     });
 
                     createBookmark.then(onCreated);
-                    document.getElementById("new-tag-input").value = "";
+                    document.getElementById("new-tag-input").value = ""; //resetting value of tag creator input.
                 }
             }
 
+            //trying to get id of default extension folder, so the new tag (folder) is created inside of it.
             var gettingID = browser.bookmarks.search({
                 title: "simplestart"
             });
-            gettingID.then(idNewSearch);
+            gettingID.then(tagCreator);
 
         } else {
+            //displaying error when tag name is not at least 1 character long
             var error = document.getElementsByClassName("input-error");
             error[0].style.display = "block";
         }
     }
 
-    document.getElementById('new-tag-cancel').onclick = function tagCancel() {
+    //hidding tag creator when 'x' is clicked
+    document.getElementById('new-tag-cancel').onclick = function () {
         box.style.display = "none";
     }
 }
 
-//creating new bookmark via nav menu
+//creating new bookmark via nav menu.
 document.getElementById('select-bookmark').onclick = function newTag() {
-    /* displaying menu to create new tag */
+    //displaying/hiding new bookmark creator.
     var box = document.getElementById("new-bookmark-content");
     if (box.style.display == "flex") {
         box.style.display = "none";
@@ -335,61 +350,59 @@ document.getElementById('select-bookmark').onclick = function newTag() {
         box.style.display = "flex";
     }
 
-    /* creating and saving new tag */
-    document.getElementById('new-bookmark-create').onclick = function bookmarkMaker() {
-        console.log(defaultStorage);
-
+    //creating and saving new bookmark
+    document.getElementById('new-bookmark-create').onclick = function () {
+        //getting name of bookmark that user typed.
         var userInputName = document.getElementById("new-bookmark-input").value;
+        //getting url of site that user typed.
         var userInputURL = document.getElementById("new-bookmark-url-input").value;
 
+        //checking if name and url are not empty.
         if (userInputName.length != "" && userInputURL.length != "") {
-
-            function idNewSearch(bookmarkItems) {
+            function bookmarkCreator(bookmarkItems) {
                 for (item of bookmarkItems) {
-                    //console.log(item.id);
-
-                    function onCreated(node) {
-                        box.style.display = "none";
-                        window.location.reload(false);
-                        //browser.storage.sync.set({ })
+                    function onCreated() {
+                        window.location.reload(false); //refreshing page. Menus are hidden again because of it + freshly created bookmark have her own card.
                     }
 
                     var createBookmark = browser.bookmarks.create({
                         title: userInputName,
                         url: userInputURL,
+                        //making sure that bookmark is created inside currently active tag.
                         parentId: item.id
                     });
 
+                    //resetting values for bookmark creator inputs.
                     createBookmark.then(onCreated);
                     document.getElementById("new-bookmark-input").value = "";
                     document.getElementById("new-bookmark-url-input").value = "";
                 }
             }
 
-            var defaultStorage = browser.storage.sync.get("defaultStorage");
-
+            //getting id for currently selected tag.
             function idSearch(result) {
-                var forSearch = result.defaultStorage;
+                var forSearch = result.activeTag;
                 var gettingID = browser.bookmarks.search(forSearch);
-                gettingID.then(idNewSearch);
+                gettingID.then(bookmarkCreator);
             }
 
+            //getting name of currently active tag from storage.
+            var defaultStorage = browser.storage.sync.get("activeTag");
             defaultStorage.then(idSearch);
 
         } else {
+            //displaying error if name or url of bookmark is empty.
             var error = document.getElementsByClassName("input-error");
             error[1].style.display = "block";
             console.log("w errorze");
         }
     }
 
-    document.getElementById('new-bookmark-cancel').onclick = function tagCancel() {
+    //hidding bookmark creator when 'x' is clicked
+    document.getElementById('new-bookmark-cancel').onclick = function () {
         box.style.display = "none";
     }
 }
 
-/*document.getElementById('full-settings').onclick = function openFullSettings() {
-    browser.runtime.openOptionsPage();
-}*/
-
+//forwarding user to this url when extenstion was unistalled.
 var settingUrl = browser.runtime.setUninstallURL('https://google.com');
