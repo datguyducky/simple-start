@@ -148,14 +148,14 @@ function cardMaker(activeID) {
                     document.getElementById("bookmarks").appendChild(clickable);
 
                     //getting favicons
-                    //var new_url = url.split('/');
-                    ///var CLEAN_ICON_URL = new_url[1] + new_url[2];
+                    var new_url = url.split('/');
+                    var CLEAN_ICON_URL = new_url[1] + new_url[2];
                     //api + page url without https and other shit
-                    //var ICON_URL = 'https://besticon-demo.herokuapp.com/icon?url=' + CLEAN_ICON_URL + '&size=32..120..250';
+                    var ICON_URL = 'https://simplestart-favicon-service.herokuapp.com/icon?url=' + CLEAN_ICON_URL + '&size=32..120..250';
 
                     clickable.href = url;
                     card_title.innerHTML = title;
-                    //card_image.style.backgroundImage = 'url(' + ICON_URL +')';
+                    card_image.style.backgroundImage = 'url(' + ICON_URL +')';
                 }
             }
         }
@@ -404,5 +404,4 @@ document.getElementById('select-bookmark').onclick = function newTag() {
     }
 }
 
-//forwarding user to this url when extenstion was unistalled.
-var settingUrl = browser.runtime.setUninstallURL('https://google.com');
+//forwarding user to this url when extenstion was uninstalled.
