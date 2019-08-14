@@ -83,15 +83,6 @@ nav {
     text-decoration: underline;
 }
 
-footer {
-    height: 2em;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border-top: 2px solid #696969;
-    width: 100%;
-}
-
 /* for index.html */
 
 #get-buttons {
@@ -165,7 +156,8 @@ footer {
 
 /* for faq.html */
 #support {
-    margin: 0 1.5em;
+    margin: 0;
+    max-width: 98vw;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -281,10 +273,9 @@ footer {
 }
 
 #changelog h1 {
-    margin-bottom: 32px;
+    margin-bottom: 0.4em;
     font-size: 2.1rem;
     text-transform: uppercase;
-    text-decoration: underline;
 }
 
 #changelog h2 {
@@ -354,6 +345,15 @@ footer {
     margin: 0;
 }
 
+footer {
+    height: 2em;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-top: 2px solid #d8d8d8;
+    width: 100%;
+}
+
 
 /* responsive for pc*/
 @media (min-width: 992px) { 
@@ -397,10 +397,23 @@ footer {
         margin-left: auto;
         padding-right: 2em;
     }
+
+    #faq-container {
+        margin: 0 5em;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        grid-column-gap: 2em;
+        grid-auto-rows: auto;
+        margin-bottom: 2em;
+    }
 }
 
 @media (min-width: 1200px) {
     #features-breakdown {
         grid-template-columns: repeat(3, 326px);
+    }
+
+    #faq-container {
+        grid-template-columns: repeat(2, 326px);
     }
 }
