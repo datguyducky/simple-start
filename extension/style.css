@@ -378,8 +378,8 @@ body {
     top: 0;
     bottom: 50%;
     margin: auto;
+    height: 10vh;
     width: 26vw;
-    height: 13vw;
     color: var(--firstTextColor);
     background-color: var(--firstBgColor);
     border: 2px solid var(--borderColor);
@@ -390,10 +390,13 @@ body {
     font-size: 1.3rem;
     flex-direction: column;
     justify-content: center;
+    padding: 5em 0;
+    margin-top: 4em;
 }
 
 .new-content h2 {
     margin: 0;
+    text-align: center;
 }
 
 .new-content h3 {
@@ -412,7 +415,7 @@ body {
 }
 
 .input-error {
-    font-size: 14px;
+    font-size: 0.6rem;
     color: red;
     padding: 0;
     margin: 0;
