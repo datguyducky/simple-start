@@ -66,7 +66,11 @@ nav {
     flex-wrap: wrap;
 }
 
-#scroll-nav a {
+#scroll-nav #header {
+    display: none;
+}
+
+#scroll-nav #mobile-content a {
     margin-top: 2px;
     color: #333;
     text-decoration: none;
@@ -75,7 +79,7 @@ nav {
     margin: 0 4px;
 }
 
-#scroll-nav a:hover {
+#scroll-nav #mobile-content a:hover {
     text-decoration: underline;
 }
 
@@ -348,4 +352,55 @@ footer {
 
 #changelog .changelog-details ul{
     margin: 0;
+}
+
+
+/* responsive for pc*/
+@media (min-width: 992px) { 
+    #home {
+        grid-template-rows: 25vh 100px 1fr;
+        margin: 0 5em;
+    }
+
+    #nav-header {
+        border: none;
+    }
+
+    #features-breakdown {
+        grid-template-columns: repeat(3, 1fr);
+        grid-auto-columns: minmax(min-content, auto);
+        grid-template-rows: repeat(2, 1fr);
+        justify-content: center;
+    }
+
+    .feature-card {
+        display: block;
+        border: none;
+    }
+
+    #scroll-nav {
+        justify-content: flex-start;
+    }
+
+    #scroll-nav #header {
+        display: block;
+    }
+
+    #scroll-nav #header h1{
+        cursor: pointer;
+        margin: 0;
+        padding: 0;
+        padding-left: 2em;
+    }
+
+    #scroll-nav #mobile-content {
+        margin-left: auto;
+        padding-right: 2em;
+    }
+}
+
+@media (min-width: 1200px) {
+    #features-breakdown {
+        grid-template-columns: repeat(3, 326px);
+    }
 }
