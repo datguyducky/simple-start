@@ -37,6 +37,7 @@ defaultStorage.then(idSearch).then(function (res) {
             btnTextColor: "#fafafa",
             btnShadowColor: "#8a8a8a"
         });
+
         window.location.reload(false);
     }
 });
@@ -59,48 +60,73 @@ function gettingChildren(ROOT_ID) {
 
 //creating tags which names are showed on navbar.
 function tagMaker(children) {
-    for (i = 0; i < children.length; i++) {
-        if (children[i].type == 'folder') {
-            console.log(children[i].title);
-            //getting all elements on left and right of header on navbar.
-            var tagsLeft = document.getElementById("nav-tags-list-left");
-            var tagsRight = document.getElementById("nav-tags-list-right");
-
-            leftCount = tagsLeft.childElementCount; //getting number of tags on left side of header.
-            rightCount = tagsRight.childElementCount; //getting number of tags on right side of header.
-
-            //first tag is always created on left side.
-            if (leftCount == 0) {
-                new_tag = document.createElement('li');
-                tagsLeft.appendChild(new_tag);
-            } else if (leftCount > rightCount) {
-                new_tag = document.createElement('li');
-                tagsRight.appendChild(new_tag);
-            } else {
-                new_tag = document.createElement('li');
-                tagsLeft.appendChild(new_tag);
+    if(!children) {
+        //making default tag after first extension launch
+        var defaultStorage = browser.bookmarks.search("simplestart");
+        //getting id of defaultStorage
+        defaultStorage.then(idSearch).then(function (res) {
+            function onCreated(node) {
+                //setting just created tag as active one
+                browser.storage.sync.set({
+                    activeTag: node.id
+                })
             }
-            new_tag.setAttribute("class", "nav-tag-li");
-            //making element id is as same as name of folder is created for. Easier to get id of it for Firefox Api by this way.
-            new_tag.setAttribute("id", children[i].title);
-            new_tag.innerHTML = children[i].title;
-        }
-    }
+            
+            //creating folder for default tag
+            var createFirstTag = browser.bookmarks.create({
+                title: "Default Tag",
+                parentId: res
+            });
 
-    var navList = document.getElementsByClassName("nav-tag-li");
-    for (var i = 0; i < navList.length; i++) {
-        //listening for click on one of the tags that're shown on navbar.
-        navList[i].addEventListener('click', tagSwitch, false);
-    }
+            createFirstTag.then(onCreated);
 
-    function tagSwitch() {
-        //saving name of tag that is set as active. Using it to remember which tag is selected as active every time that page is reloaded.
-        browser.storage.sync.set({
-            activeTag: this.id
+            window.location.reload(false);
         })
+    } else {
 
-        //realoding page to show bookmarks-cards for active tag + to show which tag is active on navbar  .
-        window.location.reload(false);
+        for (i = 0; i < children.length; i++) {
+            if (children[i].type == 'folder') {
+                console.log(children[i].title);
+                //getting all elements on left and right of header on navbar.
+                var tagsLeft = document.getElementById("nav-tags-list-left");
+                var tagsRight = document.getElementById("nav-tags-list-right");
+    
+                leftCount = tagsLeft.childElementCount; //getting number of tags on left side of header.
+                rightCount = tagsRight.childElementCount; //getting number of tags on right side of header.
+    
+                //first tag is always created on left side.
+                if (leftCount == 0) {
+                    new_tag = document.createElement('li');
+                    tagsLeft.appendChild(new_tag);
+                } else if (leftCount > rightCount) {
+                    new_tag = document.createElement('li');
+                    tagsRight.appendChild(new_tag);
+                } else {
+                    new_tag = document.createElement('li');
+                    tagsLeft.appendChild(new_tag);
+                }
+                new_tag.setAttribute("class", "nav-tag-li");
+                //making element id is as same as name of folder is created for. Easier to get id of it for Firefox Api by this way.
+                new_tag.setAttribute("id", children[i].title);
+                new_tag.innerHTML = children[i].title;
+            }
+        }
+    
+        var navList = document.getElementsByClassName("nav-tag-li");
+        for (var i = 0; i < navList.length; i++) {
+            //listening for click on one of the tags that're shown on navbar.
+            navList[i].addEventListener('click', tagSwitch, false);
+        }
+    
+        function tagSwitch() {
+            //saving name of tag that is set as active. Using it to remember which tag is selected as active every time that page is reloaded.
+            browser.storage.sync.set({
+                activeTag: this.id
+            })
+    
+            //realoding page to show bookmarks-cards for active tag + to show which tag is active on navbar  .
+            window.location.reload(false);
+        }
     }
 }
 
