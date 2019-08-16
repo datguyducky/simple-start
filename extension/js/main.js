@@ -1,3 +1,6 @@
+//clearing storage 
+//var clearing = browser.storage.sync.clear();
+
 //function to search for folders or bookmarks id's - that is needed to make, delete, edit or search for bookmark/folder.
 function idSearch(bookmarkItems) {
     for (item of bookmarkItems) {
@@ -17,10 +20,22 @@ defaultStorage.then(idSearch).then(function (res) {
     if (res) {
         gettingChildren(res);
     }
-    //creating default folder if wasn't found; refreshing page so script can get id of it.
+    //creating default folder if wasn't found; making default styles in storage space ;refreshing page so script can get id of it.
     else {
         browser.bookmarks.create({
             title: "simplestart"
+        });
+
+        browser.storage.sync.set({
+            firstBgColor: "#fafafa",
+            firstTextColor: "#333333",
+            secondTextColor: "#8a8a8a",
+            activeColor: "#3f3f3f",
+            shadowColor: "#e9e9e9",
+            borderColor: "#e9e9e9",
+            btnBgBorderColor: "#333333",
+            btnTextColor: "#fafafa",
+            btnShadowColor: "#8a8a8a"
         });
         window.location.reload(false);
     }
