@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Simple Start — Homepage</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="main-container" id="support">
+        <nav style="height: 3em; width: 100vw;">
+            <div id="scroll-nav" style="top: 0; position: relative;">
+                <div id="header">
+                    <h1>SIMPLE START</h1>
+                </div>
+                <div id="mobile-content">
+                    <a href="index.html" title="Homepage">Home</a>
+                    <a href="index.html#features" title="Extension Features">Features</a>
+                    <a href="#" title="Frequently Asked Questions">Support</a>
+                    <a href="changelog.html" title="Extension Changelog">Changelog</a>
+                </div> 
+            </div>
+        </nav>
+
+        <h1>Frequently Asked Questions</h1>
+
+        <div id="faq-container">
+            <div>
+                <h2>Getting started:</h2>
+                <ol>
+                    <li>
+                        <input id="getting-started1" class="faq" type="checkbox" checked>
+                        <label for="getting-started1" class="lbl-faq">What is Simple Start?</label>
+                        <div class="collapsible-content">
+                            <div class="content-inner">
+                                <p>
+                                    Simple Start is an extension for Firefox which replaces your new tab and home page with customizable, minimalistic list of bookmarks that you may need every time you open new tab.
+                                </p>
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        <input id="getting-started2" class="faq" type="checkbox" checked>
+                        <label for="getting-started2" class="lbl-faq">How to download Simple Start?</label>
+                        <div class="collapsible-content">
+                            <div class="content-inner">
+                                <p>
+                                    <span id="browser">For Firefox:</span> Visit <a href="#">Simple Start</a> page on Firefox Add-ons and click on 'Add to Firefox' button.
+                                </p>
+                            </div>
+                        </div>
+                    </li>
+                </ol>
+            </div>
+            <div>
+                <h2>Bookmarks and tags:</h2>
+                <ol>
+                    <li>
+                        <input id="bookmarks-tags1" class="faq" type="checkbox">
+                        <label for="bookmarks-tags1" class="lbl-faq">How to add bookmark?</label>
+                        <div class="collapsible-content">
+                            <div class="content-inner">
+                                <p>
+                                    You can use build-in option in Firefox to add new bookmark (remember to save it to 'simplestart' folder) or you can click on '+' button while being on new tab page (be sure that page you want to bookmark have 'https://' or 'http://' at the beginning.)
+                                </p>
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        <input id="bookmarks-tags2" class="faq" type="checkbox">
+                        <label for="bookmarks-tags2" class="lbl-faq">How to edit or delete bookmark?</label>
+                        <div class="collapsible-content">
+                            <div class="content-inner">
+                                <p>
+                                    Unfortunately currently Simple Start don't comes with option to delete or edit bookmarks but you can use Firefox built-in Bookmark Library to delete or edit bookmark of your choice.
+                                </p>
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        <input id="bookmarks-tags3" class="faq" type="checkbox">
+                        <label for="bookmarks-tags3" class="lbl-faq">What are tags and how to create one?</label>
+                        <div class="collapsible-content">
+                            <div class="content-inner">
+                                <p>
+                                    Simple Start lets you organize your bookmarks into different categories (e.g. to separate your favorite websites related to work or your hobies). Is really simple to create tag - just click on '+' button while being on new tab page with Simple Start installed.
+                                </p>
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        <input id="bookmarks-tags4" class="faq" type="checkbox">
+                        <label for="bookmarks-tags4" class="lbl-faq">How to rearrange my bookmarks?</label>
+                        <div class="collapsible-content">
+                            <div class="content-inner">
+                                <p>
+                                    Unfortunately currently Simple Start don't comes with option to easy rearrange your bookmarks but you can use Firefox built-in Bookmark Library to move bookmarks higher or lower so they can be different arranged on new tab page.
+                                </p>
+                            </div>
+                        </div>
+                    </li>
+                </ol>
+            </div>
+            <div>
+                <h2>Synchronization:</h2>
+                <ol>
+                    <li>
+                        <input id="sync1" class="faq" type="checkbox">
+                        <label for="sync1" class="lbl-faq">How synchronization works?</label>
+                        <div class="collapsible-content">
+                            <div class="content-inner">
+                                <p>
+                                    Simple Start uses Firefox build-in option to synchronize bookmarks between devices. You need to login into Firefox account (and select appropriate option on Sync Settings page) to let Firefox sync your bookmarks between devices.
+                                </p>
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        <input id="sync2" class="faq" type="checkbox">
+                        <label for="sync2" class="lbl-faq">What is synchronization for?</label>
+                        <div class="collapsible-content">
+                            <div class="content-inner">
+                                <p>
+                                    Synchronization in Simple Start lets you use all bookmarks and tags you've saved between your devices without need to add them again.
+                                </p>
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        <input id="syn3" class="faq" type="checkbox">
+                        <label for="syn3" class="lbl-faq">Is it required to use it?</label>
+                        <div class="collapsible-content">
+                            <div class="content-inner">
+                                <p>
+                                    Is not required to turn-on Sync on Firefox to use Simple Start extension but I recommend this option if you want to easily use all your bookmarks and tags between devices.
+                                </p>
+                            </div>
+                        </div>
+                    </li>
+                </ol>
+            </div>
+            <div>
+                <h2>Customization:</h2>
+                <ol>
+                    <li>
+                        <input id="custom1" class="faq" type="checkbox">
+                        <label for="custom1" class="lbl-faq">What can I customize?</label>
+                        <div class="collapsible-content">
+                            <div class="content-inner">
+                                <p>
+                                    Currently Simple Start lets you customize: background color, gap between cards, size of icons for bookmarks + Dark Mode is available.
+                                </p>
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        <input id="custom2" class="faq" type="checkbox">
+                        <label for="custom2" class="lbl-faq">Will there be more options in the future?</label>
+                        <div class="collapsible-content">
+                            <div class="content-inner">
+                                <p>
+                                    Yes! I plan to add as much as possible options, so users of this extension can customize almost every aspect of their new tab page with Simple Start installed.
+                                </p>
+                            </div>
+                        </div>
+                    </li>
+                </ol>
+            </div>
+            <div>
+                <h2>Troubleshooting:</h2>
+                <ol>
+                    <li>
+                        <input id="troubleshooting1" class="faq" type="checkbox">
+                        <label for="troubleshooting1" class="lbl-faq">Layout of the page seems broken</label>
+                        <div class="collapsible-content">
+                            <div class="content-inner">
+                                <p>
+                                    Check zoom settings of your new tag page. Zoom-in our zoom-out the page.
+                                </p>
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        <input id="troubleshooting2" class="faq" type="checkbox">
+                        <label for="troubleshooting2" class="lbl-faq">Problems with synchronization</label>
+                        <div class="collapsible-content">
+                            <div class="content-inner">
+                                <p>
+                                    Check if you login correctly into your Firefox account or you can try to force sync.
+                                    Have in mind that sometimes sync takes some time to completely sync everything. 
+                                </p>
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        <input id="troubleshooting3" class="faq" type="checkbox">
+                        <label for="troubleshooting3" class="lbl-faq">How do I unistall Simple Start?</label>
+                        <div class="collapsible-content">
+                            <div class="content-inner">
+                                <p>
+                                    You can delete Simple Start extension from 'Manage Your Extensions' page in Firefox by clicking three dots next to name of an extension and then by clicking on 'delete' button.
+                                </p>
+                            </div>
+                        </div>
+                    </li>
+                </ol>
+            </div>
+            <div>
+                <h2>Didn't find answer you were looking for?</h2>
+                <p>
+                    No problem! Send your question to an email that's below and you will get an answer as soon as possible.
+                    <span id="email-span">support@example.com</span>
+                </p>
+            </div>
+        </div>
+        <footer>
+            <span>
+                &copy; <script>document.write(new Date().getFullYear()); //getting current year</script>, datguysheepy
+            </span>
+        </footer>
+    </div>
+</body>
+</html>

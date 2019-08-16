@@ -1,8 +1,17 @@
 {
     "manifest_version": 2,
     "name": "Simple Start",
-    "version": "0.2",
-    "description": "...",
+    "version": "1.0",
+    "description": "Minimalistic new tage page extensions. Let's you to have all the bookmarks you may need every time you open new tab.",
+    "developer": {
+      "name": "datguysheepy",
+      "url": "simplestart.mtymon.me"
+    },
+
+    "icons": {
+      "48": "icon48.png",
+      "96": "icon96.png"
+    },
 
     "permissions": ["bookmarks", "storage"],
 
