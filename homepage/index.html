@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Simple Start — Homepage</title>
+    <link rel="stylesheet" href="style.css">
+    <!--favicons-->
+    <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+    <link rel="manifest" href="site.webmanifest">
+    <meta name="msapplication-TileColor" content="#da532c">
+    <meta name="theme-color" content="#ffffff">
+    <!--script-->
+    <script src="main.js"></script>
+</head>
+<body>
+    <div class="main-container" id="home">
+        <nav>
+            <div id="nav-header">
+                <h1>SIMPLE START</h1>
+                <h2>Minimalistic new tab page extension</h2>
+            </div>
+            <div id="scroll-nav">
+                <div id="header">
+                    <h1>SIMPLE START</h1>
+                </div>
+                <div id="mobile-content">
+                    <a href="#home" title="Homepage">Home</a>
+                    <a href="#features" title="Extension Features">Features</a>
+                    <a href="faq.html" title="Frequently Asked Questions">Support</a>
+                    <a href="changelog.html" title="Extension Changelog">Changelog</a>
+                </div>    
+            </div>
+        </nav>
+
+        <div id="get-buttons">
+            <!--for later use: when chrome version of extension is done<p>
+                <a class="get-btn" href="https://google.com">Add to Google Chrome</a>
+            </p>-->
+            <p>
+                <a class="get-btn" href="https://twitter.com/firefox">Add to Firefox</a>
+            </p>
+        </div>
+
+        <div id="features">
+            <p id="about">
+                Simple Start is minimalistic extension for Firefox that lets you have all the bookmarks you need every time you open new tab.
+            </p>
+
+            <div id="features-breakdown">
+                <div class="feature-card">
+                    <div class="feature-card-title">Bookmarks tags</div>
+                    <div class="feature-card-details"> 
+                        <p>
+                            Organize bookmarks in tags so you can have every bookmark you may need in specific situation. Be more productive thanks to seperated tags for your home, work, and your hobbies.
+                        </p>
+                    </div>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-card-title">Save any website</div>
+                    <div class="feature-card-details"> 
+                        <p>
+                            Unlike "Firefox Home Content", Simple Start lets you to save every website you like to.
+                        </p>
+                    </div>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-card-title">Synchronize</div>
+                    <div class="feature-card-details"> 
+                        <p>
+                            Thanks to Firefox Sync you are available to synchronize bookmarks and tags used by Simple Start between your devices. 
+                        </p>
+                    </div>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-card-title">Dark Mode</div>
+                    <div class="feature-card-details"> 
+                        <p>
+                            You work at night? Or maybe you don't like to see this bright white every time you opens new tab? No problem, Simple Start comes with built-in darkmode.
+                        </p>
+                    </div>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-card-title">Minimalistic</div>
+                    <div class="feature-card-details"> 
+                        <p>
+                            This extension was built with minimalistic style in mind. It comes only with functions that you may need and looks simple rather than being overpacked with everything.
+                        </p>
+                    </div>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-card-title">Customize</div>
+                    <div class="feature-card-details"> 
+                        <p>
+                            You want to change background color? No problem! You don't like how big or small gap between bookmarks is? No problem, you can change that and more via built-in settings menu.
+                            <br>(more options will come in future updates!)
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <footer>
+            <span>
+                &copy; <script>document.write(new Date().getFullYear()); //getting current year</script>, datguysheepy
+            </span>
+        </footer>
+    </div>
+</body>
+</html>
