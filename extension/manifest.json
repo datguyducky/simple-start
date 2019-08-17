@@ -20,11 +20,5 @@
     },
     "chrome_settings_overrides": {
         "homepage": "simplestart.html"
-    },
-
-    "applications": {
-      "gecko": {
-        "id": "addon@example.com"
-      }
     }
   }
