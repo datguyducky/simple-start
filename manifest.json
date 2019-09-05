@@ -2,7 +2,7 @@
     "manifest_version": 2,
     "name": "Simple Start",
     "version": "1.0.1",
-    "description": "Minimalistic new tage page extensions. Let's you to have all the bookmarks you may need every time you open new tab.",
+    "description": "Minimalistic new tab page extension. Organize bookmark in to tags - be more productive with seperated tags for your home, work, and your hobbies. ",
     "developer": {
       "name": "datguysheepy",
       "url": "simplestart.mtymon.me"
