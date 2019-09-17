@@ -35,7 +35,8 @@ defaultStorage.then(idSearch).then(function (res) {
 			borderColor: "#e9e9e9",
 			btnBgBorderColor: "#333333",
 			btnTextColor: "#fafafa",
-			btnShadowColor: "#8a8a8a"
+			btnShadowColor: "#8a8a8a",
+			activeGroup: "Default group"
 		});
 
 		window.location.reload(false);
