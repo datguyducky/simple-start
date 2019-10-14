@@ -1,3 +1,4 @@
+feather.replace();
 //clearing storage 
 //var clearing = browser.storage.sync.clear();
 
@@ -87,7 +88,7 @@ function groupMaker(children) {
 
 		for (i = 0; i < children.length; i++) {
 			if (children[i].type == 'folder') {
-				console.log(children[i].title);
+				//console.log(children[i].title);
 				//getting all elements on left and right of header on navbar.
 				var groupsLeft = document.getElementById("nav-groups-list-left");
 				var groupsRight = document.getElementById("nav-groups-list-right");
@@ -166,7 +167,14 @@ function cardMaker(activeID) {
 	function createCard(children) {
 		//checking if there're any bookmarks inside currently selected group (folder).
 		if (!children) {
-			console.log("no bookmarks were find")
+			console.log("no bookmarks were find");
+			const NO_CHILD = document.createElement('p');
+			
+			document.getElementById('bookmarks').appendChild(NO_CHILD)
+			.innerHTML = "Click '+' on navigation (top-right corner) to create new bookmark or save bookmark into 'simplestart' folder by any other method!";
+		
+			NO_CHILD.setAttribute('id', 'new');
+			document.getElementById('bookmarks').style.display = "flex";
 		} else {
 			//loop for every item and making bookmark-card for it.
 			for (i = 0; i < children.length; i++) {
@@ -436,7 +444,7 @@ document.getElementById('select-bookmark').onclick = function newgroup() {
 			//displaying error if name or url of bookmark is empty.
 			var error = document.getElementsByClassName("input-error");
 			error[1].style.display = "block";
-			console.log("w errorze");
+			console.log("empty name or url!");
 		}
 	}
 
