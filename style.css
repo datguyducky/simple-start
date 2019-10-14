@@ -1,7 +1,5 @@
-/* Roboto for almost whole document; Nunito for bookmarks names */
-@import url('https://fonts.googleapis.com/css?family=Roboto&display=swap');
-@import url('https://fonts.googleapis.com/css?family=Nunito&display=swap');
-
+/* importing default fonts: Maven Pro (for almost whole page) and Muli (for bookmarks cards title) */
+@import url('/fonts/fonts.css');
 /* creating colors by this way so script can easily change/load them if needed */
 :root {
 	--firstBgColor: #fafafa;
@@ -25,14 +23,25 @@ body {
 	padding: 0;
 	margin: 0;
 	background-color: var(--documentBgColor);
-	font-family: 'Roboto', sans-serif;
+	font-family: 'Maven Pro', sans-serif;
 }
 
+/* for displaying text when there isn't any bookmark inside current tag */
+#new {
+	margin: 0 auto;
+	font-size: 16px;
+	color: var(--firstTextColor);
+	width: 42%;
+	text-align: center;
+	font-weight: bold;
+	opacity: 0.9;
+	z-index: 2;
+}
 
 #main {
 	min-height: 100vh;
 	display: grid;
-	grid-template-rows: 52px 1fr;
+	grid-template-rows: auto 1fr;
 	grid-gap: 23px;
 }
 
@@ -45,7 +54,8 @@ body {
 	border-bottom: 2px solid var(--borderColor);
 	color: var(--secondTextColor);
 	box-shadow: 1px 1px 8px 2px var(--shadowColor);
-	z-index: 2;
+	z-index: 20;
+	min-height: 52px;
 }
 
 #nav-header {
@@ -58,6 +68,7 @@ body {
 	padding: 0;
 	margin: 0;
 	font-size: 38px;
+	font-weight: 500;
 }
 
 .nav-groups {
@@ -169,6 +180,7 @@ body {
 	margin-bottom: 0;
 	padding: 0;
 	padding-bottom: 4px;
+	font-weight: 500;
 }
 
 #user-settings-content {
@@ -217,10 +229,6 @@ body {
 
 .settings-area#bookmarks-style input:checked+.bookmarks-style-radio {
 	background-color: #D95B5B; /* temporary solution */
-}
-
-.inwork {
-	opacity: 0.5;
 }
 
 .settings-area#bookmarks-background h4 {
@@ -272,6 +280,10 @@ body {
 
 #background-solid input:checked+.radio-add {
 	opacity: 1;
+}
+
+#background-solid .radio-add:hover {
+	opacity: 0.8;
 }
 
 .settings-area#bookmarks-darkmode {
@@ -355,20 +367,32 @@ body {
 	border-bottom: 2px solid var(--firstTextColor);
 }
 
-#user-settings-footer #footer-info a {
-	color: var(--secondTextColor);
+#user-settings-footer a {
+	color: var(--firstTextColor);
 	font-weight: bold;
 	text-transform: uppercase;
 	font-size: 0.7rem;
 	text-decoration: none;
+	opacity: 0.7;
+	font-weight: 500;
 }
 
 #user-settings-footer #footer-info {
 	margin: 12px 0;
+	text-align: center;
+	font-size: 1rem;
+	margin-top: 24px;
+}
+
+#user-settings-footer .feather {
+	color: red;
+	fill: red;
+	width: 16px;
+	height: 16px;
 }
 
 #user-settings-footer #footer-info a:hover {
-	color: var(--firstTextColor);
+	opacity: 1;
 }
 
 .new-content {
@@ -392,17 +416,20 @@ body {
 	justify-content: center;
 	padding: 5em 0;
 	margin-top: 4em;
+	z-index: 10;
 }
 
 .new-content h2 {
 	margin: 0;
 	text-align: center;
+	font-weight: 500;
 }
 
 .new-content h3 {
 	margin: 0;
 	padding: 0;
 	font-size: 0.8rem;
+	font-weight: 500;
 }
 
 .new-content input {
@@ -496,7 +523,7 @@ body {
 	border-top: 2px solid var(--borderColor);
 	font-size: 1.2rem;
 	text-align: center;
-	font-family: 'Nunito', sans-serif;
+	font-family: 'Muli', sans-serif;
 }
 
 #bookmarks-add-content {
