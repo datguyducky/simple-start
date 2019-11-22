@@ -1,4 +1,23 @@
 feather.replace();
+window.onload = function() {
+	let d = new Date();
+	let currentTime = d.getHours();
+	let darkmode = document.getElementById("darkmode");
+	
+	if(currentTime >= 21 || currentTime <= 5 && darkmode.checked == true){
+		browser.storage.sync.set({
+			firstBgColor: "#212121",
+			firstTextColor: "#fafafa",
+			secondTextColor: "#bcbcbc",
+			activeColor: "#f0f0f0",
+			shadowColor: "#494949",
+			borderColor: "#494949",
+			btnBgBorderColor: "#383838",
+			btnTextColor: "#fafafa",
+			btnShadowColor: "#444444"
+		});
+	} 
+}
 //clearing storage 
 //var clearing = browser.storage.sync.clear();
 

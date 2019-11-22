@@ -289,9 +289,10 @@ body {
 .settings-area#bookmarks-darkmode {
 	margin-top: 21px;
 	display: flex;
-	align-items: center;
+	
 	padding-bottom: 21px;
 	border-bottom: 1px solid var(--borderColor);
+	flex-direction: column;
 }
 
 .settings-area#bookmarks-darkmode h4 {
