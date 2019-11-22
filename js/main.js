@@ -409,6 +409,11 @@ document.getElementById('select-bookmark').onclick = function newgroup() {
 
 		//checking if name and url are not empty.
 		if (userInputName.length != "" && userInputURL.length != "") {
+			//using regex to be sure that website url starts with 'http://' or 'https://'. Firefox API won't let create new bookmark without it.
+			let re = /^(https?|chrome):\/\/[^\s$.?#].[^\s]*$/gm;
+			//if user didn't typed 'http' or 'https' when creating new bookmark, then we will do that for him.
+			if(re.exec(userInputURL) == null){userInputURL = 'http://' + userInputURL} //using 'http' here to be sure that every website works.
+			
 			function bookmarkCreator(bookmarkItems) {
 				for (item of bookmarkItems) {
 					function onCreated() {

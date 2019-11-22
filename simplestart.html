@@ -137,9 +137,12 @@
 			<h2>CREATE NEW BOOKMARK</h2>
 			<h3>FOR CURRENT GROUP</h3>
 			<input type="text" name="newbookmark" id="new-bookmark-input" placeholder="BOOKMARK NAME (e.g Google)">
-			<input type="text" name="newbookmark" id="new-bookmark-url-input" placeholder="BOOKMARK URL (e.g https://google.com)"><!-- must be with https, else it doesn't work -->
+			<!-- 
+				must start with 'http://' or 'https://' - using regex to make sure website url starts with it 
+			-->
+			<input type="text" name="newbookmark" id="new-bookmark-url-input" placeholder="BOOKMARK URL (e.g google.com)">
 			<p class="input-error">bookmark name must be at least 1 character long and URL can't be empty.</p>
-				<!-- again: it easier to get bookmark id when you name of it + what type of bookmark is it when the URL is empty? -->
+				<!-- again: it easier to get bookmark id when you name it + what type of bookmark is it when the URL is empty? -->
 
 			<div class="new-btn" id="new-bookmark-create">CREATE</div><!-- on-click send user input to script so the bookmark can be created -->
 		</div>
