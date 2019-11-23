@@ -85,11 +85,16 @@
 						</div>
 						<div class="settings-area" id="bookmarks-darkmode">
 							<!-- nav, settings, cards etc. - dark or white -->
-							<h4>dark mode: </h4>
-							<input type="checkbox" name="darkmode" id="darkmode">
-							
-							<h4>Auto dark-mode (between 9pm and 6am) </h4>
-							<input type="checkbox" name="darkmode-auto" id="darkmode-auto">
+							<label for="darkmode">
+								Dark mode:
+								<input type="checkbox" name="darkmode" id="darkmode">
+							</label>
+							<label for="darkmode-auto">
+								Auto dark-mode: 
+								<input type="checkbox" name="darkmode-auto" id="darkmode-auto">
+								<p id="darkmode-auto-note">between 9pm and 5am!</p>
+							</label>
+						
 						</div>
 						<div class="settings-area" id="bookmarks-gridgap">
 							<label for="gridgap">Gap between cards: </label>

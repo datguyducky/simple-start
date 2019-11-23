@@ -294,15 +294,23 @@ body {
 	flex-direction: column;
 }
 
-.settings-area#bookmarks-darkmode h4 {
+.settings-area#bookmarks-darkmode label {
 	text-transform: uppercase;
 	margin: 0;
 	font-size: 1rem;
+	font-weight: bold;
 }
 
 .settings-area#bookmarks-darkmode input {
 	align-self: flex-start;
 	margin: 0 4px;
+}
+
+.settings-area#bookmarks-darkmode #darkmode-auto-note {
+	margin: 0;
+	font-size: 12px;
+	text-transform: uppercase;
+	font-weight: normal;
 }
 
 .settings-area#bookmarks-gridgap {
