@@ -1,23 +1,4 @@
 feather.replace();
-window.onload = function() {
-	let d = new Date();
-	let currentTime = d.getHours();
-	let darkmode = document.getElementById("darkmode");
-	
-	if(currentTime >= 21 || currentTime <= 5 && darkmode.checked == true){
-		browser.storage.sync.set({
-			firstBgColor: "#212121",
-			firstTextColor: "#fafafa",
-			secondTextColor: "#bcbcbc",
-			activeColor: "#f0f0f0",
-			shadowColor: "#494949",
-			borderColor: "#494949",
-			btnBgBorderColor: "#383838",
-			btnTextColor: "#fafafa",
-			btnShadowColor: "#444444"
-		});
-	} 
-}
 //clearing storage 
 //var clearing = browser.storage.sync.clear();
 
@@ -248,8 +229,47 @@ document.getElementById('btn-cancel').onclick = function () {
 	box.style.display = "none";
 }
 
-
 function restoreOptions() {
+	//getting user OS time.
+	let d = new Date();
+	let currentTime = d.getHours();
+	//getting boolean value of 'darkmode' and 'darkmode-auto' checkboxes.
+	let darkmode_auto = document.getElementById('darkmode-auto').checked;
+	let darkmode = document.getElementById('darkmode').checked;
+	//if 'darkmode' checkbox is checked then set CSS variables to dark mode colors.
+	//or if 'darkmode-auto' checkbox is checked and user time is equal or between 9pm and 5am then set CSS variables to dark mode colors.
+	//otherwise use colors for white mode.
+	if((darkmode_auto == true && (currentTime >= 21 || currentTime <= 5)) || darkmode == true){
+		console.log('dark mode is: ON');
+		browser.storage.sync.set({
+			firstBgColor: "#212121",
+			firstTextColor: "#fafafa",
+			secondTextColor: "#bcbcbc",
+			activeColor: "#f0f0f0",
+			shadowColor: "#494949",
+			borderColor: "#494949",
+			btnBgBorderColor: "#383838",
+			btnTextColor: "#fafafa",
+			btnShadowColor: "#444444"
+			
+		});
+		
+	}
+	else {
+		console.log('dark mode is: OFF');
+		browser.storage.sync.set({
+			firstBgColor: "#fafafa",
+			firstTextColor: "#333333",
+			secondTextColor: "#8a8a8a",
+			activeColor: "#3f3f3f",
+			shadowColor: "#e9e9e9",
+			borderColor: "#e9e9e9",
+			btnBgBorderColor: "#333333",
+			btnTextColor: "#fafafa",
+			btnShadowColor: "#8a8a8a"
+		});
+	}
+	
 	function setCurrentChoice(result) {
 		document.documentElement.style.setProperty('--shadowColor', result.shadowColor);
 
@@ -290,8 +310,6 @@ function restoreOptions() {
 //changing and saving settings:
 document.addEventListener("DOMContentLoaded", restoreOptions);
 document.getElementById('btn-save').onclick = function savingSettings() {
-	window.location.reload(false); //reloading page when settings are saved
-
 	var solid_color = document.getElementsByName('solid-color');
 	for (var i = 0; i < solid_color.length; i++) {
 		if (solid_color[i].checked) {
@@ -307,33 +325,7 @@ document.getElementById('btn-save').onclick = function savingSettings() {
 		gridGap: gridgap
 	});
 
-	var darkmode = document.getElementById("darkmode");
-
-	if (darkmode.checked == true) {
-		browser.storage.sync.set({
-			firstBgColor: "#212121",
-			firstTextColor: "#fafafa",
-			secondTextColor: "#bcbcbc",
-			activeColor: "#f0f0f0",
-			shadowColor: "#494949",
-			borderColor: "#494949",
-			btnBgBorderColor: "#383838",
-			btnTextColor: "#fafafa",
-			btnShadowColor: "#444444"
-		});
-	} else {
-		browser.storage.sync.set({
-			firstBgColor: "#fafafa",
-			firstTextColor: "#333333",
-			secondTextColor: "#8a8a8a",
-			activeColor: "#3f3f3f",
-			shadowColor: "#e9e9e9",
-			borderColor: "#e9e9e9",
-			btnBgBorderColor: "#333333",
-			btnTextColor: "#fafafa",
-			btnShadowColor: "#8a8a8a"
-		});
-	}
+	window.location.reload(false); //reloading page when settings are saved
 }
 
 //real-time preview of changing gap size.
