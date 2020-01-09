@@ -25,5 +25,8 @@ One thing I disliked about Firefox after I switched from Opera to it, was lack o
 ## 🤝 Contribution:
 I strongly encourage to contribute to development of Simple Start extension. Bugs reports and new features suggestions can be made by creating new Issue - with appropriate title and description.
 
+## 📦 Favicon Service
+Simple Start use [Besticon](https://github.com/mat/besticon) to gain ability to show websites favicon. Hosted on Heroku.
+
 ## 📝 License:
 Simple Start extension is open-source project licensed under the [GLP-3.0 license](LICENSE).
