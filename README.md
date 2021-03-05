@@ -3,8 +3,6 @@
 One thing I disliked about Firefox after I switched from Opera to it, was lack of speed dial for new tab page. That's why I created Simple Start - for minimalistic new tab page speed dial.
 
 <p align="center">
-	<a href="https://simplestart.mtymon.me/">Homepage</a>
-	|
 	<a href="https://addons.mozilla.org/en-US/firefox/addon/simple-start/">Get it for Firefox</a>
 </p>
 
