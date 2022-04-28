@@ -1,0 +1,3 @@
+# don't lint extension build output
+dist
+old

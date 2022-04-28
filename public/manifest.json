@@ -1,0 +1,24 @@
+{
+  "manifest_version": 2,
+  "name": "Simple Start",
+  "version": "2.0.0",
+  "description": "Minimalistic new tab page extension. Organize bookmarks into groups - be more productive with bookmarks sorted by groups for your Work, Home and Hobbies.",
+  "permissions": [
+    "bookmarks",
+    "storage"
+  ],
+  "options_ui": {
+    "page": "src/pages/settings/index.html",
+    "open_in_tab": true
+  },
+  "chrome_url_overrides": {
+    "newtab": "src/pages/newtab/index.html"
+  },
+  "chrome_settings_overrides": {
+    "homepage": "src/pages/newtab/index.html"
+  },
+  "icons": {
+    "48": "icon48.png",
+    "96": "icon96.png"
+  }
+}
