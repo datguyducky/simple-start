@@ -1,8 +1,6 @@
 import { useState } from 'react';
-import { Button, Grid, Group, Menu, Text, Title, Modal } from '@mantine/core';
+import { Button, Grid, Group, Menu, Text, Title, Modal, Box } from '@mantine/core';
 import { CogIcon, PlusIcon, BookmarkIcon, CollectionIcon } from '@heroicons/react/outline';
-
-import { NewTabLayout } from './NewTab.styles';
 
 import { NewBookmarkForm } from '../../forms/NewBookmarkForm';
 import { NewCategoryForm } from '../../forms/NewCategoryForm';
@@ -13,7 +11,7 @@ export const NewTab = () => {
 
 	return (
 		<>
-			<NewTabLayout>
+			<Box py={32} px={96}>
 				<Grid columns={3} style={{ marginBottom: 32 }}>
 					<Grid.Col span={1}>
 						<Title>Simple Start</Title>
@@ -73,6 +71,12 @@ export const NewTab = () => {
 										backgroundColor: theme.colors.gray[2],
 									},
 								})}
+								onClick={async () =>
+									await browser.runtime
+										.openOptionsPage()
+										.then(() => console.log('did work?'))
+										.catch((error) => console.error(error))
+								}
 							>
 								Settings
 							</Button>
@@ -85,7 +89,7 @@ export const NewTab = () => {
 						Click "add" button to add your first bookmark to this view.
 					</Text>
 				</div>
-			</NewTabLayout>
+			</Box>
 
 			<Modal
 				opened={newBookmarkModal}
