@@ -3,10 +3,13 @@ import { Button, Grid, Group, Menu, Text, Title, Modal } from '@mantine/core';
 import { CogIcon, PlusIcon, BookmarkIcon, CollectionIcon } from '@heroicons/react/outline';
 
 import { NewTabLayout } from './NewTab.styles';
+
 import { NewBookmarkForm } from '../../forms/NewBookmarkForm';
+import { NewCategoryForm } from '../../forms/NewCategoryForm';
 
 export const NewTab = () => {
 	const [newBookmarkModal, setNewBookmarkModal] = useState(false);
+	const [newCategoryModal, setNewCategoryModal] = useState(false);
 
 	return (
 		<>
@@ -54,6 +57,7 @@ export const NewTab = () => {
 											backgroundColor: theme.colors.gray[2],
 										},
 									})}
+									onClick={() => setNewCategoryModal(true)}
 								>
 									New Category
 								</Menu.Item>
@@ -87,7 +91,7 @@ export const NewTab = () => {
 				opened={newBookmarkModal}
 				onClose={() => setNewBookmarkModal(false)}
 				centered
-				title="Add New Bookmark"
+				title="Add new bookmark"
 				size="lg"
 				styles={(theme) => ({
 					title: {
@@ -100,6 +104,25 @@ export const NewTab = () => {
 				})}
 			>
 				<NewBookmarkForm />
+			</Modal>
+
+			<Modal
+				opened={newCategoryModal}
+				onClose={() => setNewCategoryModal(false)}
+				centered
+				title="Add new category"
+				size="lg"
+				styles={(theme) => ({
+					title: {
+						fontSize: theme.headings.sizes.h3.fontSize,
+						fontWeight: 'bold',
+					},
+					close: {
+						color: theme.colors.red[6],
+					},
+				})}
+			>
+				<NewCategoryForm />
 			</Modal>
 		</>
 	);
