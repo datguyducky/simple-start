@@ -12,9 +12,9 @@ export const NewBookmarkForm = () => {
 			/>
 			<Select
 				label="Select bookmark category"
-				data={[{ label: 'Test', value: 'testValue' }]}
+				data={[]}
 				searchable
-				nothingFound="No category found"
+				nothingFound="Category not found"
 				clearable
 				mb="xl"
 				styles={(theme) => ({
@@ -30,7 +30,7 @@ export const NewBookmarkForm = () => {
 			/>
 
 			<Group position="right">
-				<Button type="submit">Add new bookmark</Button>
+				<Button type="submit">Create new bookmark</Button>
 			</Group>
 		</Box>
 	);
