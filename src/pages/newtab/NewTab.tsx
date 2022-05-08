@@ -1,13 +1,62 @@
-import { useState } from 'react';
-import { Button, Grid, Group, Menu, Text, Title, Modal, Box } from '@mantine/core';
-import { CogIcon, PlusIcon, BookmarkIcon, CollectionIcon } from '@heroicons/react/outline';
+import { useEffect, useState } from 'react';
+import { Button, Grid, Group, Menu, Text, Title, Modal, Box, Select } from '@mantine/core';
+import {
+	CogIcon,
+	PlusIcon,
+	BookmarkIcon,
+	CollectionIcon,
+	ChevronDownIcon,
+} from '@heroicons/react/outline';
 
 import { NewBookmarkForm } from '../../forms/NewBookmarkForm';
 import { NewCategoryForm } from '../../forms/NewCategoryForm';
+import BookmarkTreeNode = browser.bookmarks.BookmarkTreeNode;
+import { BookmarkCapsule } from '../../components/BookmarkCapsule';
 
 export const NewTab = () => {
 	const [newBookmarkModal, setNewBookmarkModal] = useState(false);
 	const [newCategoryModal, setNewCategoryModal] = useState(false);
+
+	const [categoriesList, setCategoriesList] = useState<BookmarkTreeNode[]>([]);
+	const [uncategorizedBookmarks, setUncategorizedBookmarks] = useState<BookmarkTreeNode[]>([]);
+
+	const [selectedCategoryId, setSelectedCategoryId] = useState<string | null>(null);
+	const [bookmarksList, setBookmarksList] = useState<BookmarkTreeNode[]>([]);
+
+	useEffect(() => {
+		browser.bookmarks
+			.search({ title: 'simplestart' })
+			.then((extensionFolder) => {
+				if (extensionFolder && extensionFolder?.length > 0) {
+					const { id } = extensionFolder[0]; // we just get the first found folder and hope it's the correct one
+					browser.bookmarks
+						.getChildren(id)
+						.then((folderContent) => {
+							// save all categories (bookmarks folders)
+							setCategoriesList(
+								folderContent.filter((content) => content.type === 'folder'),
+							);
+
+							// save all bookmarks that are stored in the root of the extension folder
+							setUncategorizedBookmarks(
+								folderContent.filter((content) => content.type === 'bookmark'),
+							);
+						})
+						.catch((error) => console.error(error));
+				}
+				// TODO: handle when no folder was found?
+			})
+			.catch((error) => console.log(error)); // TODO: handle error
+	}, []);
+
+	useEffect(() => {
+		if (selectedCategoryId) {
+			browser.bookmarks
+				.getChildren(selectedCategoryId)
+				.then((bookmarks) => setBookmarksList(bookmarks))
+				.catch((error) => console.error(error));
+		}
+	}, [selectedCategoryId]);
 
 	return (
 		<>
@@ -85,10 +134,51 @@ export const NewTab = () => {
 				</Grid>
 
 				<div>
-					<Text color="dimmed">
-						Click "add" button to add your first bookmark to this view.
-					</Text>
+					{categoriesList?.length < 0 && uncategorizedBookmarks?.length < 0 && (
+						<Text color="dimmed">
+							Click "add" button to add your first bookmark to this view.
+						</Text>
+					)}
+
+					<Select
+						data={categoriesList.map((category) => ({
+							...category,
+							value: category.id,
+							label: category.title,
+						}))}
+						rightSection={<ChevronDownIcon style={{ width: 18, height: 18 }} />}
+						variant="unstyled"
+						styles={(theme) => ({
+							root: {
+								maxWidth: 120,
+							},
+							dropdown: {
+								backgroundColor: 'transparent',
+								padding: 0,
+								//border: 'none',
+								//boxShadow: 'none',
+							},
+							item: {
+								padding: 0,
+								backgroundColor: 'transparent',
+							},
+							input: {
+								fontSize: 18,
+								fontWeight: 600,
+							},
+						})}
+						allowDeselect
+						initiallyOpened
+						withinPortal={false}
+						value={selectedCategoryId}
+						onChange={setSelectedCategoryId}
+						//dropdownComponent={<div></div>}
+					/>
 				</div>
+
+				{bookmarksList?.map((bookmark) => (
+					<BookmarkCapsule title={bookmark.title} url={bookmark?.url} />
+				))}
 			</Box>
 
 			<Modal
