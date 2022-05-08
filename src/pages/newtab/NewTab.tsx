@@ -19,6 +19,7 @@ export const NewTab = () => {
 	const [selectedCategoryId, setSelectedCategoryId] = useState<string | null>(null);
 	const [bookmarksList, setBookmarksList] = useState<BookmarkTreeNode[]>([]);
 
+	// TODO: re-run this after new bookmark/category was created
 	useEffect(() => {
 		browser.bookmarks
 			.search({ title: 'simplestart' })
@@ -128,7 +129,7 @@ export const NewTab = () => {
 					},
 				})}
 			>
-				<NewBookmarkForm />
+				<NewBookmarkForm onClose={() => setNewBookmarkModal(false)} />
 			</Modal>
 
 			<Modal
@@ -147,7 +148,7 @@ export const NewTab = () => {
 					},
 				})}
 			>
-				<NewCategoryForm />
+				<NewCategoryForm onClose={() => setNewCategoryModal(false)} />
 			</Modal>
 		</>
 	);
