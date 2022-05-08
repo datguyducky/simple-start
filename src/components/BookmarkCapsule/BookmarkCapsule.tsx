@@ -7,8 +7,50 @@ type BookmarkCapsuleProps = {
 
 export const BookmarkCapsule = ({ title, url }: BookmarkCapsuleProps) => {
 	return (
-		<Box>
-			<Text>{title}</Text>
+		<Box
+			sx={{
+				textAlign: 'center',
+				display: 'flex',
+				flexDirection: 'column',
+				alignItems: 'center',
+				cursor: 'pointer',
+				color: 'black',
+				textDecoration: 'none',
+				maxWidth: 120,
+			}}
+			component="a"
+			href={url}
+		>
+			<Box
+				sx={{
+					marginBottom: 8,
+					height: 64,
+					width: 64,
+					padding: 16,
+					backgroundColor: '#F3F3F3',
+					boxSizing: 'border-box',
+					borderRadius: '100%',
+					boxShadow: 'inset 0px 4px 8px rgba(0, 0, 0, 0.05)',
+				}}
+			>
+				<img
+					src={`https://simplestart-favicon-service.herokuapp.com/icon?url=${url}&size=64`}
+					height={32}
+					width={32}
+				/>
+			</Box>
+
+			<Text
+				sx={{
+					textOverflow: 'ellipsis',
+					overflow: 'hidden',
+					whiteSpace: 'nowrap',
+					maxWidth: 120,
+					fontSize: 14,
+				}}
+			>
+				{title}
+			</Text>
 		</Box>
 	);
 };

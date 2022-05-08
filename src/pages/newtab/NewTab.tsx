@@ -1,17 +1,13 @@
 import { useEffect, useState } from 'react';
-import { Button, Grid, Group, Menu, Text, Title, Modal, Box, Select } from '@mantine/core';
-import {
-	CogIcon,
-	PlusIcon,
-	BookmarkIcon,
-	CollectionIcon,
-	ChevronDownIcon,
-} from '@heroicons/react/outline';
+import { Text, Modal, Box, Select, Grid } from '@mantine/core';
+import { ChevronDownIcon } from '@heroicons/react/outline';
+import BookmarkTreeNode = browser.bookmarks.BookmarkTreeNode;
 
 import { NewBookmarkForm } from '../../forms/NewBookmarkForm';
 import { NewCategoryForm } from '../../forms/NewCategoryForm';
-import BookmarkTreeNode = browser.bookmarks.BookmarkTreeNode;
+
 import { BookmarkCapsule } from '../../components/BookmarkCapsule';
+import { NewTabHeader } from '../../components/NewTabHeader';
 
 export const NewTab = () => {
 	const [newBookmarkModal, setNewBookmarkModal] = useState(false);
@@ -60,80 +56,22 @@ export const NewTab = () => {
 
 	return (
 		<>
-			<Box py={32} px={96}>
-				<Grid columns={3} style={{ marginBottom: 32 }}>
-					<Grid.Col span={1}>
-						<Title>Simple Start</Title>
-					</Grid.Col>
+			<Box
+				py={32}
+				px={96}
+				sx={{
+					height: '100%',
+					display: 'flex',
+					flexDirection: 'column',
+					boxSizing: 'border-box',
+				}}
+			>
+				<NewTabHeader
+					onNewBookmarkClick={() => setNewBookmarkModal(true)}
+					onNewCategoryClick={() => setNewCategoryModal(true)}
+				/>
 
-					<Grid.Col span={1} offset={1}>
-						<Group position="right" spacing="xs">
-							<Menu
-								control={
-									<Button
-										variant="subtle"
-										leftIcon={<PlusIcon style={{ width: 14, height: 14 }} />}
-										compact
-										color="dark"
-										sx={(theme) => ({
-											'&:hover': {
-												backgroundColor: theme.colors.gray[2],
-											},
-										})}
-									>
-										Add
-									</Button>
-								}
-								withArrow
-							>
-								<Menu.Item
-									icon={<BookmarkIcon style={{ width: 14, height: 14 }} />}
-									sx={(theme) => ({
-										'&:hover': {
-											backgroundColor: theme.colors.gray[2],
-										},
-									})}
-									onClick={() => setNewBookmarkModal(true)}
-								>
-									New Bookmark
-								</Menu.Item>
-								<Menu.Item
-									icon={<CollectionIcon style={{ width: 14, height: 14 }} />}
-									sx={(theme) => ({
-										'&:hover': {
-											backgroundColor: theme.colors.gray[2],
-										},
-									})}
-									onClick={() => setNewCategoryModal(true)}
-								>
-									New Category
-								</Menu.Item>
-							</Menu>
-
-							<Button
-								variant="subtle"
-								leftIcon={<CogIcon style={{ width: 14, height: 14 }} />}
-								compact
-								color="dark"
-								sx={(theme) => ({
-									'&:hover': {
-										backgroundColor: theme.colors.gray[2],
-									},
-								})}
-								onClick={async () =>
-									await browser.runtime
-										.openOptionsPage()
-										.then(() => console.log('did work?'))
-										.catch((error) => console.error(error))
-								}
-							>
-								Settings
-							</Button>
-						</Group>
-					</Grid.Col>
-				</Grid>
-
-				<div>
+				<Box>
 					{categoriesList?.length < 0 && uncategorizedBookmarks?.length < 0 && (
 						<Text color="dimmed">
 							Click "add" button to add your first bookmark to this view.
@@ -142,7 +80,6 @@ export const NewTab = () => {
 
 					<Select
 						data={categoriesList.map((category) => ({
-							...category,
 							value: category.id,
 							label: category.title,
 						}))}
@@ -150,17 +87,8 @@ export const NewTab = () => {
 						variant="unstyled"
 						styles={(theme) => ({
 							root: {
-								maxWidth: 120,
-							},
-							dropdown: {
-								backgroundColor: 'transparent',
-								padding: 0,
-								//border: 'none',
-								//boxShadow: 'none',
-							},
-							item: {
-								padding: 0,
-								backgroundColor: 'transparent',
+								width: 156,
+								marginBottom: 32,
 							},
 							input: {
 								fontSize: 18,
@@ -168,17 +96,20 @@ export const NewTab = () => {
 							},
 						})}
 						allowDeselect
-						initiallyOpened
 						withinPortal={false}
 						value={selectedCategoryId}
 						onChange={setSelectedCategoryId}
-						//dropdownComponent={<div></div>}
+						placeholder="No category"
 					/>
-				</div>
 
-				{bookmarksList?.map((bookmark) => (
-					<BookmarkCapsule title={bookmark.title} url={bookmark?.url} />
-				))}
+					<Grid columns={12} gutter={48}>
+						{bookmarksList?.map((bookmark) => (
+							<Grid.Col span={1}>
+								<BookmarkCapsule title={bookmark.title} url={bookmark?.url} />
+							</Grid.Col>
+						))}
+					</Grid>
+				</Box>
 			</Box>
 
 			<Modal

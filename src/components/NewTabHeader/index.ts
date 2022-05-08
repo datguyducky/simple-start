@@ -1,0 +1,1 @@
+export { NewTabHeader } from './NewTabHeader';
