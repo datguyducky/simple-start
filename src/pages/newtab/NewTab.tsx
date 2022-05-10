@@ -72,45 +72,72 @@ export const NewTab = () => {
 					onNewCategoryClick={() => setNewCategoryModal(true)}
 				/>
 
-				<Box>
-					{categoriesList?.length < 0 && uncategorizedBookmarks?.length < 0 && (
-						<Text color="dimmed">
-							Click "add" button to add your first bookmark to this view.
-						</Text>
-					)}
+				{categoriesList?.length < 0 && uncategorizedBookmarks?.length < 0 && (
+					<Text color="dimmed">
+						Click "add" button to add your first bookmark to this view.
+					</Text>
+				)}
 
-					<Select
-						data={categoriesList.map((category) => ({
-							value: category.id,
-							label: category.title,
-						}))}
-						rightSection={<ChevronDownIcon style={{ width: 18, height: 18 }} />}
-						variant="unstyled"
-						styles={(theme) => ({
-							root: {
-								width: 156,
-								marginBottom: 32,
-							},
-							input: {
-								fontSize: 18,
-								fontWeight: 600,
-							},
-						})}
-						allowDeselect
-						withinPortal={false}
-						value={selectedCategoryId}
-						onChange={setSelectedCategoryId}
-						placeholder="No category"
-					/>
+				<Select
+					data={categoriesList.map((category) => ({
+						value: category.id,
+						label: category.title,
+					}))}
+					rightSection={<ChevronDownIcon style={{ width: 18, height: 18 }} />}
+					variant="unstyled"
+					styles={(theme) => ({
+						root: {
+							marginBottom: 32,
+							width:
+								(categoriesList?.find(
+									(category) => category.id === selectedCategoryId,
+								)?.title?.length || 11) *
+									8 +
+								64,
+							maxWidth: '100%',
+							marginLeft: -8,
+						},
+						input: {
+							fontSize: 18,
+							fontWeight: 600,
+							paddingLeft: 8,
+							borderRadius: 5,
+							textOverflow: 'ellipsis',
+							overflow: 'hidden',
+							whiteSpace: 'nowrap',
+							paddingRight: 32,
 
-					<Grid columns={12} gutter={48}>
-						{bookmarksList?.map((bookmark) => (
-							<Grid.Col span={1}>
-								<BookmarkCapsule title={bookmark.title} url={bookmark?.url} />
-							</Grid.Col>
-						))}
-					</Grid>
-				</Box>
+							'&:hover': {
+								backgroundColor: theme.colors.gray[2],
+							},
+						},
+						dropdown: {
+							width: '210px !important',
+							minWidth: '210px !important',
+						},
+						hovered: {
+							backgroundColor: theme.colors.gray[2],
+							color: theme.colors.dark[9],
+						},
+						selected: {
+							backgroundColor: theme.colors.gray[2],
+							color: theme.colors.dark[9],
+						},
+					})}
+					allowDeselect
+					withinPortal={false}
+					value={selectedCategoryId}
+					onChange={setSelectedCategoryId}
+					placeholder="No category"
+				/>
+
+				<Grid columns={12} gutter={48}>
+					{bookmarksList?.map((bookmark) => (
+						<Grid.Col span={1}>
+							<BookmarkCapsule title={bookmark.title} url={bookmark?.url} />
+						</Grid.Col>
+					))}
+				</Grid>
 			</Box>
 
 			<Modal
