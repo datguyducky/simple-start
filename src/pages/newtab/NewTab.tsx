@@ -1,7 +1,6 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Text, Modal, Box, Select, Grid } from '@mantine/core';
 import { ChevronDownIcon } from '@heroicons/react/outline';
-import BookmarkTreeNode = browser.bookmarks.BookmarkTreeNode;
 
 import { NewBookmarkForm } from '../../forms/NewBookmarkForm';
 import { NewCategoryForm } from '../../forms/NewCategoryForm';
@@ -9,51 +8,20 @@ import { NewCategoryForm } from '../../forms/NewCategoryForm';
 import { BookmarkCapsule } from '../../components/BookmarkCapsule';
 import { NewTabHeader } from '../../components/NewTabHeader';
 
+import { useExtensionBookmarks } from '../../hooks/useExtensionBookmarks';
+import { useExtensionCategories } from '../../hooks/useExtensionCategories';
+
 export const NewTab = () => {
 	const [newBookmarkModal, setNewBookmarkModal] = useState(false);
 	const [newCategoryModal, setNewCategoryModal] = useState(false);
 
-	const [categoriesList, setCategoriesList] = useState<BookmarkTreeNode[]>([]);
-	const [uncategorizedBookmarks, setUncategorizedBookmarks] = useState<BookmarkTreeNode[]>([]);
-
 	const [selectedCategoryId, setSelectedCategoryId] = useState<string | null>(null);
-	const [bookmarksList, setBookmarksList] = useState<BookmarkTreeNode[]>([]);
 
-	// TODO: re-run this after new bookmark/category was created
-	useEffect(() => {
-		browser.bookmarks
-			.search({ title: 'simplestart' })
-			.then((extensionFolder) => {
-				if (extensionFolder && extensionFolder?.length > 0) {
-					const { id } = extensionFolder[0]; // we just get the first found folder and hope it's the correct one
-					browser.bookmarks
-						.getChildren(id)
-						.then((folderContent) => {
-							// save all categories (bookmarks folders)
-							setCategoriesList(
-								folderContent.filter((content) => content.type === 'folder'),
-							);
+	const { bookmarks, uncategorizedBookmarks } = useExtensionBookmarks({
+		categoryId: selectedCategoryId,
+	});
 
-							// save all bookmarks that are stored in the root of the extension folder
-							setUncategorizedBookmarks(
-								folderContent.filter((content) => content.type === 'bookmark'),
-							);
-						})
-						.catch((error) => console.error(error));
-				}
-				// TODO: handle when no folder was found?
-			})
-			.catch((error) => console.log(error)); // TODO: handle error
-	}, []);
-
-	useEffect(() => {
-		if (selectedCategoryId) {
-			browser.bookmarks
-				.getChildren(selectedCategoryId)
-				.then((bookmarks) => setBookmarksList(bookmarks))
-				.catch((error) => console.error(error));
-		}
-	}, [selectedCategoryId]);
+	const { categories } = useExtensionCategories();
 
 	return (
 		<>
@@ -72,72 +40,82 @@ export const NewTab = () => {
 					onNewCategoryClick={() => setNewCategoryModal(true)}
 				/>
 
-				{categoriesList?.length < 0 && uncategorizedBookmarks?.length < 0 && (
+				{categories?.length <= 0 && uncategorizedBookmarks?.length <= 0 ? (
 					<Text color="dimmed">
-						Click "add" button to add your first bookmark to this view.
+						Click "add" button to add your first bookmark and category to this view.
 					</Text>
+				) : (
+					<Select
+						data={categories.map((category) => ({
+							value: category.id,
+							label: category.title,
+						}))}
+						rightSection={<ChevronDownIcon style={{ width: 18, height: 18 }} />}
+						variant="unstyled"
+						styles={(theme) => ({
+							root: {
+								marginBottom: 32,
+								width:
+									(categories?.find(
+										(category) => category.id === selectedCategoryId,
+									)?.title?.length || 11) *
+										8 +
+									64,
+								maxWidth: '100%',
+								marginLeft: -8,
+							},
+							input: {
+								fontSize: 18,
+								fontWeight: 600,
+								paddingLeft: 8,
+								borderRadius: 5,
+								textOverflow: 'ellipsis',
+								overflow: 'hidden',
+								whiteSpace: 'nowrap',
+								paddingRight: 32,
+
+								'&:hover': {
+									backgroundColor: theme.colors.gray[2],
+								},
+							},
+							dropdown: {
+								width: '210px !important',
+								minWidth: '210px !important',
+							},
+							hovered: {
+								backgroundColor: theme.colors.gray[2],
+								color: theme.colors.dark[9],
+							},
+							selected: {
+								backgroundColor: theme.colors.gray[2],
+								color: theme.colors.dark[9],
+							},
+						})}
+						allowDeselect
+						withinPortal={false}
+						value={selectedCategoryId}
+						onChange={setSelectedCategoryId}
+						placeholder="No category"
+					/>
 				)}
 
-				<Select
-					data={categoriesList.map((category) => ({
-						value: category.id,
-						label: category.title,
-					}))}
-					rightSection={<ChevronDownIcon style={{ width: 18, height: 18 }} />}
-					variant="unstyled"
-					styles={(theme) => ({
-						root: {
-							marginBottom: 32,
-							width:
-								(categoriesList?.find(
-									(category) => category.id === selectedCategoryId,
-								)?.title?.length || 11) *
-									8 +
-								64,
-							maxWidth: '100%',
-							marginLeft: -8,
-						},
-						input: {
-							fontSize: 18,
-							fontWeight: 600,
-							paddingLeft: 8,
-							borderRadius: 5,
-							textOverflow: 'ellipsis',
-							overflow: 'hidden',
-							whiteSpace: 'nowrap',
-							paddingRight: 32,
-
-							'&:hover': {
-								backgroundColor: theme.colors.gray[2],
-							},
-						},
-						dropdown: {
-							width: '210px !important',
-							minWidth: '210px !important',
-						},
-						hovered: {
-							backgroundColor: theme.colors.gray[2],
-							color: theme.colors.dark[9],
-						},
-						selected: {
-							backgroundColor: theme.colors.gray[2],
-							color: theme.colors.dark[9],
-						},
-					})}
-					allowDeselect
-					withinPortal={false}
-					value={selectedCategoryId}
-					onChange={setSelectedCategoryId}
-					placeholder="No category"
-				/>
-
-				<Grid columns={12} gutter={48}>
-					{bookmarksList?.map((bookmark) => (
-						<Grid.Col span={1}>
-							<BookmarkCapsule title={bookmark.title} url={bookmark?.url} />
-						</Grid.Col>
-					))}
-				</Grid>
+				{(selectedCategoryId && bookmarks.length > 0) ||
+				(!selectedCategoryId && uncategorizedBookmarks?.length > 0) ? (
+					<Grid columns={12} gutter={48}>
+						{(selectedCategoryId ? bookmarks : uncategorizedBookmarks)?.map(
+							(bookmark) => (
+								<Grid.Col span={1}>
+									<BookmarkCapsule title={bookmark.title} url={bookmark?.url} />
+								</Grid.Col>
+							),
+						)}
+					</Grid>
+				) : (
+					<Text>
+						Sorry, the currently selected category does not have any bookmarks. Click
+						"add" button to create a new bookmark or category.
+					</Text>
+				)}
 			</Box>
 
 			<Modal
