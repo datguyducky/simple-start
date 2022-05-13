@@ -1,15 +1,13 @@
 import { Button, Group, Select, TextInput } from '@mantine/core';
-import { useEffect, useState } from 'react';
-import BookmarkTreeNode = browser.bookmarks.BookmarkTreeNode;
 import { useForm } from '@mantine/form';
+
+import { useExtensionCategories } from '../../hooks/useExtensionCategories';
 
 type NewBookmarkFormProps = {
 	onClose: () => void;
 };
 
 export const NewBookmarkForm = ({ onClose }: NewBookmarkFormProps) => {
-	const [categoriesList, setCategoriesList] = useState<BookmarkTreeNode[]>([]);
-
 	const { values, setFieldValue, onSubmit } = useForm({
 		initialValues: {
 			bookmarkName: '',
@@ -18,25 +16,7 @@ export const NewBookmarkForm = ({ onClose }: NewBookmarkFormProps) => {
 		},
 	});
 
-	useEffect(() => {
-		browser.bookmarks
-			.search({ title: 'simplestart' })
-			.then((extensionFolder) => {
-				if (extensionFolder && extensionFolder?.length > 0) {
-					const { id } = extensionFolder[0]; // we just get the first found folder and hope it's the correct one
-					browser.bookmarks
-						.getChildren(id)
-						.then((folderContent) => {
-							// save all categories (bookmarks folders)
-							setCategoriesList(
-								folderContent.filter((content) => content.type === 'folder'),
-							);
-						})
-						.catch((error) => console.error(error));
-				}
-			})
-			.catch((error) => console.log(error));
-	}, []);
+	const { categories } = useExtensionCategories();
 
 	// todo: this currently rejects bookmarks urls without https and http - display error or add http at the beginning?
 	const handleCreateNewBookmark = async (formValues: typeof values) => {
@@ -80,7 +60,7 @@ export const NewBookmarkForm = ({ onClose }: NewBookmarkFormProps) => {
 			/>
 			<Select
 				label="Select bookmark category"
-				data={categoriesList.map((category) => ({
+				data={categories.map((category) => ({
 					value: category.id,
 					label: category.title,
 				}))}
