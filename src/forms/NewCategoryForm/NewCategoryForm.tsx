@@ -3,9 +3,10 @@ import { useForm } from '@mantine/form';
 
 type NewCategoryFormProps = {
 	onClose: () => void;
+	createNewCategory: ({ name }: { name: string }) => Promise<void>;
 };
 
-export const NewCategoryForm = ({ onClose }: NewCategoryFormProps) => {
+export const NewCategoryForm = ({ onClose, createNewCategory }: NewCategoryFormProps) => {
 	const { values, setFieldValue, onSubmit } = useForm({
 		initialValues: {
 			categoryName: '',
@@ -13,21 +14,12 @@ export const NewCategoryForm = ({ onClose }: NewCategoryFormProps) => {
 		},
 	});
 
-	const handleCreateCategory = async (formValues: typeof values) => {
-		const extensionRootFolder = await browser.bookmarks.search({ title: 'simplestart' });
-
-		try {
-			const test = await browser.bookmarks.create({
-				parentId: extensionRootFolder[0].id,
-				title: formValues.categoryName,
-				type: 'folder',
-			});
-			console.log(test); // todo: toast that the category was created?
-		} catch (error) {
-			console.error(error);
-		}
-
-		onClose(); // hide new category modal
+	const handleCreateCategory = (formValues: typeof values) => {
+		// todo: toast that the category was created?
+		setTimeout(async () => {
+			await createNewCategory({ name: formValues.categoryName });
+		}, 600);
+		onClose(); // hide modal
 	};
 
 	return (
