@@ -45,21 +45,17 @@ export const useExtensionBookmarks = ({ categoryId }: { categoryId?: string | nu
 	}) => {
 		const extensionRootFolder = await browser.bookmarks.search({ title: 'simplestart' });
 
-		try {
-			await browser.bookmarks.create({
-				parentId: bookmarkCategoryId ? bookmarkCategoryId : extensionRootFolder[0].id,
-				title: name,
-				url: url,
-				type: 'bookmark',
-			});
+		await browser.bookmarks.create({
+			parentId: bookmarkCategoryId ? bookmarkCategoryId : extensionRootFolder[0].id,
+			title: name,
+			url: url,
+			type: 'bookmark',
+		});
 
-			if (bookmarkCategoryId) {
-				await retrieveCategoryBookmarks(bookmarkCategoryId);
-			} else {
-				await retrieveExtensionRoot();
-			}
-		} catch (error) {
-			console.error(error); //todo: handle error
+		if (bookmarkCategoryId) {
+			await retrieveCategoryBookmarks(bookmarkCategoryId);
+		} else {
+			await retrieveExtensionRoot();
 		}
 	};
 

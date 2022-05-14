@@ -1,5 +1,6 @@
 import { Button, Checkbox, Group, TextInput } from '@mantine/core';
 import { useForm } from '@mantine/form';
+import { showNotification } from '@mantine/notifications';
 
 type NewCategoryFormProps = {
 	onClose: () => void;
@@ -17,8 +18,23 @@ export const NewCategoryForm = ({ onClose, createNewCategory }: NewCategoryFormP
 	const handleCreateCategory = (formValues: typeof values) => {
 		// todo: toast that the category was created?
 		setTimeout(async () => {
-			await createNewCategory({ name: formValues.categoryName });
-		}, 600);
+			try {
+				await createNewCategory({ name: formValues.categoryName });
+
+				showNotification({
+					color: 'dark',
+					message: `The ${formValues.categoryName} category was successfully created!`,
+					autoClose: 3000,
+				});
+			} catch (error) {
+				showNotification({
+					color: 'red',
+					title: 'A new category could not be created!',
+					message: 'Sorry, but something went wrong, please try again.',
+					autoClose: 5000,
+				});
+			}
+		}, 500);
 		onClose(); // hide modal
 	};
 
