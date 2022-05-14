@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { showNotification } from '@mantine/notifications';
 import BookmarkTreeNode = browser.bookmarks.BookmarkTreeNode;
 
 export const useExtensionCategories = () => {
@@ -9,7 +10,12 @@ export const useExtensionCategories = () => {
 			const extensionCategories = await browser.bookmarks.getChildren(rootId);
 			setCategories(extensionCategories.filter((content) => content.type === 'folder'));
 		} catch (error) {
-			console.log(error); //todo: handle error
+			showNotification({
+				color: 'red',
+				title: 'Categories cannot be found!',
+				message: 'Sorry, but something went wrong, please try again.',
+				autoClose: 5000,
+			});
 		}
 	};
 
@@ -27,16 +33,12 @@ export const useExtensionCategories = () => {
 	const createCategory = async ({ name }: { name: string }) => {
 		const extensionRootFolder = await browser.bookmarks.search({ title: 'simplestart' });
 
-		try {
-			await browser.bookmarks.create({
-				parentId: extensionRootFolder[0].id,
-				title: name,
-				type: 'folder',
-			});
-			await getExtensionCategories(extensionRootFolder[0].id);
-		} catch (error) {
-			console.error(error); //todo: handle error
-		}
+		await browser.bookmarks.create({
+			parentId: extensionRootFolder[0].id,
+			title: name,
+			type: 'folder',
+		});
+		await getExtensionCategories(extensionRootFolder[0].id);
 	};
 
 	return {

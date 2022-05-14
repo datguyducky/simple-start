@@ -2,6 +2,7 @@ import { Button, Group, Select, TextInput } from '@mantine/core';
 import { useForm } from '@mantine/form';
 
 import { useExtensionCategories } from '../../hooks/useExtensionCategories';
+import { showNotification } from '@mantine/notifications';
 
 type NewBookmarkFormProps = {
 	onClose: () => void;
@@ -29,18 +30,37 @@ export const NewBookmarkForm = ({ onClose, createNewBookmark }: NewBookmarkFormP
 
 	// todo: this currently rejects bookmarks urls without https and http - display error or add http at the beginning?
 	const handleCreateNewBookmark = (formValues: typeof values) => {
-		// todo: toast that the bookmark was created?
-		setTimeout(async () => {
-			await createNewBookmark({
-				name: formValues.bookmarkName,
-				url: formValues.bookmarkUrl,
-				bookmarkCategoryId:
-					formValues.bookmarkCategory.length > 0
-						? formValues.bookmarkCategory
-						: undefined,
-			});
-		}, 600);
+		const categoryName = categories.find(
+			(category) => category.id === formValues.bookmarkCategory,
+		)?.title;
 
+		setTimeout(async () => {
+			try {
+				await createNewBookmark({
+					name: formValues.bookmarkName,
+					url: formValues.bookmarkUrl,
+					bookmarkCategoryId: categoryName ? formValues.bookmarkCategory : undefined,
+				});
+
+				showNotification({
+					color: 'dark',
+					title: categoryName
+						? 'Bookmark was successfully added!'
+						: `The ${formValues.bookmarkName} bookmark was successfully added!`,
+					message: categoryName
+						? `The ${formValues.bookmarkName} bookmark was added to the ${categoryName} category.`
+						: undefined,
+					autoClose: 3000,
+				});
+			} catch (error) {
+				showNotification({
+					color: 'red',
+					title: 'A new bookmark could not be created!',
+					message: 'Sorry, but something went wrong, please try again.',
+					autoClose: 5000,
+				});
+			}
+		}, 600);
 		onClose(); // close modal with the form
 	};
 
