@@ -5,9 +5,18 @@ import { useExtensionCategories } from '../../hooks/useExtensionCategories';
 
 type NewBookmarkFormProps = {
 	onClose: () => void;
+	createNewBookmark: ({
+		name,
+		url,
+		bookmarkCategoryId,
+	}: {
+		name: string;
+		url: string;
+		bookmarkCategoryId?: string;
+	}) => Promise<void>;
 };
 
-export const NewBookmarkForm = ({ onClose }: NewBookmarkFormProps) => {
+export const NewBookmarkForm = ({ onClose, createNewBookmark }: NewBookmarkFormProps) => {
 	const { values, setFieldValue, onSubmit } = useForm({
 		initialValues: {
 			bookmarkName: '',
@@ -19,23 +28,18 @@ export const NewBookmarkForm = ({ onClose }: NewBookmarkFormProps) => {
 	const { categories } = useExtensionCategories();
 
 	// todo: this currently rejects bookmarks urls without https and http - display error or add http at the beginning?
-	const handleCreateNewBookmark = async (formValues: typeof values) => {
-		const extensionRootFolder = await browser.bookmarks.search({ title: 'simplestart' });
-
-		try {
-			const test = await browser.bookmarks.create({
-				parentId:
+	const handleCreateNewBookmark = (formValues: typeof values) => {
+		// todo: toast that the bookmark was created?
+		setTimeout(async () => {
+			await createNewBookmark({
+				name: formValues.bookmarkName,
+				url: formValues.bookmarkUrl,
+				bookmarkCategoryId:
 					formValues.bookmarkCategory.length > 0
 						? formValues.bookmarkCategory
-						: extensionRootFolder[0].id,
-				title: formValues.bookmarkName,
-				url: formValues.bookmarkUrl,
-				type: 'bookmark',
+						: undefined,
 			});
-			console.log(test); // todo: toast that the bookmark was created?
-		} catch (error) {
-			console.error(error);
-		}
+		}, 600);
 
 		onClose(); // close modal with the form
 	};

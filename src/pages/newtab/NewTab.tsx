@@ -17,11 +17,10 @@ export const NewTab = () => {
 
 	const [selectedCategoryId, setSelectedCategoryId] = useState<string | null>(null);
 
-	const { bookmarks, uncategorizedBookmarks } = useExtensionBookmarks({
+	const { bookmarks, uncategorizedBookmarks, createBookmark } = useExtensionBookmarks({
 		categoryId: selectedCategoryId,
 	});
-
-	const { categories } = useExtensionCategories();
+	const { categories, createCategory } = useExtensionCategories();
 
 	return (
 		<>
@@ -134,7 +133,10 @@ export const NewTab = () => {
 					},
 				})}
 			>
-				<NewBookmarkForm onClose={() => setNewBookmarkModal(false)} />
+				<NewBookmarkForm
+					onClose={() => setNewBookmarkModal(false)}
+					createNewBookmark={createBookmark}
+				/>
 			</Modal>
 
 			<Modal
@@ -153,7 +155,10 @@ export const NewTab = () => {
 					},
 				})}
 			>
-				<NewCategoryForm onClose={() => setNewCategoryModal(false)} />
+				<NewCategoryForm
+					onClose={() => setNewCategoryModal(false)}
+					createNewCategory={createCategory}
+				/>
 			</Modal>
 		</>
 	);
