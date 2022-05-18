@@ -1,11 +1,11 @@
 import { useState } from 'react';
-import { Text, Modal, Box, Select, Grid } from '@mantine/core';
+import { Text, Modal, Box, Select } from '@mantine/core';
 import { ChevronDownIcon } from '@heroicons/react/outline';
 
 import { NewBookmarkForm } from '../../forms/NewBookmarkForm';
 import { NewCategoryForm } from '../../forms/NewCategoryForm';
 
-import { BookmarkCapsule } from '../../components/BookmarkCapsule';
+import { Bookmarks } from '../../components/Bookmarks';
 import { NewTabHeader } from '../../components/NewTabHeader';
 
 import { useExtensionBookmarks } from '../../hooks/useExtensionBookmarks';
@@ -100,15 +100,9 @@ export const NewTab = () => {
 
 				{(selectedCategoryId && bookmarks.length > 0) ||
 				(!selectedCategoryId && uncategorizedBookmarks?.length > 0) ? (
-					<Grid columns={12} gutter={48}>
-						{(selectedCategoryId ? bookmarks : uncategorizedBookmarks)?.map(
-							(bookmark) => (
-								<Grid.Col span={1}>
-									<BookmarkCapsule title={bookmark.title} url={bookmark?.url} />
-								</Grid.Col>
-							),
-						)}
-					</Grid>
+					<Bookmarks
+						bookmarks={selectedCategoryId ? bookmarks : uncategorizedBookmarks}
+					/>
 				) : (
 					<Text>
 						Sorry, the currently selected category does not have any bookmarks. Click
