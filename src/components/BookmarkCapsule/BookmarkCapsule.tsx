@@ -16,7 +16,6 @@ export const BookmarkCapsule = ({ title, url }: BookmarkCapsuleProps) => {
 				cursor: 'pointer',
 				color: 'black',
 				textDecoration: 'none',
-				maxWidth: 120,
 
 				'&:hover div:first-of-type': {
 					backgroundColor: theme.colors.gray[2],
@@ -51,6 +50,7 @@ export const BookmarkCapsule = ({ title, url }: BookmarkCapsuleProps) => {
 					whiteSpace: 'nowrap',
 					maxWidth: 120,
 					fontSize: 14,
+					width: '100%',
 				}}
 			>
 				{title}

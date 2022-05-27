@@ -21,9 +21,9 @@ export const Bookmarks = ({ bookmarks }: BookmarksProps) => {
 
 	if (currentViewTitle === 'Capsules') {
 		return (
-			<Grid columns={12} gutter={48}>
+			<Grid columns={12} gutter={16}>
 				{bookmarks.map((bookmark) => (
-					<Grid.Col span={1} key={bookmark.id}>
+					<Grid.Col xl={1} lg={2} md={3} sm={4} xs={6} key={bookmark.id}>
 						<BookmarkCapsule title={bookmark.title} url={bookmark?.url} />
 					</Grid.Col>
 				))}
