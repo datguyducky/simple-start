@@ -3,7 +3,7 @@ import BookmarkTreeNode = browser.bookmarks.BookmarkTreeNode;
 
 import { constants } from '../../common/constants';
 
-import { useExtensionView } from '../../hooks/useExtensionView';
+import { useExtensionSettings } from '../../hooks/useExtensionSettings';
 
 import { BookmarkCapsule } from '../BookmarkCapsule';
 import { BookmarkListRow } from '../BookmarkListRow';
@@ -13,7 +13,7 @@ type BookmarksProps = {
 };
 
 export const Bookmarks = ({ bookmarks }: BookmarksProps) => {
-	const { currentView } = useExtensionView();
+	const { currentView } = useExtensionSettings();
 
 	const currentViewTitle = constants.availableViews.find(
 		(view) => view.id === currentView,

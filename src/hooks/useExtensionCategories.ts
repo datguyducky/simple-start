@@ -2,8 +2,11 @@ import { useEffect, useState } from 'react';
 import { showNotification } from '@mantine/notifications';
 import BookmarkTreeNode = browser.bookmarks.BookmarkTreeNode;
 
+import { useExtensionSettings } from './useExtensionSettings';
+
 export const useExtensionCategories = () => {
 	const [categories, setCategories] = useState<BookmarkTreeNode[]>([]);
+	const { handleSetDefaultCategory } = useExtensionSettings();
 
 	const getExtensionCategories = async (rootId: string) => {
 		try {
@@ -30,14 +33,25 @@ export const useExtensionCategories = () => {
 		retrieveRoot();
 	}, []);
 
-	const createCategory = async ({ name }: { name: string }) => {
+	const createCategory = async ({
+		name,
+		setAsDefault = false,
+	}: {
+		name: string;
+		setAsDefault?: boolean;
+	}) => {
 		const extensionRootFolder = await browser.bookmarks.search({ title: 'simplestart' });
 
-		await browser.bookmarks.create({
+		const newCategory = await browser.bookmarks.create({
 			parentId: extensionRootFolder[0].id,
 			title: name,
 			type: 'folder',
 		});
+
+		if (setAsDefault) {
+			await handleSetDefaultCategory({ newDefaultCategory: newCategory?.id });
+		}
+
 		await getExtensionCategories(extensionRootFolder[0].id);
 	};
 

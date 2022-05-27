@@ -3,7 +3,7 @@ import { BookmarkIcon, CogIcon, CollectionIcon, PlusIcon } from '@heroicons/reac
 
 import { constants } from '../../common/constants';
 
-import { useExtensionView } from '../../hooks/useExtensionView';
+import { useExtensionSettings } from '../../hooks/useExtensionSettings';
 
 type NewTabHeaderProps = {
 	onNewBookmarkClick: () => void;
@@ -11,7 +11,7 @@ type NewTabHeaderProps = {
 };
 
 export const NewTabHeader = ({ onNewBookmarkClick, onNewCategoryClick }: NewTabHeaderProps) => {
-	const { currentView, handleNextView, viewLoading } = useExtensionView();
+	const { currentView, handleNextView, viewLoading } = useExtensionSettings();
 
 	return (
 		<Grid columns={3} style={{ marginBottom: 32 }}>
