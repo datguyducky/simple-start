@@ -8,7 +8,7 @@ type BookmarkCapsuleProps = {
 export const BookmarkCapsule = ({ title, url }: BookmarkCapsuleProps) => {
 	return (
 		<Box
-			sx={{
+			sx={(theme) => ({
 				textAlign: 'center',
 				display: 'flex',
 				flexDirection: 'column',
@@ -17,7 +17,11 @@ export const BookmarkCapsule = ({ title, url }: BookmarkCapsuleProps) => {
 				color: 'black',
 				textDecoration: 'none',
 				maxWidth: 120,
-			}}
+
+				'&:hover div:first-of-type': {
+					backgroundColor: theme.colors.gray[2],
+				},
+			})}
 			component="a"
 			href={url}
 		>
