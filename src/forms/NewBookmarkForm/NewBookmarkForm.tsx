@@ -18,12 +18,21 @@ type NewBookmarkFormProps = {
 };
 
 export const NewBookmarkForm = ({ onClose, createNewBookmark }: NewBookmarkFormProps) => {
-	const { values, setFieldValue, onSubmit } = useForm({
+	const { values, errors, setFieldValue, onSubmit } = useForm({
 		initialValues: {
 			bookmarkName: '',
 			bookmarkUrl: '',
 			bookmarkCategory: '',
 		},
+		validate: (values) => ({
+			bookmarkName: values.bookmarkName.length <= 0 ? 'Bookmark name is required' : null,
+			bookmarkUrl:
+				values.bookmarkUrl.length <= 0
+					? 'Bookmark URL is required'
+					: !/^(?:f|ht)tps?:\/\//.test(values.bookmarkUrl)
+					? 'Bookmark URL needs to start with "https://"'
+					: null,
+		}),
 	});
 
 	const { categories } = useExtensionCategories();
@@ -65,13 +74,14 @@ export const NewBookmarkForm = ({ onClose, createNewBookmark }: NewBookmarkFormP
 	};
 
 	return (
-		<form onSubmit={onSubmit(handleCreateNewBookmark)}>
+		<form onSubmit={onSubmit(handleCreateNewBookmark)} noValidate>
 			<TextInput
 				mb="xl"
 				label="Bookmark name"
 				required
 				placeholder="e.g. DuckDuckGo"
 				value={values.bookmarkName}
+				error={errors.bookmarkName}
 				onChange={(event) => setFieldValue('bookmarkName', event.currentTarget.value)}
 			/>
 			<TextInput
@@ -80,6 +90,7 @@ export const NewBookmarkForm = ({ onClose, createNewBookmark }: NewBookmarkFormP
 				required
 				placeholder="e.g. https://duckduckgo.com/"
 				value={values.bookmarkUrl}
+				error={errors.bookmarkUrl}
 				onChange={(event) => setFieldValue('bookmarkUrl', event.currentTarget.value)}
 			/>
 			<Select
