@@ -112,11 +112,13 @@ export const NewTab = () => {
 					<Bookmarks
 						bookmarks={selectedCategoryId ? bookmarks : uncategorizedBookmarks}
 					/>
-				) : (
+				) : categories.length > 0 ? (
 					<Text>
 						Sorry, the currently selected category doesn't have any bookmarks. Click
 						"add" button to create a new bookmark or category.
 					</Text>
+				) : (
+					<></>
 				)}
 			</Box>
 
@@ -133,6 +135,10 @@ export const NewTab = () => {
 					},
 					close: {
 						color: theme.colors.red[6],
+
+						'&:hover': {
+							backgroundColor: theme.colors.gray[2],
+						},
 					},
 				})}
 			>
@@ -155,6 +161,10 @@ export const NewTab = () => {
 					},
 					close: {
 						color: theme.colors.red[6],
+
+						'&:hover': {
+							backgroundColor: theme.colors.gray[2],
+						},
 					},
 				})}
 			>
