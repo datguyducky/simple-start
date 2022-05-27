@@ -14,11 +14,14 @@ type NewCategoryFormProps = {
 };
 
 export const NewCategoryForm = ({ onClose, createNewCategory }: NewCategoryFormProps) => {
-	const { values, setFieldValue, onSubmit } = useForm({
+	const { values, errors, setFieldValue, onSubmit } = useForm({
 		initialValues: {
 			categoryName: '',
 			defaultCategory: false,
 		},
+		validate: (values) => ({
+			categoryName: values.categoryName.length <= 0 ? 'Category name is required' : null,
+		}),
 	});
 
 	const handleCreateCategory = (formValues: typeof values) => {
@@ -48,13 +51,14 @@ export const NewCategoryForm = ({ onClose, createNewCategory }: NewCategoryFormP
 	};
 
 	return (
-		<form onSubmit={onSubmit(handleCreateCategory)}>
+		<form onSubmit={onSubmit(handleCreateCategory)} noValidate>
 			<TextInput
 				mb="xl"
 				label="Category name"
 				required
 				placeholder="e.g. Home"
 				value={values.categoryName}
+				error={errors.categoryName}
 				onChange={(event) => setFieldValue('categoryName', event.currentTarget.value)}
 			/>
 
