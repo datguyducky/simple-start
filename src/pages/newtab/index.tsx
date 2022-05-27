@@ -5,7 +5,7 @@ import { NotificationsProvider } from '@mantine/notifications';
 
 import { NewTab } from './NewTab';
 
-import { ExtensionViewProvider } from '../../context/extensionView';
+import { ExtensionSettingsProvider } from '../../context/extensionSettings';
 
 import './styles.css';
 
@@ -13,9 +13,9 @@ ReactDOM.render(
 	<React.StrictMode>
 		<MantineProvider>
 			<NotificationsProvider position="top-right">
-				<ExtensionViewProvider>
+				<ExtensionSettingsProvider>
 					<NewTab />
-				</ExtensionViewProvider>
+				</ExtensionSettingsProvider>
 			</NotificationsProvider>
 		</MantineProvider>
 	</React.StrictMode>,

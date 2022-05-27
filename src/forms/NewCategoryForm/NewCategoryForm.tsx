@@ -4,7 +4,13 @@ import { showNotification } from '@mantine/notifications';
 
 type NewCategoryFormProps = {
 	onClose: () => void;
-	createNewCategory: ({ name }: { name: string }) => Promise<void>;
+	createNewCategory: ({
+		name,
+		setAsDefault,
+	}: {
+		name: string;
+		setAsDefault?: boolean;
+	}) => Promise<void>;
 };
 
 export const NewCategoryForm = ({ onClose, createNewCategory }: NewCategoryFormProps) => {
@@ -19,7 +25,10 @@ export const NewCategoryForm = ({ onClose, createNewCategory }: NewCategoryFormP
 		// todo: toast that the category was created?
 		setTimeout(async () => {
 			try {
-				await createNewCategory({ name: formValues.categoryName });
+				await createNewCategory({
+					name: formValues.categoryName,
+					setAsDefault: values.defaultCategory,
+				});
 
 				showNotification({
 					color: 'dark',

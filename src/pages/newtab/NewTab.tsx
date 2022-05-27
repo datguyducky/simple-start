@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Text, Modal, Box, Select } from '@mantine/core';
 import { ChevronDownIcon } from '@heroicons/react/outline';
 
@@ -10,6 +10,7 @@ import { NewTabHeader } from '../../components/NewTabHeader';
 
 import { useExtensionBookmarks } from '../../hooks/useExtensionBookmarks';
 import { useExtensionCategories } from '../../hooks/useExtensionCategories';
+import { useExtensionSettings } from '../../hooks/useExtensionSettings';
 
 export const NewTab = () => {
 	const [newBookmarkModal, setNewBookmarkModal] = useState(false);
@@ -21,6 +22,14 @@ export const NewTab = () => {
 		categoryId: selectedCategoryId,
 	});
 	const { categories, createCategory } = useExtensionCategories();
+
+	const { extensionSettings } = useExtensionSettings();
+
+	useEffect(() => {
+		if (extensionSettings?.defaultCategory && !selectedCategoryId) {
+			setSelectedCategoryId(extensionSettings.defaultCategory);
+		}
+	}, [extensionSettings, selectedCategoryId]);
 
 	return (
 		<>
@@ -105,7 +114,7 @@ export const NewTab = () => {
 					/>
 				) : (
 					<Text>
-						Sorry, the currently selected category does not have any bookmarks. Click
+						Sorry, the currently selected category doesn't have any bookmarks. Click
 						"add" button to create a new bookmark or category.
 					</Text>
 				)}
