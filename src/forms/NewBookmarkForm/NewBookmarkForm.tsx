@@ -1,4 +1,4 @@
-import { Button, Group, Select, TextInput } from '@mantine/core';
+import { Button, Group, Select, Text, TextInput } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { showNotification } from '@mantine/notifications';
 
@@ -93,29 +93,46 @@ export const NewBookmarkForm = ({ onClose, createNewBookmark }: NewBookmarkFormP
 				error={errors.bookmarkUrl}
 				onChange={(event) => setFieldValue('bookmarkUrl', event.currentTarget.value)}
 			/>
-			<Select
-				label="Select bookmark category"
-				data={categories.map((category) => ({
-					value: category.id,
-					label: category.title,
-				}))}
-				searchable
-				nothingFound="Category not found"
-				clearable
-				mb="xl"
-				styles={(theme) => ({
-					hovered: {
-						backgroundColor: theme.colors.gray[2],
-						color: theme.colors.dark[9],
-					},
-					selected: {
-						backgroundColor: theme.colors.gray[2],
-						color: theme.colors.dark[9],
-					},
-				})}
-				value={values.bookmarkCategory}
-				onChange={(category) => setFieldValue('bookmarkCategory', category || '')}
-			/>
+
+			{categories.length > 0 ? (
+				<Select
+					label="Select bookmark category"
+					data={categories.map((category) => ({
+						value: category.id,
+						label: category.title,
+					}))}
+					searchable
+					nothingFound="Category not found"
+					clearable
+					mb="xl"
+					styles={(theme) => ({
+						hovered: {
+							backgroundColor: theme.colors.gray[2],
+							color: theme.colors.dark[9],
+						},
+						selected: {
+							backgroundColor: theme.colors.gray[2],
+							color: theme.colors.dark[9],
+						},
+					})}
+					value={values.bookmarkCategory}
+					onChange={(category) => setFieldValue('bookmarkCategory', category || '')}
+				/>
+			) : (
+				<>
+					<Text size="sm">Select bookmark category</Text>
+					<Text
+						size="xs"
+						sx={(theme) => ({
+							color: theme.colors.gray[5],
+						})}
+						weight={600}
+						mb="xl"
+					>
+						To select category you first need to create it in the New Category modal
+					</Text>
+				</>
+			)}
 
 			<Group position="right">
 				<Button type="submit">Create new bookmark</Button>
