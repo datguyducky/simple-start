@@ -2,11 +2,23 @@ import { createStyles } from '@mantine/core';
 
 export const useNewTabStyles = createStyles((theme, { width }: { width: number }) => ({
 	newTabLayout: {
-		height: '100%',
+		minHeight: '100%',
 		display: 'flex',
 		flexDirection: 'column',
 		boxSizing: 'border-box',
 		padding: '32px 96px',
+
+		[`@media (max-width: ${theme.breakpoints.xl}px)`]: {
+			padding: '32px 64px',
+		},
+
+		[`@media (max-width: ${theme.breakpoints.sm}px)`]: {
+			padding: '32px 48px',
+		},
+
+		[`@media (max-width: ${theme.breakpoints.sm}px)`]: {
+			padding: '32px 24px',
+		},
 	},
 
 	// styles for Category Select component

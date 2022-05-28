@@ -24,7 +24,7 @@ export const NewTabHeader = ({ onNewBookmarkClick, onNewCategoryClick }: NewTabH
 			</Grid.Col>
 
 			{!viewLoading && (
-				<Grid.Col span={1} offset={1}>
+				<Grid.Col span={2}>
 					<Group position="right" spacing="xs">
 						<Menu
 							control={
