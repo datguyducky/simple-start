@@ -11,7 +11,34 @@ import './styles.css';
 
 ReactDOM.render(
 	<React.StrictMode>
-		<MantineProvider>
+		<MantineProvider
+			styles={{
+				Select: (theme) => ({
+					hovered: {
+						backgroundColor: theme.colors.gray[2],
+						color: theme.colors.dark[9],
+					},
+					selected: {
+						backgroundColor: theme.colors.gray[2],
+						color: theme.colors.dark[9],
+					},
+				}),
+
+				Modal: (theme) => ({
+					title: {
+						fontSize: theme.headings.sizes.h3.fontSize,
+						fontWeight: 'bold',
+					},
+					close: {
+						color: theme.colors.red[6],
+
+						'&:hover': {
+							backgroundColor: theme.colors.gray[2],
+						},
+					},
+				}),
+			}}
+		>
 			<NotificationsProvider position="top-right">
 				<ExtensionSettingsProvider>
 					<NewTab />

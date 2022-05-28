@@ -12,6 +12,8 @@ import { useExtensionBookmarks } from '../../hooks/useExtensionBookmarks';
 import { useExtensionCategories } from '../../hooks/useExtensionCategories';
 import { useExtensionSettings } from '../../hooks/useExtensionSettings';
 
+import { useNewTabStyles } from './NewTab.styles';
+
 export const NewTab = () => {
 	const [newBookmarkModal, setNewBookmarkModal] = useState(false);
 	const [newCategoryModal, setNewCategoryModal] = useState(false);
@@ -23,6 +25,14 @@ export const NewTab = () => {
 	});
 	const { categories, createCategory } = useExtensionCategories();
 
+	const { classes } = useNewTabStyles({
+		width:
+			(categories?.find((category) => category.id === selectedCategoryId)?.title?.length ||
+				11) *
+				8 +
+			64,
+	});
+
 	const { extensionSettings } = useExtensionSettings();
 
 	useEffect(() => {
@@ -33,16 +43,7 @@ export const NewTab = () => {
 
 	return (
 		<>
-			<Box
-				py={32}
-				px={96}
-				sx={{
-					height: '100%',
-					display: 'flex',
-					flexDirection: 'column',
-					boxSizing: 'border-box',
-				}}
-			>
+			<Box className={classes.newTabLayout}>
 				<NewTabHeader
 					onNewBookmarkClick={() => setNewBookmarkModal(true)}
 					onNewCategoryClick={() => setNewCategoryModal(true)}
@@ -60,45 +61,11 @@ export const NewTab = () => {
 						}))}
 						rightSection={<ChevronDownIcon style={{ width: 18, height: 18 }} />}
 						variant="unstyled"
-						styles={(theme) => ({
-							root: {
-								marginBottom: 32,
-								width:
-									(categories?.find(
-										(category) => category.id === selectedCategoryId,
-									)?.title?.length || 11) *
-										8 +
-									64,
-								maxWidth: '100%',
-								marginLeft: -8,
-							},
-							input: {
-								fontSize: 18,
-								fontWeight: 600,
-								paddingLeft: 8,
-								borderRadius: 5,
-								textOverflow: 'ellipsis',
-								overflow: 'hidden',
-								whiteSpace: 'nowrap',
-								paddingRight: 32,
-
-								'&:hover': {
-									backgroundColor: theme.colors.gray[2],
-								},
-							},
-							dropdown: {
-								width: '210px !important',
-								minWidth: '210px !important',
-							},
-							hovered: {
-								backgroundColor: theme.colors.gray[2],
-								color: theme.colors.dark[9],
-							},
-							selected: {
-								backgroundColor: theme.colors.gray[2],
-								color: theme.colors.dark[9],
-							},
-						})}
+						classNames={{
+							root: classes.selectRoot,
+							input: classes.selectInput,
+							dropdown: classes.selectDropdown,
+						}}
 						allowDeselect
 						withinPortal={false}
 						value={selectedCategoryId}
@@ -128,19 +95,6 @@ export const NewTab = () => {
 				centered
 				title="Add new bookmark"
 				size="lg"
-				styles={(theme) => ({
-					title: {
-						fontSize: theme.headings.sizes.h3.fontSize,
-						fontWeight: 'bold',
-					},
-					close: {
-						color: theme.colors.red[6],
-
-						'&:hover': {
-							backgroundColor: theme.colors.gray[2],
-						},
-					},
-				})}
 			>
 				<NewBookmarkForm
 					onClose={() => setNewBookmarkModal(false)}
@@ -154,19 +108,6 @@ export const NewTab = () => {
 				centered
 				title="Add new category"
 				size="lg"
-				styles={(theme) => ({
-					title: {
-						fontSize: theme.headings.sizes.h3.fontSize,
-						fontWeight: 'bold',
-					},
-					close: {
-						color: theme.colors.red[6],
-
-						'&:hover': {
-							backgroundColor: theme.colors.gray[2],
-						},
-					},
-				})}
 			>
 				<NewCategoryForm
 					onClose={() => setNewCategoryModal(false)}

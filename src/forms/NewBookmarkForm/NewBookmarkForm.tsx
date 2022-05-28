@@ -105,16 +105,6 @@ export const NewBookmarkForm = ({ onClose, createNewBookmark }: NewBookmarkFormP
 					nothingFound="Category not found"
 					clearable
 					mb="xl"
-					styles={(theme) => ({
-						hovered: {
-							backgroundColor: theme.colors.gray[2],
-							color: theme.colors.dark[9],
-						},
-						selected: {
-							backgroundColor: theme.colors.gray[2],
-							color: theme.colors.dark[9],
-						},
-					})}
 					value={values.bookmarkCategory}
 					onChange={(category) => setFieldValue('bookmarkCategory', category || '')}
 				/>
