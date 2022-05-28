@@ -8,11 +8,15 @@ import { useExtensionSettings } from '../../hooks/useExtensionSettings';
 import { BookmarkCapsule } from '../BookmarkCapsule';
 import { BookmarkListRow } from '../BookmarkListRow';
 
+import { useBookmarksStyles } from './Bookmarks.styles';
+
 type BookmarksProps = {
 	bookmarks: BookmarkTreeNode[];
 };
 
 export const Bookmarks = ({ bookmarks }: BookmarksProps) => {
+	const { classes } = useBookmarksStyles();
+
 	const { currentView } = useExtensionSettings();
 
 	const currentViewTitle = constants.availableViews.find(
@@ -33,20 +37,7 @@ export const Bookmarks = ({ bookmarks }: BookmarksProps) => {
 
 	if (currentViewTitle === 'List') {
 		return (
-			<Stack
-				justify="flex-start"
-				spacing={4}
-				sx={{
-					'& > a:first-of-type': {
-						borderTopLeftRadius: 5,
-						borderTopRightRadius: 5,
-					},
-					'& > a:last-of-type': {
-						borderBottomLeftRadius: 5,
-						borderBottomRightRadius: 5,
-					},
-				}}
-			>
+			<Stack justify="flex-start" spacing={4} className={classes.bookmarksListWrap}>
 				{bookmarks.map((bookmark) => (
 					<BookmarkListRow key={bookmark.id} title={bookmark.title} url={bookmark.url} />
 				))}

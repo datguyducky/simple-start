@@ -5,12 +5,16 @@ import { constants } from '../../common/constants';
 
 import { useExtensionSettings } from '../../hooks/useExtensionSettings';
 
+import { useNewTabHeaderStyles } from './NewTabHeader.styles';
+
 type NewTabHeaderProps = {
 	onNewBookmarkClick: () => void;
 	onNewCategoryClick: () => void;
 };
 
 export const NewTabHeader = ({ onNewBookmarkClick, onNewCategoryClick }: NewTabHeaderProps) => {
+	const { classes } = useNewTabHeaderStyles();
+
 	const { currentView, handleNextView, viewLoading } = useExtensionSettings();
 
 	return (
@@ -29,11 +33,7 @@ export const NewTabHeader = ({ onNewBookmarkClick, onNewCategoryClick }: NewTabH
 									leftIcon={<PlusIcon style={{ width: 18, height: 18 }} />}
 									compact
 									color="dark"
-									sx={(theme) => ({
-										'&:hover': {
-											backgroundColor: theme.colors.gray[2],
-										},
-									})}
+									className={classes.headerButton}
 								>
 									<Text size="sm" inline mt={3}>
 										Add
@@ -44,11 +44,7 @@ export const NewTabHeader = ({ onNewBookmarkClick, onNewCategoryClick }: NewTabH
 						>
 							<Menu.Item
 								icon={<BookmarkIcon style={{ width: 14, height: 14 }} />}
-								sx={(theme) => ({
-									'&:hover': {
-										backgroundColor: theme.colors.gray[2],
-									},
-								})}
+								className={classes.headerButton}
 								onClick={onNewBookmarkClick}
 							>
 								New Bookmark
@@ -56,11 +52,7 @@ export const NewTabHeader = ({ onNewBookmarkClick, onNewCategoryClick }: NewTabH
 
 							<Menu.Item
 								icon={<CollectionIcon style={{ width: 14, height: 14 }} />}
-								sx={(theme) => ({
-									'&:hover': {
-										backgroundColor: theme.colors.gray[2],
-									},
-								})}
+								className={classes.headerButton}
 								onClick={onNewCategoryClick}
 							>
 								New Category
@@ -75,11 +67,7 @@ export const NewTabHeader = ({ onNewBookmarkClick, onNewCategoryClick }: NewTabH
 							}
 							compact
 							color="dark"
-							sx={(theme) => ({
-								'&:hover': {
-									backgroundColor: theme.colors.gray[2],
-								},
-							})}
+							className={classes.headerButton}
 							onClick={handleNextView}
 						>
 							<Text inline size="sm" mt={3}>{`${
@@ -93,11 +81,7 @@ export const NewTabHeader = ({ onNewBookmarkClick, onNewCategoryClick }: NewTabH
 							leftIcon={<CogIcon style={{ width: 18, height: 18 }} />}
 							compact
 							color="dark"
-							sx={(theme) => ({
-								'&:hover': {
-									backgroundColor: theme.colors.gray[2],
-								},
-							})}
+							className={classes.headerButton}
 							onClick={async () =>
 								await browser.runtime
 									.openOptionsPage()

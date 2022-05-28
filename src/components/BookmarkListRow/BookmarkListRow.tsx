@@ -1,31 +1,19 @@
 import { Box, Text, Group } from '@mantine/core';
 
+import { useBookmarkListRowStyles } from './BookmarkListRow.styles';
+
 type BookmarkListRowProps = {
 	title: string;
 	url?: string;
 };
 
 export const BookmarkListRow = ({ title, url }: BookmarkListRowProps) => {
-	return (
-		<Box
-			sx={(theme) => ({
-				display: 'flex',
-				cursor: 'pointer',
-				color: 'black',
-				textDecoration: 'none',
-				alignItems: 'center',
-				padding: '12px 20px',
-				backgroundColor: '#F3F3F3',
+	const { classes } = useBookmarkListRowStyles();
 
-				'&:hover': {
-					backgroundColor: theme.colors.gray[2],
-				},
-			})}
-			component="a"
-			href={url}
-		>
+	return (
+		<Box className={classes.bookmarkListRowWrap} component="a" href={url}>
 			<Group spacing={24} position="apart" grow sx={{ width: '100%' }}>
-				<Box sx={{ display: 'flex', alignItems: 'center' }}>
+				<Box className={classes.faviconWrap}>
 					<img
 						src={`https://simplestart-favicon-service.herokuapp.com/icon?url=${url}&size=64`}
 						height={24}

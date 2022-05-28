@@ -1,41 +1,18 @@
 import { Box, Text } from '@mantine/core';
 
+import { useBookmarkCapsuleStyles } from './BookmarkCapsule.styles';
+
 type BookmarkCapsuleProps = {
 	title: string;
 	url?: string;
 };
 
 export const BookmarkCapsule = ({ title, url }: BookmarkCapsuleProps) => {
-	return (
-		<Box
-			sx={(theme) => ({
-				textAlign: 'center',
-				display: 'flex',
-				flexDirection: 'column',
-				alignItems: 'center',
-				cursor: 'pointer',
-				color: 'black',
-				textDecoration: 'none',
+	const { classes } = useBookmarkCapsuleStyles();
 
-				'&:hover div:first-of-type': {
-					backgroundColor: theme.colors.gray[2],
-				},
-			})}
-			component="a"
-			href={url}
-		>
-			<Box
-				sx={{
-					marginBottom: 8,
-					height: 64,
-					width: 64,
-					padding: 16,
-					backgroundColor: '#F3F3F3',
-					boxSizing: 'border-box',
-					borderRadius: '100%',
-					boxShadow: 'inset 0px 4px 8px rgba(0, 0, 0, 0.05)',
-				}}
-			>
+	return (
+		<Box className={classes.bookmarkCapsuleWrap} component="a" href={url}>
+			<Box className={classes.faviconWrap}>
 				<img
 					src={`https://simplestart-favicon-service.herokuapp.com/icon?url=${url}&size=64`}
 					height={32}
@@ -43,18 +20,7 @@ export const BookmarkCapsule = ({ title, url }: BookmarkCapsuleProps) => {
 				/>
 			</Box>
 
-			<Text
-				sx={{
-					textOverflow: 'ellipsis',
-					overflow: 'hidden',
-					whiteSpace: 'nowrap',
-					maxWidth: 120,
-					fontSize: 14,
-					width: '100%',
-				}}
-			>
-				{title}
-			</Text>
+			<Text className={classes.textWrap}>{title}</Text>
 		</Box>
 	);
 };
