@@ -6,7 +6,7 @@ import { useExtensionSettings } from './useExtensionSettings';
 
 export const useExtensionCategories = () => {
 	const [categories, setCategories] = useState<BookmarkTreeNode[]>([]);
-	const { handleSetDefaultCategory } = useExtensionSettings();
+	const { handleSetDefaultCategory, extensionSettings } = useExtensionSettings();
 
 	const getExtensionCategories = async (rootId: string) => {
 		try {
@@ -22,15 +22,19 @@ export const useExtensionCategories = () => {
 		}
 	};
 
+	const retrieveRootId = async () => {
+		const extensionRoot = await browser.bookmarks.search({ title: 'simplestart' });
+		return extensionRoot[0].id;
+	};
+
 	useEffect(() => {
-		const retrieveRoot = async () => {
-			const extensionRoot = await browser.bookmarks.search({ title: 'simplestart' });
-			if (extensionRoot?.length) {
-				await getExtensionCategories(extensionRoot[0].id);
-			}
+		//retrieveRoot();
+		const categoriesFromRoot = async () => {
+			const rootId = await retrieveRootId();
+			await getExtensionCategories(rootId);
 		};
 
-		retrieveRoot();
+		categoriesFromRoot();
 	}, []);
 
 	const createCategory = async ({
@@ -40,10 +44,10 @@ export const useExtensionCategories = () => {
 		name: string;
 		setAsDefault?: boolean;
 	}) => {
-		const extensionRootFolder = await browser.bookmarks.search({ title: 'simplestart' });
+		const rootId = await retrieveRootId();
 
 		const newCategory = await browser.bookmarks.create({
-			parentId: extensionRootFolder[0].id,
+			parentId: rootId,
 			title: name,
 			type: 'folder',
 		});
@@ -52,11 +56,39 @@ export const useExtensionCategories = () => {
 			await handleSetDefaultCategory({ newDefaultCategory: newCategory?.id });
 		}
 
-		await getExtensionCategories(extensionRootFolder[0].id);
+		await getExtensionCategories(rootId);
+	};
+
+	const editCategory = async ({
+		id,
+		categoryName,
+		defaultCategory,
+	}: {
+		id: string;
+		categoryName: string;
+		defaultCategory?: boolean;
+	}) => {
+		await browser.bookmarks.update(id, {
+			title: categoryName,
+		});
+
+		// set category as a default one
+		if (defaultCategory) {
+			await handleSetDefaultCategory({ newDefaultCategory: id });
+		} else {
+			// if currently edited category is set as default one and got unselected then reset the defaultCategory in storage
+			if (extensionSettings?.defaultCategory === id) {
+				await handleSetDefaultCategory({ newDefaultCategory: '' });
+			}
+		}
+
+		const rootId = await retrieveRootId();
+		await getExtensionCategories(rootId);
 	};
 
 	return {
 		categories,
 		createCategory,
+		editCategory,
 	};
 };

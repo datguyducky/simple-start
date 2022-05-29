@@ -3,7 +3,7 @@ import { Text, Modal, Box, Select } from '@mantine/core';
 import { ChevronDownIcon } from '@heroicons/react/outline';
 
 import { NewBookmarkForm } from '../../forms/NewBookmarkForm';
-import { NewCategoryForm } from '../../forms/NewCategoryForm';
+import { CategoryForm } from '../../forms/CategoryForm';
 
 import { Bookmarks } from '../../components/Bookmarks';
 import { NewTabHeader } from '../../components/NewTabHeader';
@@ -109,7 +109,8 @@ export const NewTab = () => {
 				title="Add new category"
 				size="lg"
 			>
-				<NewCategoryForm
+				<CategoryForm
+					mode="create"
 					onClose={() => setNewCategoryModal(false)}
 					createNewCategory={createCategory}
 				/>

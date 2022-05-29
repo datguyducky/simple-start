@@ -1,1 +1,0 @@
-export { NewCategoryForm } from './NewCategoryForm';
