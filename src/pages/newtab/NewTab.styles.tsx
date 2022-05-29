@@ -2,7 +2,7 @@ import { createStyles } from '@mantine/core';
 
 export const useNewTabStyles = createStyles((theme, { width }: { width: number }) => ({
 	newTabLayout: {
-		minHeight: '100%',
+		minHeight: '100vh',
 		display: 'flex',
 		flexDirection: 'column',
 		boxSizing: 'border-box',

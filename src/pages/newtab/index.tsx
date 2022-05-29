@@ -7,7 +7,7 @@ import { NewTab } from './NewTab';
 
 import { ExtensionSettingsProvider } from '../../context/extensionSettings';
 
-import './styles.css';
+import '../styles.css';
 
 ReactDOM.render(
 	<React.StrictMode>
