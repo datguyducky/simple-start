@@ -1,0 +1,1 @@
+export { ModalRemoveCategory } from './ModalRemoveCategory';
