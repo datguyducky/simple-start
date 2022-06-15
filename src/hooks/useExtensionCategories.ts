@@ -86,9 +86,23 @@ export const useExtensionCategories = () => {
 		await getExtensionCategories(rootId);
 	};
 
+	const removeCategory = async ({ id }: { id: string }) => {
+		// before removing category from the extension root folder
+		// make sure that the category is also removed from extensionSettings if it's saved there as a defaultCategory
+		if (extensionSettings?.defaultCategory === id) {
+			await handleSetDefaultCategory({ newDefaultCategory: '' });
+		}
+
+		await browser.bookmarks.removeTree(id);
+
+		const rootId = await retrieveRootId();
+		await getExtensionCategories(rootId);
+	};
+
 	return {
 		categories,
 		createCategory,
 		editCategory,
+		removeCategory,
 	};
 };

@@ -78,7 +78,7 @@ export const CategoryForm = ({
 
 					showNotification({
 						color: 'dark',
-						message: `Category was successfully renamed to ${formValues.categoryName}`,
+						message: `The ${formValues.categoryName} category was successfully edited!`,
 						autoClose: 3000,
 					});
 				} catch (error) {
@@ -119,7 +119,9 @@ export const CategoryForm = ({
 			/>
 
 			<Group position="right">
-				<Button type="submit">Create new category</Button>
+				<Button type="submit">
+					{mode === 'create' ? 'Create new category' : 'Save changes'}
+				</Button>
 			</Group>
 		</form>
 	);

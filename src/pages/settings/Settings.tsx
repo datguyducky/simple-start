@@ -2,18 +2,19 @@ import { useState } from 'react';
 import { Box, Modal, Title } from '@mantine/core';
 
 import { useExtensionCategories } from '../../hooks/useExtensionCategories';
+import { useExtensionSettings } from '../../hooks/useExtensionSettings';
 
 import { useSettingsViewStyles } from './Settings.styles';
+
 import { SettingsCategoryRow } from '../../components/SettingsCategoryRow';
 
-import { useExtensionSettings } from '../../hooks/useExtensionSettings';
 import { CategoryForm } from '../../forms/CategoryForm';
+import { ModalRemoveCategory } from '../../modals/ModalRemoveCategory';
 
 export const Settings = () => {
 	const { classes } = useSettingsViewStyles();
 
-	const { categories, editCategory } = useExtensionCategories();
-
+	const { categories, editCategory, removeCategory } = useExtensionCategories();
 	const { extensionSettings } = useExtensionSettings();
 
 	const [editCategoryModal, setEditCategoryModal] = useState({
@@ -23,6 +24,10 @@ export const Settings = () => {
 			categoryName: '',
 			defaultCategory: false,
 		},
+	});
+	const [removeCategoryModal, setRemoveCategoryModal] = useState({
+		isVisible: false,
+		id: '',
 	});
 
 	return (
@@ -78,6 +83,13 @@ export const Settings = () => {
 										isVisible: true,
 									}))
 								}
+								onRemoveAction={() =>
+									setRemoveCategoryModal((prevRemoveCategoryModal) => ({
+										...prevRemoveCategoryModal,
+										isVisible: true,
+										id,
+									}))
+								}
 							/>
 						))}
 					</Box>
@@ -114,6 +126,16 @@ export const Settings = () => {
 					editCategory={editCategory}
 				/>
 			</Modal>
+
+			<ModalRemoveCategory
+				setRemoveCategoryModal={setRemoveCategoryModal}
+				isVisible={removeCategoryModal.isVisible}
+				id={removeCategoryModal.id}
+				name={
+					categories?.find((category) => category.id === removeCategoryModal?.id)?.title
+				}
+				removeCategory={removeCategory}
+			/>
 		</>
 	);
 };
