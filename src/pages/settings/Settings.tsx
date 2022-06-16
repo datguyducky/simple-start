@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Box, Modal, Title } from '@mantine/core';
+import { Box, Modal, Title, Accordion, Text } from '@mantine/core';
 
 import { useExtensionCategories } from '../../hooks/useExtensionCategories';
 import { useExtensionSettings } from '../../hooks/useExtensionSettings';
@@ -61,44 +61,64 @@ export const Settings = () => {
 
 				<Box>
 					<Title order={3} mb={8} sx={{ fontWeight: 600 }}>
-						Categories
+						Categories & Bookmarks
 					</Title>
 
 					<Box>
-						{categories.map(({ title, id }) => (
-							<SettingsCategoryRow
-								name={title}
-								key={id}
-								onEditAction={() =>
-									setEditCategoryModal((prevEditCategoryModal) => ({
-										...prevEditCategoryModal,
-										categoryData: {
-											id: id,
-											categoryName:
-												categories?.find((category) => category.id === id)
-													?.title || '',
-											defaultCategory:
-												id === extensionSettings?.defaultCategory,
+						<Accordion initialItem={-1} iconSize={18} iconPosition="right">
+							{categories.map(({ title, id }) => (
+								<Accordion.Item
+									id={id}
+									label={
+										<SettingsCategoryRow
+											name={title}
+											key={id}
+											onEditAction={() =>
+												setEditCategoryModal((prevEditCategoryModal) => ({
+													...prevEditCategoryModal,
+													categoryData: {
+														id: id,
+														categoryName:
+															categories?.find(
+																(category) => category.id === id,
+															)?.title || '',
+														defaultCategory:
+															id ===
+															extensionSettings?.defaultCategory,
+													},
+													isVisible: true,
+												}))
+											}
+											onRemoveAction={() =>
+												setRemoveCategoryModal(
+													(prevRemoveCategoryModal) => ({
+														...prevRemoveCategoryModal,
+														isVisible: true,
+														id,
+													}),
+												)
+											}
+										/>
+									}
+									key={id}
+									styles={{
+										item: {
+											borderBottomWidth: 0,
 										},
-										isVisible: true,
-									}))
-								}
-								onRemoveAction={() =>
-									setRemoveCategoryModal((prevRemoveCategoryModal) => ({
-										...prevRemoveCategoryModal,
-										isVisible: true,
-										id,
-									}))
-								}
-							/>
-						))}
+										control: {
+											marginLeft: -8,
+											padding: 8,
+										},
+										icon: {
+											marginLeft: 8,
+										},
+									}}
+								>
+									<Text size="sm">bookmarks for this category here</Text>
+								</Accordion.Item>
+							))}
+						</Accordion>
 					</Box>
-				</Box>
-
-				<Box>
-					<Title order={3} mb={8} sx={{ fontWeight: 600 }}>
-						Bookmarks
-					</Title>
 				</Box>
 			</Box>
 

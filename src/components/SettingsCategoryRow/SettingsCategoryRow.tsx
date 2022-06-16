@@ -13,7 +13,7 @@ export const SettingsCategoryRow = ({
 	onEditAction,
 }: SettingsCategoryRowProps) => {
 	return (
-		<Group position="apart" mb={8}>
+		<Group position="apart" spacing={0}>
 			<Text
 				sx={{
 					maxWidth: '90%',
@@ -27,12 +27,26 @@ export const SettingsCategoryRow = ({
 
 			<Group spacing={8}>
 				{onRemoveAction && (
-					<ActionIcon color="red" onClick={onRemoveAction}>
+					<ActionIcon<'span'>
+						color="red"
+						onClick={(event) => {
+							event.stopPropagation();
+							onRemoveAction();
+						}}
+						component="span"
+					>
 						<TrashIcon style={{ width: 14, height: 14 }} />
 					</ActionIcon>
 				)}
 				{onEditAction && (
-					<ActionIcon color="dark" onClick={onEditAction}>
+					<ActionIcon<'span'>
+						color="dark"
+						onClick={(event) => {
+							event.stopPropagation();
+							onEditAction();
+						}}
+						component="span"
+					>
 						<PencilAltIcon style={{ width: 14, height: 14 }} />
 					</ActionIcon>
 				)}
