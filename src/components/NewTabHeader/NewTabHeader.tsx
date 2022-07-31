@@ -26,8 +26,8 @@ export const NewTabHeader = ({ onNewBookmarkClick, onNewCategoryClick }: NewTabH
 			{!viewLoading && (
 				<Grid.Col span={2}>
 					<Group position="right" spacing="xs">
-						<Menu
-							control={
+						<Menu withArrow position="top-start" width={200}>
+							<Menu.Target>
 								<Button
 									variant="subtle"
 									leftIcon={<PlusIcon style={{ width: 18, height: 18 }} />}
@@ -39,24 +39,25 @@ export const NewTabHeader = ({ onNewBookmarkClick, onNewCategoryClick }: NewTabH
 										Add
 									</Text>
 								</Button>
-							}
-							withArrow
-						>
-							<Menu.Item
-								icon={<BookmarkIcon style={{ width: 14, height: 14 }} />}
-								className={classes.headerButton}
-								onClick={onNewBookmarkClick}
-							>
-								New Bookmark
-							</Menu.Item>
+							</Menu.Target>
 
-							<Menu.Item
-								icon={<CollectionIcon style={{ width: 14, height: 14 }} />}
-								className={classes.headerButton}
-								onClick={onNewCategoryClick}
-							>
-								New Category
-							</Menu.Item>
+							<Menu.Dropdown>
+								<Menu.Item
+									icon={<BookmarkIcon style={{ width: 14, height: 14 }} />}
+									className={classes.headerButton}
+									onClick={onNewBookmarkClick}
+								>
+									New Bookmark
+								</Menu.Item>
+
+								<Menu.Item
+									icon={<CollectionIcon style={{ width: 14, height: 14 }} />}
+									className={classes.headerButton}
+									onClick={onNewCategoryClick}
+								>
+									New Category
+								</Menu.Item>
+							</Menu.Dropdown>
 						</Menu>
 
 						<Button

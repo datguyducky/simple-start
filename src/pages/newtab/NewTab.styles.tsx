@@ -27,6 +27,7 @@ export const useNewTabStyles = createStyles((theme, { width }: { width: number }
 		maxWidth: '100%',
 		marginLeft: -8,
 		width: width,
+		position: 'relative',
 	},
 	selectInput: {
 		fontSize: 18,
@@ -36,14 +37,14 @@ export const useNewTabStyles = createStyles((theme, { width }: { width: number }
 		textOverflow: 'ellipsis',
 		overflow: 'hidden',
 		whiteSpace: 'nowrap',
-		paddingRight: 32,
 
 		'&:hover': {
 			backgroundColor: theme.colors.gray[2],
 		},
 	},
 	selectDropdown: {
-		width: '210px !important',
 		minWidth: '210px !important',
+		maxWidth: '210px !important',
+		left: '0px !important',
 	},
 }));
