@@ -5,7 +5,7 @@ import { showNotification } from '@mantine/notifications';
 
 type ModalRemoveCategoryProps = {
 	id: string;
-	isVisible: boolean;
+	opened: boolean;
 	removeCategory: ({ id }: { id: string }) => Promise<void>;
 	setRemoveCategoryModal: Dispatch<SetStateAction<{ isVisible: boolean; id: string }>>;
 	name?: string;
@@ -14,7 +14,7 @@ type ModalRemoveCategoryProps = {
 export const ModalRemoveCategory = ({
 	id,
 	name,
-	isVisible,
+	opened,
 	setRemoveCategoryModal,
 	removeCategory,
 }: ModalRemoveCategoryProps) => {
@@ -42,7 +42,7 @@ export const ModalRemoveCategory = ({
 
 	return (
 		<Modal
-			opened={isVisible}
+			opened={opened}
 			onClose={() => setRemoveCategoryModal({ isVisible: false, id: '' })}
 			centered
 			title="Remove category"
