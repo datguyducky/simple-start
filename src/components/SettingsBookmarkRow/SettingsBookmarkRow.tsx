@@ -1,18 +1,17 @@
-import React from 'react';
 import { ActionIcon, Group, Text } from '@mantine/core';
 import { PencilAltIcon, TrashIcon } from '@heroicons/react/solid';
 
-type SettingsCategoryRowProps = {
+type SettingsBookmarkRowProps = {
 	name: string;
 	onRemoveAction?: () => void;
 	onEditAction?: () => void;
 };
 
-export const SettingsCategoryRow = ({
+export const SettingsBookmarkRow = ({
 	name,
 	onRemoveAction,
 	onEditAction,
-}: SettingsCategoryRowProps) => {
+}: SettingsBookmarkRowProps) => {
 	return (
 		<Group position="apart" spacing={0}>
 			<Text
@@ -28,26 +27,12 @@ export const SettingsCategoryRow = ({
 
 			<Group spacing={8}>
 				{onRemoveAction && (
-					<ActionIcon
-						color="red"
-						onClick={(event: React.MouseEvent<HTMLSpanElement, MouseEvent>) => {
-							event.stopPropagation();
-							onRemoveAction();
-						}}
-						component="span"
-					>
+					<ActionIcon color="red" onClick={onRemoveAction} component="span">
 						<TrashIcon style={{ width: 14, height: 14 }} />
 					</ActionIcon>
 				)}
 				{onEditAction && (
-					<ActionIcon
-						color="dark"
-						onClick={(event: React.MouseEvent<HTMLSpanElement, MouseEvent>) => {
-							event.stopPropagation();
-							onEditAction();
-						}}
-						component="span"
-					>
+					<ActionIcon color="dark" onClick={onEditAction} component="span">
 						<PencilAltIcon style={{ width: 14, height: 14 }} />
 					</ActionIcon>
 				)}
