@@ -59,9 +59,48 @@ export const useExtensionBookmarks = ({ categoryId }: { categoryId?: string | nu
 		}
 	};
 
+	const editBookmark = async ({
+		id,
+		bookmarkName,
+		bookmarkUrl,
+		bookmarkCategoryId,
+	}: {
+		id: string;
+		bookmarkName: string;
+		bookmarkUrl: string;
+		bookmarkCategoryId?: string;
+	}) => {
+		await browser.bookmarks.update(id, {
+			title: bookmarkName,
+			url: bookmarkUrl,
+		});
+
+		if (bookmarkCategoryId) {
+			await browser.bookmarks.move(id, {
+				parentId: bookmarkCategoryId,
+			});
+		} else {
+			const extensionRootFolder = await browser.bookmarks.search({ title: 'simplestart' });
+			await browser.bookmarks.move(id, {
+				parentId: extensionRootFolder[0]?.id,
+			});
+		}
+	};
+
+	const removeBookmark = async ({ id }: { id: string }) => {
+		const bookmarkDetails = await browser.bookmarks.get(id);
+
+		await browser.bookmarks.removeTree(id);
+		if (bookmarkDetails[0]?.parentId) {
+			await retrieveCategoryBookmarks(bookmarkDetails[0]?.parentId);
+		}
+	};
+
 	return {
 		bookmarks,
 		uncategorizedBookmarks,
 		createBookmark,
+		editBookmark,
+		removeBookmark,
 	};
 };

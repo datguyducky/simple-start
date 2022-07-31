@@ -2,7 +2,7 @@ import { Button, Checkbox, Group, TextInput } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { showNotification } from '@mantine/notifications';
 
-type CategoryValues = {
+export type CategoryValues = {
 	id: string;
 	categoryName: string;
 	defaultCategory?: boolean;
