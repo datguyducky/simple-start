@@ -95,6 +95,7 @@ export const useExtensionCategories = () => {
 
 		await browser.bookmarks.removeTree(id);
 
+		// retrieve updated list of extension categories
 		const rootId = await retrieveRootId();
 		await getExtensionCategories(rootId);
 	};
