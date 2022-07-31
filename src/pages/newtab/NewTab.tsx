@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { Text, Modal, Box, Select } from '@mantine/core';
 import { ChevronDownIcon } from '@heroicons/react/outline';
 
-import { NewBookmarkForm } from '../../forms/NewBookmarkForm';
+import { BookmarkForm } from '../../forms/BookmarkForm';
 import { CategoryForm } from '../../forms/CategoryForm';
 
 import { Bookmarks } from '../../components/Bookmarks';
@@ -25,6 +25,7 @@ export const NewTab = () => {
 	});
 	const { categories, createCategory } = useExtensionCategories();
 
+	// todo: for sure this width handle needs rework as in some cases is way to big (long text + calculation makes it bigger than the whole page/monitor)
 	const { classes } = useNewTabStyles({
 		width:
 			(categories?.find((category) => category.id === selectedCategoryId)?.title?.length ||
@@ -63,7 +64,7 @@ export const NewTab = () => {
 						variant="unstyled"
 						classNames={{
 							root: classes.selectRoot,
-							input: classes.selectInput,
+							wrapper: classes.selectInput,
 							dropdown: classes.selectDropdown,
 						}}
 						allowDeselect
@@ -96,7 +97,8 @@ export const NewTab = () => {
 				title="Add new bookmark"
 				size="lg"
 			>
-				<NewBookmarkForm
+				<BookmarkForm
+					mode="create"
 					onClose={() => setNewBookmarkModal(false)}
 					createNewBookmark={createBookmark}
 				/>
