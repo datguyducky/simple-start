@@ -20,19 +20,26 @@ export const NewTabHeader = ({ onNewBookmarkClick, onNewCategoryClick }: NewTabH
 	return (
 		<Grid columns={3} style={{ marginBottom: 32 }}>
 			<Grid.Col span={1}>
-				<Title>Simple Start</Title>
+				<Title color="dark">Simple Start</Title>
 			</Grid.Col>
 
 			{!viewLoading && (
 				<Grid.Col span={2}>
 					<Group position="right" spacing="xs">
-						<Menu withArrow position="top-start" width={200}>
+						<Menu
+							withArrow
+							position="top-start"
+							width={200}
+							classNames={{
+								dropdown: classes.menuDropdown,
+								arrow: classes.menuArrow,
+							}}
+						>
 							<Menu.Target>
 								<Button
 									variant="subtle"
 									leftIcon={<PlusIcon style={{ width: 18, height: 18 }} />}
 									compact
-									color="dark"
 									className={classes.headerButton}
 								>
 									<Text size="sm" inline mt={3}>

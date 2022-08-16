@@ -8,10 +8,10 @@ export const useBookmarkListRowStyles = createStyles((theme) => ({
 		textDecoration: 'none',
 		alignItems: 'center',
 		padding: '12px 20px',
-		backgroundColor: '#F3F3F3',
+		backgroundColor: theme.colors.background[1],
 
 		'&:hover': {
-			backgroundColor: theme.colors.gray[2],
+			backgroundColor: theme.colors.background[2],
 		},
 	},
 

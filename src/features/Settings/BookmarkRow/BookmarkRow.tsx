@@ -28,7 +28,13 @@ export const BookmarkRow = ({ name, onRemoveAction, onEditAction }: BookmarkRowP
 					</ActionIcon>
 				)}
 				{onEditAction && (
-					<ActionIcon color="dark" onClick={onEditAction} component="span">
+					<ActionIcon
+						onClick={onEditAction}
+						component="span"
+						sx={(theme) => ({
+							color: theme.colors.text,
+						})}
+					>
 						<PencilAltIcon style={{ width: 14, height: 14 }} />
 					</ActionIcon>
 				)}

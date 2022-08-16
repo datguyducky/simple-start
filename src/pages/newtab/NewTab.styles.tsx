@@ -7,6 +7,9 @@ export const useNewTabStyles = createStyles((theme, { width }: { width: number }
 		flexDirection: 'column',
 		boxSizing: 'border-box',
 		padding: '32px 96px',
+		backgroundColor: theme.colors.background[0],
+		transition: 'background-color 3s linear',
+		transitionDelay: '0.2s',
 
 		[`@media (max-width: ${theme.breakpoints.xl}px)`]: {
 			padding: '32px 64px',
@@ -39,12 +42,19 @@ export const useNewTabStyles = createStyles((theme, { width }: { width: number }
 		whiteSpace: 'nowrap',
 
 		'&:hover': {
-			backgroundColor: theme.colors.gray[2],
+			backgroundColor: theme.colors.background[2],
 		},
 	},
 	selectDropdown: {
 		minWidth: '210px !important',
 		maxWidth: '210px !important',
 		left: '0px !important',
+		backgroundColor: theme.colors.background[0],
+		borderColor: theme.colors.background[2],
+	},
+	selectItem: {
+		'&[data-hovered]': {
+			backgroundColor: theme.colors.background[2],
+		},
 	},
 }));

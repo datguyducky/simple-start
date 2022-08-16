@@ -7,8 +7,11 @@ export type ExtensionSettingsObjects = {
 
 export const ExtensionSettingsContext = createContext<{
 	setCurrentSettings: Dispatch<SetStateAction<ExtensionSettingsObjects>>;
-	currentSettings?: ExtensionSettingsObjects;
-}>({ setCurrentSettings: () => null });
+	currentSettings: ExtensionSettingsObjects;
+}>({
+	currentSettings: { currentView: 1, defaultCategory: null },
+	setCurrentSettings: () => null,
+});
 
 export const ExtensionSettingsProvider = ({ children }: { children: ReactNode }) => {
 	const [currentSettings, setCurrentSettings] = useState<ExtensionSettingsObjects>({

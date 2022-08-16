@@ -7,11 +7,11 @@ export const useBookmarkCapsuleStyles = createStyles((theme, _params, getRef) =>
 		flexDirection: 'column',
 		alignItems: 'center',
 		cursor: 'pointer',
-		color: 'black',
+		color: theme.colors.text,
 		textDecoration: 'none',
 
 		[`&:hover .${getRef('faviconWrapRef')}`]: {
-			backgroundColor: theme.colors.gray[2],
+			backgroundColor: theme.colors.background[2],
 		},
 	},
 
@@ -22,7 +22,7 @@ export const useBookmarkCapsuleStyles = createStyles((theme, _params, getRef) =>
 		height: 64,
 		width: 64,
 		padding: 16,
-		backgroundColor: '#F3F3F3',
+		backgroundColor: theme.colors.background[1],
 		boxSizing: 'border-box',
 		borderRadius: '100%',
 		boxShadow: 'inset 0px 4px 8px rgba(0, 0, 0, 0.05)',
