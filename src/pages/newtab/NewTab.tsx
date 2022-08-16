@@ -66,6 +66,7 @@ export const NewTab = () => {
 							root: classes.selectRoot,
 							wrapper: classes.selectInput,
 							dropdown: classes.selectDropdown,
+							item: classes.selectItem,
 						}}
 						allowDeselect
 						withinPortal={false}

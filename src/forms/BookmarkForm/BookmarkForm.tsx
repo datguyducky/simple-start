@@ -171,14 +171,7 @@ export const BookmarkForm = ({
 			) : (
 				<>
 					<Text size="sm">Select bookmark category</Text>
-					<Text
-						size="xs"
-						sx={(theme) => ({
-							color: theme.colors.gray[5],
-						})}
-						weight={600}
-						mb="xl"
-					>
+					<Text size="xs" color="dimmed" weight={600} mb="xl">
 						To select category you first need to create it in the New Category modal
 					</Text>
 				</>

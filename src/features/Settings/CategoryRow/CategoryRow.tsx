@@ -37,12 +37,12 @@ export const CategoryRow = ({ name, onRemoveAction, onEditAction }: CategoryRowP
 				)}
 				{onEditAction && (
 					<ActionIcon
-						color="dark"
 						onClick={(event: React.MouseEvent<HTMLSpanElement, MouseEvent>) => {
 							event.stopPropagation();
 							onEditAction();
 						}}
 						component="span"
+						sx={(theme) => ({ color: theme.colors.text })}
 					>
 						<PencilAltIcon style={{ width: 14, height: 14 }} />
 					</ActionIcon>
