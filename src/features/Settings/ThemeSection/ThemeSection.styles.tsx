@@ -32,6 +32,19 @@ export const useThemeSectionStyles = createStyles((theme) => ({
 	},
 
 	active: {
-		borderColor: theme.colors[theme.primaryColor],
+		borderColor: theme.colors[theme.primaryColor][6],
+	},
+
+	customAdd: {
+		display: 'flex',
+		alignItems: 'center',
+		justifyContent: 'center',
+		backgroundColor: theme.colors.background[1],
+		borderColor: theme.colors.background[2],
+		color: theme.colors.background[6],
+
+		'&:hover': {
+			backgroundColor: theme.colors.background[2],
+		},
 	},
 }));
