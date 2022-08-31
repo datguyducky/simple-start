@@ -9,26 +9,26 @@
     "eslint": "eslint . --ext .js,.jsx,.ts,.tsx"
   },
   "dependencies": {
-    "@emotion/react": "^11.9.0",
-    "@emotion/styled": "^11.8.1",
-    "@heroicons/react": "^1.0.6",
-    "@mantine/core": "^5.0.2",
-    "@mantine/form": "^5.0.2",
-    "@mantine/hooks": "^5.0.2",
-    "@mantine/notifications": "^5.0.2",
+    "@emotion/react": "^11.10.4",
+    "@heroicons/react": "1.0.6",
+    "@mantine/core": "^5.2.4",
+    "@mantine/form": "^5.2.4",
+    "@mantine/hooks": "^5.2.4",
+    "@mantine/notifications": "^5.2.4",
     "react": "^18.0.0",
-    "react-dom": "^18.0.0"
+    "react-dom": "^18.0.0",
+    "zod": "^3.18.0"
   },
   "devDependencies": {
-    "@emotion/babel-plugin": "^11.9.2",
+    "@emotion/babel-plugin": "^11.10.2",
     "@types/firefox-webext-browser": "^94.0.1",
     "@types/fs-extra": "^9.0.13",
-    "@types/react": "^18.0.0",
+    "@types/react": "^18.0.18",
     "@types/react-dom": "^18.0.0",
-    "@typescript-eslint/eslint-plugin": "^5.21.0",
-    "@typescript-eslint/parser": "^5.21.0",
-    "@vitejs/plugin-react": "^2.0.0",
-    "eslint": "^8.14.0",
+    "@typescript-eslint/eslint-plugin": "^5.36.1",
+    "@typescript-eslint/parser": "^5.36.1",
+    "@vitejs/plugin-react": "^2.0.1",
+    "eslint": "^8.23.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-import": "^2.26.0",
     "eslint-plugin-prettier": "^4.0.0",
@@ -36,7 +36,7 @@
     "fs-extra": "^10.1.0",
     "path": "^0.12.7",
     "prettier": "^2.6.2",
-    "typescript": "^4.6.3",
-    "vite": "^3.0.4"
+    "typescript": "^4.8.2",
+    "vite": "^3.0.9"
   }
 }

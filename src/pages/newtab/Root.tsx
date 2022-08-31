@@ -1,5 +1,4 @@
 import { MantineProvider, Global } from '@mantine/core';
-import { useHotkeys } from '@mantine/hooks';
 import { NewTab } from './NewTab';
 import { NotificationsProvider } from '@mantine/notifications';
 import { ExtensionSettingsProvider } from '../../context/extensionSettings';
@@ -10,14 +9,14 @@ import { themeComponents } from '../../themeComponents';
 import { useExtensionTheme } from '../../hooks/useExtensionTheme';
 
 export const Root = () => {
-	const [theme] = useExtensionTheme({ key: 'simpleStartTheme', defaultValue: 'light' });
+	const { theme } = useExtensionTheme({ key: 'simpleStartTheme', defaultValue: 'light' });
 
 	return (
 		<MantineProvider
 			theme={{
 				...themeComponents,
 				...themeColors[theme],
-				primaryColor: theme === 'dark' || theme === 'light' ? 'blue' : 'red', // todo: change red to primary from custom theme
+				primaryColor: theme === 'dark' || theme === 'light' ? 'blue' : 'custom-primary',
 			}}
 		>
 			<Global

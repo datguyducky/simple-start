@@ -2,10 +2,10 @@ import { useCallback, useLayoutEffect, useEffect, useState } from 'react';
 
 type UseExtensionThemeProps = {
 	key: string;
-	defaultValue: string;
+	defaultValue?: string;
 };
 
-export const useExtensionTheme = ({ key, defaultValue }: UseExtensionThemeProps) => {
+export const useExtensionTheme = ({ key, defaultValue = 'light' }: UseExtensionThemeProps) => {
 	const [value, setValue] = useState();
 
 	// getting theme from browser storage on page load
@@ -34,10 +34,30 @@ export const useExtensionTheme = ({ key, defaultValue }: UseExtensionThemeProps)
 	// making sure that theme is correctly updated also on other tabs that are currently opened
 	useEffect(() => {
 		browser.storage.onChanged.addListener((changes) => {
-			setValue(changes.simpleStartTheme.newValue);
+			if (changes?.simpleStartTheme) {
+				setValue(changes.simpleStartTheme.newValue);
+			}
 		});
 		return () => browser.storage.onChanged.removeListener(setLocalStorageValue);
 	}, []);
 
-	return [value === undefined ? defaultValue : value, setLocalStorageValue] as const;
+	// todo: proper type for colors object
+	const saveCustomThemeToStorage = async (name: string, themeColors: Record<string, any>) => {
+		const formattedName = name.toLowerCase().replace(/ /g, '-');
+
+		const isExistingTheme = await browser.storage.sync.get(`created-theme-${formattedName}`);
+		if (Object.values(isExistingTheme).length > 0) {
+			throw new Error('CUSTOM_THEME_EXISTS');
+		}
+
+		await browser.storage.sync.set({
+			['created-theme-' + formattedName]: { colors: themeColors },
+		});
+	};
+
+	return {
+		theme: value === undefined ? defaultValue : value,
+		setTheme: setLocalStorageValue,
+		saveCustomThemeToStorage,
+	};
 };
