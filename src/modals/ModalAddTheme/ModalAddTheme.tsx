@@ -14,8 +14,6 @@ import {
 } from '@mantine/core';
 import { useForm } from '@mantine/form';
 
-import { useExtensionTheme } from '../../hooks/useExtensionTheme';
-
 import { themeValidation } from '../../utils/themeValidation';
 import { showNotification } from '@mantine/notifications';
 import { ModalAddThemeValues } from '../../types/formValues';
@@ -24,10 +22,10 @@ type ModalAddThemeProps = {
 	opened: boolean;
 	onClose: () => void;
 	title: string;
+	saveCustomTheme: (name: string, themeColors: Record<string, any>) => Promise<void>;
 };
 
-export const ModalAddTheme = ({ opened, onClose, title }: ModalAddThemeProps) => {
-	const { saveCustomThemeToStorage } = useExtensionTheme({ key: 'simpleStartTheme' });
+export const ModalAddTheme = ({ opened, onClose, title, saveCustomTheme }: ModalAddThemeProps) => {
 	const [themeColors, setThemeColors] = useState<{
 		background: string[];
 		'background-local': string[];
@@ -94,7 +92,7 @@ export const ModalAddTheme = ({ opened, onClose, title }: ModalAddThemeProps) =>
 		const { 'background-local': bgLocal, ...colors } = themeColors as Record<string, unknown>;
 
 		try {
-			await saveCustomThemeToStorage(values.customThemeName, colors);
+			await saveCustomTheme(values.customThemeName, colors);
 			onClose();
 
 			showNotification({

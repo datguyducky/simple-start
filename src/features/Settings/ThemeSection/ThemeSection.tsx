@@ -9,7 +9,7 @@ import { ModalAddTheme } from '../../../modals/ModalAddTheme';
 
 export const ThemeSection = () => {
 	const { classes, cx } = useThemeSectionStyles();
-	const { theme, setTheme } = useExtensionTheme({
+	const { theme, setTheme, customThemes, saveCustomTheme } = useExtensionTheme({
 		key: 'simpleStartTheme',
 		defaultValue: 'light',
 	});
@@ -27,7 +27,9 @@ export const ThemeSection = () => {
 							})}
 						/>
 
-						<Text size="sm">Light Theme</Text>
+						<Text size="sm" align="center">
+							Light Theme
+						</Text>
 					</Stack>
 
 					<Stack align="center" sx={{ width: 80 }} onClick={() => setTheme('dark')}>
@@ -37,15 +39,55 @@ export const ThemeSection = () => {
 							})}
 						/>
 
-						<Text size="sm">Dark Theme</Text>
+						<Text size="sm" align="center">
+							Dark Theme
+						</Text>
 					</Stack>
+
+					{customThemes &&
+						customThemes.map(({ name, colors }) => {
+							// todo: types for name and background
+							const customThemeName = name
+								.replace('created-theme-', '')
+								.replace(/-/g, ' ');
+							const customThemeBackground = colors.background[0]; // todo: fix typing
+							const customThemeBorder = colors.background[2]; // todo: fix typing
+
+							return (
+								<Stack
+									align="center"
+									sx={{ width: 80 }}
+									onClick={() => setTheme(name)}
+								>
+									<Box
+										className={cx(classes.colorBox, {
+											[classes.active]: theme === name,
+										})}
+										sx={{
+											backgroundColor: customThemeBackground,
+											borderColor: customThemeBorder,
+
+											'&:hover': {
+												backgroundColor: customThemeBorder,
+											},
+										}}
+									/>
+
+									<Text size="sm" transform="capitalize" align="center">
+										{customThemeName}
+									</Text>
+								</Stack>
+							);
+						})}
 
 					<Stack align="center" sx={{ width: 80 }} onClick={() => setAddThemeModal(true)}>
 						<Box className={cx(classes.colorBox, classes.customAdd)}>
 							<PlusIcon style={{ width: 32, height: 32 }} />
 						</Box>
 
-						<Text size="sm">Add Theme</Text>
+						<Text size="sm" align="center">
+							Add Theme
+						</Text>
 					</Stack>
 				</Group>
 			</Box>
@@ -54,6 +96,7 @@ export const ThemeSection = () => {
 				opened={addThemeModal}
 				onClose={() => setAddThemeModal(false)}
 				title="Add new custom theme"
+				saveCustomTheme={saveCustomTheme}
 			/>
 		</>
 	);
