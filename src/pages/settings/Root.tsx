@@ -10,14 +10,26 @@ import { themeComponents } from '../../themeComponents';
 import { useExtensionTheme } from '../../hooks/useExtensionTheme';
 
 export const Root = () => {
-	const { theme } = useExtensionTheme({ key: 'simpleStartTheme', defaultValue: 'light' });
+	const { theme, customThemes } = useExtensionTheme({
+		key: 'simpleStartTheme',
+		defaultValue: 'light',
+	});
+
+	const { name, ...selectedCustomTheme } = customThemes?.find(({ name }) => name === theme) || {};
 
 	return (
 		<MantineProvider
 			theme={{
 				...themeComponents,
-				...themeColors[theme],
-				primaryColor: theme === 'dark' || theme === 'light' ? 'blue' : 'custom-theme',
+				...(theme?.includes('created-theme')
+					? name !== undefined
+						? selectedCustomTheme
+						: themeColors['light']
+					: themeColors[theme]),
+				primaryColor:
+					theme === 'dark' || theme === 'light' || name === undefined
+						? 'blue'
+						: 'custom-primary',
 			}}
 		>
 			<Global
