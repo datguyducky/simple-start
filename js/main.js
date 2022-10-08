@@ -1,4 +1,3 @@
-feather.replace();
 //clearing storage 
 //var clearing = browser.storage.sync.clear();
 
