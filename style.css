@@ -286,6 +286,18 @@ body {
 	opacity: 0.8;
 }
 
+.custom-color {
+    background-color: var(--documentBgColor);
+    display: flex !important;
+    justify-content: center;
+    align-items: center;
+}
+
+.edit-icon {
+    width: 20px;
+    height: 20px;
+}
+
 .settings-area#bookmarks-darkmode {
 	margin-top: 21px;
 	display: flex;

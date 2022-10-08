@@ -267,6 +267,23 @@ function restoreOptions() {
 	getting.then(setCurrentChoice);
 }
 
+document.querySelector(".custom-color").onclick = function () {
+    const currentColor = document.documentElement.style.getPropertyValue("--documentBgColor")
+    const newBg = prompt("Enter a valid hex color code", currentColor)
+
+    // Regex to verify valid hex color code
+    const reg = /(^#[0-9A-F]{6}$)|(^#[0-9A-F]{3}$)/i
+    
+    // If it is a valid hex code
+    if (reg.test(newBg)){
+        const hex = document.getElementById("hex-value")
+        hex.checked = true
+        hex.setAttribute('value', newBg)
+        this.style = `background-color: ${newBg}`
+    }
+
+}
+
 //changing and saving settings:
 document.addEventListener("DOMContentLoaded", restoreOptions);
 document.getElementById('btn-save').onclick = function savingSettings() {
