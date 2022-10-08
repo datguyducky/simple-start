@@ -1,7 +1,7 @@
 {	
 	"manifest_version": 2,
 	"name": "Simple Start",
-	"version": "1.0.5",
+	"version": "1.0.6",
 	"description": "Minimalistic new tab page extension. Organize bookmarks into groups - be more productive with bookmarks sorted by groups for your Work, Home and Hobbies.",
 	"author": "datguysheepy",
 	"homepage_url": "https://simplestart.mtymon.me/",
