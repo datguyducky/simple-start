@@ -267,23 +267,6 @@ function restoreOptions() {
 	getting.then(setCurrentChoice);
 }
 
-document.querySelector(".custom-color").onclick = function () {
-    const currentColor = document.documentElement.style.getPropertyValue("--documentBgColor")
-    const newBg = prompt("Enter a valid hex color code", currentColor)
-
-    // Regex to verify valid hex color code
-    const reg = /(^#[0-9A-F]{6}$)|(^#[0-9A-F]{3}$)/i
-    
-    // If it is a valid hex code
-    if (reg.test(newBg)){
-        const hex = document.getElementById("hex-value")
-        hex.checked = true
-        hex.setAttribute('value', newBg)
-        this.style = `background-color: ${newBg}`
-    }
-
-}
-
 //changing and saving settings:
 document.addEventListener("DOMContentLoaded", restoreOptions);
 document.getElementById('btn-save').onclick = function savingSettings() {
@@ -466,6 +449,46 @@ document.getElementById('select-bookmark').onclick = function newgroup() {
 
 	//hidding bookmark creator when 'x' is clicked
 	document.getElementById('new-bookmark-cancel').onclick = function () {
+		box.style.display = "none";
+	}
+}
+
+document.getElementById('select-bg').onclick = function newbg() {
+	//displaying/hiding new bg creator
+	var box = document.getElementById("new-bg-content");
+	if (box.style.display == "flex"){
+		box.style.display = "none";
+	} else {
+		box.style.display = "flex";
+	}
+
+	document.getElementById('new-bg-create').onclick = function () {
+		const userInputColor = document.getElementById("new-bg-input").value
+
+		// Regex to verify valid hex color code
+		const reg = /(^#[0-9A-F]{6}$)|(^#[0-9A-F]{3}$)/i
+    
+		// If it is a valid hex code
+		if (reg.test(userInputColor)){
+			const hex = document.getElementById("hex-value")
+			hex.checked = true
+			hex.setAttribute('value', userInputColor)
+			var selectBgBox = document.getElementById('select-bg')
+			selectBgBox.style = `background-color: ${userInputColor}`
+
+			// Reset values, close modal and close error
+			document.getElementById("new-bg-input").value = ""
+			document.getElementsByClassName("input-error")[2].style.display = "none"
+			box.style.display = "none"
+		} else {
+			//displaying error if invalid hex code.
+			var error = document.getElementsByClassName("input-error");
+			error[2].style.display = "block";
+		}
+	}
+
+	//hidding bg setter when 'x' is clicked
+	document.getElementById('new-bg-cancel').onclick = function () {
 		box.style.display = "none";
 	}
 }

@@ -91,8 +91,10 @@
 								<label id="background-blue" for="solid-blue" class="radio-add"></label>
 
                                 <input type="radio" name="solid-color" id="hex-value">
-								<label id="background-hex" for="solid-color" class="radio-add custom-color">
-                                    <img class="edit-icon" src="/img/edit.svg" />
+								<label id="select-bg" for="solid-color" class="radio-add custom-color">
+									<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="svg-icon edit-icon">
+										<path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10" />
+									</svg>
                                 </label>
 
 							</div>
@@ -169,6 +171,21 @@
 
 		<div id="bookmarks">
 			<!-- generating content for this div via main.js: gettings all bookmarks and folders from default extension folder ('simplestart'), bookmarks folder acts as groups that are showed on nav -->
+		</div>
+
+		<div class="new-content" id="new-bg-content"> <!-- creating new group that then goes on navbar -->
+			<div id="new-bg-cancel">
+				<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="svg-icon">
+					<path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+				</svg>
+			</div><!-- closing the whole window for bg value -->
+	
+			<h2>ENTER COLOR CODE</h2>
+			<input type="text" name="newbg" id="new-bg-input" placeholder="Hex code (e.g #708DB4)">
+			<p class="input-error">Color must start with # followed by 3 or 4 hex value.</p>
+			<!-- error, when you enter wrong hex value -->
+	
+			<div class="new-btn" id="new-bg-create">Save</div> <!-- on-click send user input to script so the group can be created -->
 		</div>
 
 	</div>

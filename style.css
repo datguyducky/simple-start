@@ -458,6 +458,7 @@ body {
 	font-weight: bold;
 }
 
+#new-bg-cancel,
 #new-group-cancel,
 #new-bookmark-cancel {
 	position: absolute;
@@ -469,6 +470,7 @@ body {
 	font-style: monospace;
 }
 
+#new-bg-cancel:hover,
 #new-group-cancel:hover,
 #new-bookmark-cancel:hover {
 	color: var(--secondTextColor);
