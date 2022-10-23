@@ -1,0 +1,1 @@
+export { ModalRemoveCustomTheme } from './ModalRemoveCustomTheme';

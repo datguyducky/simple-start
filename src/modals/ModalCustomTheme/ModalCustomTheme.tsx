@@ -16,16 +16,31 @@ import { useForm } from '@mantine/form';
 
 import { themeValidation } from '../../utils/themeValidation';
 import { showNotification } from '@mantine/notifications';
-import { ModalAddThemeValues } from '../../types/formValues';
+import { ModalCustomThemeValues } from '../../types/formValues';
 
-type ModalAddThemeProps = {
+type ModalCustomThemeProps = {
 	opened: boolean;
 	onClose: () => void;
 	title: string;
 	saveCustomTheme: (name: string, themeColors: Record<string, any>) => Promise<void>;
+	editCustomTheme: (
+		name: string,
+		oldName: string,
+		themeColors: Record<string, any>,
+	) => Promise<void>;
+	mode: 'edit' | 'create';
+	initialValues: Record<string, unknown>;
 };
 
-export const ModalAddTheme = ({ opened, onClose, title, saveCustomTheme }: ModalAddThemeProps) => {
+export const ModalCustomTheme = ({
+	opened,
+	onClose,
+	title,
+	saveCustomTheme,
+	mode,
+	initialValues,
+	editCustomTheme,
+}: ModalCustomThemeProps) => {
 	const [themeColors, setThemeColors] = useState<{
 		background: string[];
 		'background-local': string[];
@@ -34,15 +49,44 @@ export const ModalAddTheme = ({ opened, onClose, title, saveCustomTheme }: Modal
 	}>();
 	const [activeStep, setActive] = useState(0);
 
-	const { values, getInputProps, onSubmit, validate } = useForm<ModalAddThemeValues>({
-		initialValues: {
-			text: '#101113',
-			background8: '#ff00ff',
-			background9: '#ff00ff',
-			customThemeName: '',
-		},
-		validate: (values) => themeValidation(activeStep, values),
-	});
+	const { values, getInputProps, onSubmit, validate, setValues } =
+		useForm<ModalCustomThemeValues>({
+			initialValues: {
+				text: '#101113',
+				background8: '#ff00ff',
+				background9: '#ff00ff',
+				customThemeName: '',
+			},
+			validate: (values) => themeValidation(activeStep, values),
+		});
+
+	useEffect(() => {
+		if (mode === 'edit') {
+			const { name, colors } = initialValues;
+
+			const backgroundColors = Object.assign(
+				{},
+				...Object.entries({ ...colors.background }).map(([index, value]) => ({
+					[`background${index}`]: value,
+				})),
+			);
+
+			const primaryColors = Object.assign(
+				{},
+				...Object.entries({ ...colors['custom-primary'] }).map(([index, value]) => ({
+					[`primary${index}`]: value,
+				})),
+			);
+
+			setValues({
+				customThemeName: name.replace('created-theme-', '').replace(/-/g, ' '),
+				...backgroundColors,
+				...primaryColors,
+				text: colors.text,
+				oldCustomThemeName: name,
+			});
+		}
+	}, [mode, initialValues]);
 
 	const nextStep = () =>
 		setActive((current) => {
@@ -91,27 +135,58 @@ export const ModalAddTheme = ({ opened, onClose, title, saveCustomTheme }: Modal
 	const handleSubmit = async () => {
 		const { 'background-local': bgLocal, ...colors } = themeColors as Record<string, unknown>;
 
-		try {
-			await saveCustomTheme(values.customThemeName, colors);
-			onClose();
+		if (mode === 'create') {
+			try {
+				await saveCustomTheme(values.customThemeName, colors);
+				setActive(0);
+				onClose();
 
-			showNotification({
-				color: 'dark',
-				message: `The ${values.customThemeName} theme was successfully created!`,
-				autoClose: 3000,
-			});
-		} catch (e: any) {
-			const errorMessage =
-				e.message === 'CUSTOM_THEME_EXISTS'
-					? 'Theme under this name already exists, please try again with a different one.'
-					: 'Sorry, but something went wrong, please try again.';
+				showNotification({
+					color: 'dark',
+					message: `The ${values.customThemeName} theme was successfully created!`,
+					autoClose: 3000,
+				});
+			} catch (e: any) {
+				const errorMessage =
+					e.message === 'CUSTOM_THEME_EXISTS'
+						? 'Theme under this name already exists, please try again with a different one.'
+						: 'Sorry, but something went wrong, please try again.';
 
-			showNotification({
-				color: 'red',
-				title: 'A new theme can not be created!',
-				message: errorMessage,
-				autoClose: 5000,
-			});
+				showNotification({
+					color: 'red',
+					title: 'A new theme can not be created!',
+					message: errorMessage,
+					autoClose: 5000,
+				});
+			}
+		} else if (mode === 'edit') {
+			try {
+				await editCustomTheme(
+					values.customThemeName,
+					values.oldCustomThemeName as string,
+					colors,
+				);
+				setActive(0);
+				onClose();
+
+				showNotification({
+					color: 'dark',
+					message: `The ${values.customThemeName} theme was successfully edited!`,
+					autoClose: 3000,
+				});
+			} catch (e: any) {
+				const errorMessage =
+					e.message === 'CUSTOM_THEME_EXISTS'
+						? 'Theme under this name already exists, please try again with a different one.'
+						: 'Sorry, but something went wrong, please try again.';
+
+				showNotification({
+					color: 'red',
+					title: 'A theme can not be edited!',
+					message: errorMessage,
+					autoClose: 5000,
+				});
+			}
 		}
 	};
 
@@ -382,6 +457,11 @@ export const ModalAddTheme = ({ opened, onClose, title, saveCustomTheme }: Modal
 									label="Theme name"
 									required
 									placeholder="e.g. Custom Theme 1"
+									styles={{
+										input: {
+											textTransform: 'capitalize', // is this a good idea?
+										},
+									}}
 								/>
 							</Stack>
 						</Group>

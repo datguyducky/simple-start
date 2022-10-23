@@ -5,16 +5,38 @@ import { PlusIcon } from '@heroicons/react/solid';
 import { useThemeSectionStyles } from './ThemeSection.styles';
 
 import { useExtensionTheme } from '../../../hooks/useExtensionTheme';
-import { ModalAddTheme } from '../../../modals/ModalAddTheme';
+import { ModalCustomTheme } from '../../../modals/ModalCustomTheme';
+import { CustomThemeBox } from '../../../components/CustomThemeBox';
+import { ModalRemoveCustomTheme } from '../../../modals/ModalRemoveCustomTheme';
 
 export const ThemeSection = () => {
 	const { classes, cx } = useThemeSectionStyles();
-	const { theme, setTheme, customThemes, saveCustomTheme } = useExtensionTheme({
-		key: 'simpleStartTheme',
-		defaultValue: 'light',
+	const { theme, setTheme, customThemes, saveCustomTheme, editCustomTheme, removeCustomTheme } =
+		useExtensionTheme({
+			key: 'simpleStartTheme',
+			defaultValue: 'light',
+		});
+
+	const [addThemeModal, setAddThemeModal] = useState<{
+		isOpen: boolean;
+		args: Record<string, any>;
+	}>({
+		isOpen: false,
+		args: {
+			data: null,
+			mode: null,
+		},
 	});
 
-	const [addThemeModal, setAddThemeModal] = useState(false);
+	const [removeThemeModal, setRemoveThemeModal] = useState<{
+		isOpen: boolean;
+		args: Record<string, any>;
+	}>({
+		isOpen: false,
+		args: {
+			name: null,
+		},
+	});
 
 	return (
 		<>
@@ -45,42 +67,55 @@ export const ThemeSection = () => {
 					</Stack>
 
 					{customThemes &&
-						customThemes.map(({ name, colors }) => {
+						customThemes.map((customThemeData) => {
 							// todo: types for name and background
-							const customThemeName = name
+							const customThemeName = customThemeData.name
 								.replace('created-theme-', '')
 								.replace(/-/g, ' ');
-							const customThemeBackground = colors.background[0]; // todo: fix typing
-							const customThemeBorder = colors.background[2]; // todo: fix typing
+							const customThemeBackground = customThemeData.colors.background[0]; // todo: fix typing
+							const customThemeBorder = customThemeData.colors.background[2]; // todo: fix typing
 
 							return (
-								<Stack
-									align="center"
-									sx={{ width: 80 }}
-									onClick={() => setTheme(name)}
-								>
-									<Box
-										className={cx(classes.colorBox, {
-											[classes.active]: theme === name,
-										})}
-										sx={{
-											backgroundColor: customThemeBackground,
-											borderColor: customThemeBorder,
-
-											'&:hover': {
-												backgroundColor: customThemeBorder,
+								<CustomThemeBox
+									onEdit={() =>
+										setAddThemeModal((prevState) => ({
+											...prevState,
+											isOpen: true,
+											args: {
+												mode: 'edit',
+												data: customThemeData,
 											},
-										}}
-									/>
-
-									<Text size="sm" transform="capitalize" align="center">
-										{customThemeName}
-									</Text>
-								</Stack>
+										}))
+									}
+									setActive={() => setTheme(customThemeData.name)}
+									customThemeName={customThemeName}
+									backgroundColor={customThemeBackground}
+									borderColor={customThemeBorder}
+									isActive={theme === customThemeData.name}
+									onRemove={() =>
+										setRemoveThemeModal((prevState) => ({
+											...prevState,
+											isOpen: true,
+											args: {
+												name: customThemeData.name,
+											},
+										}))
+									}
+								/>
 							);
 						})}
 
-					<Stack align="center" sx={{ width: 80 }} onClick={() => setAddThemeModal(true)}>
+					<Stack
+						align="center"
+						sx={{ width: 80 }}
+						onClick={() =>
+							setAddThemeModal((prevState) => ({
+								...prevState,
+								isOpen: true,
+								args: { mode: 'create' },
+							}))
+						}
+					>
 						<Box className={cx(classes.colorBox, classes.customAdd)}>
 							<PlusIcon style={{ width: 32, height: 32 }} />
 						</Box>
@@ -92,11 +127,21 @@ export const ThemeSection = () => {
 				</Group>
 			</Box>
 
-			<ModalAddTheme
-				opened={addThemeModal}
-				onClose={() => setAddThemeModal(false)}
+			<ModalCustomTheme
+				opened={addThemeModal?.isOpen}
+				onClose={() => setAddThemeModal((prevState) => ({ ...prevState, isOpen: false }))}
 				title="Add new custom theme"
 				saveCustomTheme={saveCustomTheme}
+				mode={addThemeModal?.args.mode}
+				initialValues={addThemeModal?.args?.data}
+				editCustomTheme={editCustomTheme}
+			/>
+
+			<ModalRemoveCustomTheme
+				isOpen={removeThemeModal.isOpen}
+				onClose={() => setRemoveThemeModal({ isOpen: false, args: {} })}
+				name={removeThemeModal.args?.name}
+				removeTheme={() => removeCustomTheme(removeThemeModal?.args?.name)}
 			/>
 		</>
 	);
