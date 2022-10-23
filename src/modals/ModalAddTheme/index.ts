@@ -1,1 +1,0 @@
-export { ModalAddTheme } from './ModalAddTheme';

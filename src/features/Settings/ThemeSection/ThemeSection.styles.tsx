@@ -27,10 +27,6 @@ export const useThemeSectionStyles = createStyles((theme) => ({
 		},
 	},
 
-	custom: {
-		backgroundColor: 'red',
-	},
-
 	active: {
 		borderColor: theme.colors[theme.primaryColor][6],
 	},

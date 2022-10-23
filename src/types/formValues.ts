@@ -1,4 +1,4 @@
-export type ModalAddThemeValues = {
+export type ModalCustomThemeValues = {
 	background0?: string;
 	background1?: string;
 	background2?: string;
@@ -21,4 +21,5 @@ export type ModalAddThemeValues = {
 	primary9?: string;
 	text?: string;
 	customThemeName: string;
+	oldCustomThemeName?: string;
 };

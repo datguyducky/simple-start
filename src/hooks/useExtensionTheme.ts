@@ -7,7 +7,7 @@ type UseExtensionThemeProps = {
 
 export const useExtensionTheme = ({ key, defaultValue = 'light' }: UseExtensionThemeProps) => {
 	const [localTheme, setLocalTheme] = useState();
-	const [localCustomThemes, setLocalCustomThemes] = useState<Record<string, unknown>[]>();
+	const [localCustomThemes, setLocalCustomThemes] = useState<Record<string, unknown>[]>([]);
 
 	// getting theme from browser storage on page load
 	useLayoutEffect(() => {
@@ -45,7 +45,10 @@ export const useExtensionTheme = ({ key, defaultValue = 'light' }: UseExtensionT
 	// todo: proper type for colors object
 	// saving custom theme in browser sync storage and in state for local use
 	const saveCustomTheme = async (name: string, themeColors: Record<string, any>) => {
-		const formattedName = name.toLowerCase().replace(/ /g, '-');
+		const formattedName = `created-theme-${name
+			.match(/[A-Z]{2,}(?=[A-Z][a-z]+[0-9]*|\b)|[A-Z]?[a-z]+[0-9]*|[A-Z]|[0-9]+/g)!
+			.map((x) => x.toLowerCase())
+			.join('-')}`;
 
 		const isExistingTheme = await browser.storage.sync.get(`created-theme-${formattedName}`);
 		if (Object.values(isExistingTheme).length > 0) {
@@ -59,6 +62,44 @@ export const useExtensionTheme = ({ key, defaultValue = 'light' }: UseExtensionT
 			...prevState,
 			{ name: 'created-theme-' + formattedName, colors: themeColors },
 		]);
+	};
+
+	const editCustomTheme = async (
+		name: string,
+		oldName: string,
+		themeColors: Record<string, any>,
+	) => {
+		const formattedName = `created-theme-${name
+			.match(/[A-Z]{2,}(?=[A-Z][a-z]+[0-9]*|\b)|[A-Z]?[a-z]+[0-9]*|[A-Z]|[0-9]+/g)!
+			.map((x) => x.toLowerCase())
+			.join('-')}`;
+
+		const isExistingTheme = await browser.storage.sync.get(formattedName);
+		if (Object.values(isExistingTheme).length > 0 && formattedName !== oldName) {
+			throw new Error('CUSTOM_THEME_EXISTS');
+		}
+
+		// creating or updating theme by passed named
+		await browser.storage.sync.set({
+			[formattedName]: { colors: themeColors },
+		});
+
+		// update existing customTheme in local state, or remove old one and add the new one to local state
+		if (formattedName === oldName) {
+			setLocalCustomThemes((prevState) =>
+				prevState.map((el) =>
+					el.name === formattedName ? { ...el, colors: themeColors } : el,
+				),
+			);
+		} else {
+			// also removing old theme from local storage if we're updating under a new name
+			await browser.storage.sync.remove(oldName);
+
+			setLocalCustomThemes((prevState) => [
+				...prevState.filter((item) => item.name !== oldName),
+				{ name: formattedName, colors: themeColors },
+			]);
+		}
 	};
 
 	// retrieved all saved custom themes on load
@@ -76,10 +117,29 @@ export const useExtensionTheme = ({ key, defaultValue = 'light' }: UseExtensionT
 		);
 	};
 
+	const removeCustomTheme = async (name: string) => {
+		try {
+			// removing selected theme for local (state) and from the extension storage
+			const newCustomThemes = localCustomThemes.filter((theme) => theme.name !== name);
+			setLocalCustomThemes(newCustomThemes);
+
+			await browser.storage.sync.remove(name);
+
+			// when selected theme is removed and is currently set active then the extension theme is reset to "light" version
+			if (localTheme === name) {
+				setLocalStorageValue('light');
+			}
+		} catch (error) {
+			throw new Error('SOMETHING_WENT_WRONG');
+		}
+	};
+
 	return {
 		theme: localTheme === undefined ? defaultValue : localTheme,
 		setTheme: setLocalStorageValue,
 		saveCustomTheme,
 		customThemes: localCustomThemes,
+		editCustomTheme,
+		removeCustomTheme,
 	};
 };
