@@ -1,6 +1,7 @@
 import { Box, Text, Group } from '@mantine/core';
 
 import { useBookmarkListRowStyles } from './BookmarkListRow.styles';
+import { useExtensionSettings } from '../../hooks/useExtensionSettings';
 
 type BookmarkListRowProps = {
 	title: string;
@@ -8,7 +9,11 @@ type BookmarkListRowProps = {
 };
 
 export const BookmarkListRow = ({ title, url }: BookmarkListRowProps) => {
-	const { classes } = useBookmarkListRowStyles();
+	const { extensionSettings } = useExtensionSettings();
+	const { classes } = useBookmarkListRowStyles({
+		verticalPadding: extensionSettings.listVerticalPadding,
+		horizontalPadding: extensionSettings.listHorizontalPadding,
+	});
 
 	return (
 		<Box className={classes.bookmarkListRowWrap} component="a" href={url}>
@@ -16,29 +21,39 @@ export const BookmarkListRow = ({ title, url }: BookmarkListRowProps) => {
 				<Box className={classes.faviconWrap}>
 					<img
 						src={`https://simplestart-favicon-service.herokuapp.com/icon?url=${url}&size=64`}
-						height={24}
-						width={24}
+						height={extensionSettings.listIconSize}
+						width={extensionSettings.listIconSize}
 						style={{ marginRight: 8 }}
 					/>
 
-					<Text
-						sx={{
-							fontSize: 16,
-						}}
-						inline
-					>
-						{title}
-					</Text>
+					{!extensionSettings.listHiddenName && (
+						<Text
+							sx={(theme) => ({
+								fontSize: extensionSettings.listNameSize,
+								color: extensionSettings.listNameColor ?? theme.colors.text,
+							})}
+							inline
+							weight={extensionSettings.listNameBold ? '700' : '400'}
+							italic={extensionSettings.listNameItalic}
+						>
+							{title}
+						</Text>
+					)}
 				</Box>
 
-				<Text
-					sx={{
-						fontSize: 14,
-					}}
-					inline
-				>
-					{url}
-				</Text>
+				{!extensionSettings.listHiddenUrl && (
+					<Text
+						sx={(theme) => ({
+							fontSize: extensionSettings.listUrlSize,
+							color: extensionSettings.listUrlColor ?? theme.colors.text,
+						})}
+						inline
+						weight={extensionSettings.listUrlBold ? '700' : '400'}
+						italic={extensionSettings.listUrlItalic}
+					>
+						{url}
+					</Text>
+				)}
 			</Group>
 		</Box>
 	);
