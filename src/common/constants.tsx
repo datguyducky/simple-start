@@ -13,4 +13,33 @@ export const constants = {
 			title: 'List',
 		},
 	],
+	defaultExtensionSettings: {
+		// just extension settings
+		currentView: 1,
+		defaultCategory: null,
+		// settings for the capsule view
+		capsuleSpacing: 24,
+		capsuleSize: 110,
+		capsuleIconSize: 32,
+		capsuleLabelSize: 14,
+		capsuleLabelItalic: false,
+		capsuleLabelBold: false,
+		capsuleLabelColor: null,
+		capsuleHiddenName: false,
+		// settings for the list view
+		listHiddenName: false,
+		listHiddenUrl: false,
+		listNameItalic: false,
+		listNameBold: false,
+		listUrlItalic: false,
+		listUrlBold: false,
+		listUrlColor: null,
+		listNameColor: null,
+		listVerticalPadding: 12,
+		listHorizontalPadding: 20,
+		listSpacing: 4,
+		listIconSize: 24,
+		listNameSize: 16,
+		listUrlSize: 14,
+	},
 };

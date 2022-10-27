@@ -5,6 +5,8 @@ import { ThemeSection } from '../../features/Settings/ThemeSection';
 import { useSettingsViewStyles } from './Settings.styles';
 
 import { CategoriesBookmarksSection } from '../../features/Settings/CategoriesBookmarksSection';
+import { CapsulesSection } from '../../features/Settings/CapsulesSection';
+import { ListSection } from '../../features/Settings/ListSection';
 
 export const Settings = () => {
 	const { classes } = useSettingsViewStyles();
@@ -32,15 +34,25 @@ export const Settings = () => {
 			</Box>
 
 			<Box>
-				<Title order={3} mb={8} sx={{ fontWeight: 600 }}>
+				<Title order={3} mb={0} sx={{ fontWeight: 600 }}>
 					Capsule View
 				</Title>
+				<Text mb={16} color="dimmed">
+					Customize the look and feel of the capsule view!
+				</Text>
+
+				<CapsulesSection />
 			</Box>
 
 			<Box>
 				<Title order={3} mb={8} sx={{ fontWeight: 600 }}>
 					List View
 				</Title>
+				<Text mb={16} color="dimmed">
+					Customize the look and feel of the list view!
+				</Text>
+
+				<ListSection />
 			</Box>
 
 			<Box>

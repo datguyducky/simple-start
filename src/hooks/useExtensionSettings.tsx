@@ -72,11 +72,28 @@ export const useExtensionSettings = () => {
 		}));
 	};
 
+	// todo: better type for newValues argument
+	// todo: use this to save every setting? For example "defaultCategory" or "currentView"?
+	const saveExtensionSettings = async (newValues: Record<string, unknown>) => {
+		await browser.storage.sync.set({
+			extensionSettings: {
+				...currentSettings,
+				...newValues,
+			},
+		});
+
+		setCurrentSettings((prevSettings) => ({
+			...prevSettings,
+			...newValues,
+		}));
+	};
+
 	return {
 		extensionSettings: currentSettings,
 		currentView: currentSettings?.currentView,
 		handleNextView,
 		handleSetDefaultCategory,
 		viewLoading,
+		saveExtensionSettings,
 	};
 };

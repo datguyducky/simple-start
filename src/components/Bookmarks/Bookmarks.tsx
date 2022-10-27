@@ -1,4 +1,4 @@
-import { Grid, Stack } from '@mantine/core';
+import { Stack, Group } from '@mantine/core';
 import BookmarkTreeNode = browser.bookmarks.BookmarkTreeNode;
 
 import { constants } from '../../common/constants';
@@ -17,7 +17,7 @@ type BookmarksProps = {
 export const Bookmarks = ({ bookmarks }: BookmarksProps) => {
 	const { classes } = useBookmarksStyles();
 
-	const { currentView } = useExtensionSettings();
+	const { currentView, extensionSettings } = useExtensionSettings();
 
 	const currentViewTitle = constants.availableViews.find(
 		(view) => view.id === currentView,
@@ -25,19 +25,21 @@ export const Bookmarks = ({ bookmarks }: BookmarksProps) => {
 
 	if (currentViewTitle === 'Capsules') {
 		return (
-			<Grid columns={12} gutter={16}>
+			<Group spacing={extensionSettings.capsuleSpacing}>
 				{bookmarks.map((bookmark) => (
-					<Grid.Col xl={1} lg={2} md={2} sm={3} xs={4} key={bookmark.id}>
-						<BookmarkCapsule title={bookmark.title} url={bookmark?.url} />
-					</Grid.Col>
+					<BookmarkCapsule title={bookmark.title} url={bookmark?.url} />
 				))}
-			</Grid>
+			</Group>
 		);
 	}
 
 	if (currentViewTitle === 'List') {
 		return (
-			<Stack justify="flex-start" spacing={4} className={classes.bookmarksListWrap}>
+			<Stack
+				justify="flex-start"
+				spacing={extensionSettings.listSpacing}
+				className={classes.bookmarksListWrap}
+			>
 				{bookmarks.map((bookmark) => (
 					<BookmarkListRow key={bookmark.id} title={bookmark.title} url={bookmark.url} />
 				))}
