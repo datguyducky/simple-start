@@ -15,7 +15,7 @@ export const useBookmarkCapsuleStyles = createStyles(
 			cursor: 'pointer',
 			color: theme.colors.text,
 			textDecoration: 'none',
-			width: size,
+			width: size + 44,
 
 			[`&:hover .${getRef('faviconWrapRef')}`]: {
 				backgroundColor: theme.colors.background[2],
@@ -26,12 +26,14 @@ export const useBookmarkCapsuleStyles = createStyles(
 			ref: getRef('faviconWrapRef'),
 
 			marginBottom: 8,
-			height: 64,
-			width: 64,
-			padding: 16,
+			height: size,
+			width: size,
 			backgroundColor: theme.colors.background[1],
 			boxSizing: 'border-box',
 			borderRadius: '100%',
+			display: 'flex',
+			alignItems: 'center',
+			justifyContent: 'center',
 			boxShadow: 'inset 0px 4px 8px rgba(0, 0, 0, 0.05)',
 		},
 
@@ -39,7 +41,7 @@ export const useBookmarkCapsuleStyles = createStyles(
 			textOverflow: 'ellipsis',
 			overflow: 'hidden',
 			whiteSpace: 'nowrap',
-			maxWidth: size,
+			maxWidth: size + 44,
 			width: '100%',
 			color: labelColor ?? theme.colors.text,
 		},
