@@ -1,18 +1,18 @@
 import { Box, Text } from '@mantine/core';
 
 import { useBookmarkCapsuleStyles } from './BookmarkCapsule.styles';
-import { useExtensionSettings } from '../../hooks/useExtensionSettings';
+import { CapsuleSettings } from '../../types/settingsValues';
 
 type BookmarkCapsuleProps = {
 	title: string;
+	settings: CapsuleSettings;
 	url?: string;
 };
 
-export const BookmarkCapsule = ({ title, url }: BookmarkCapsuleProps) => {
-	const { extensionSettings } = useExtensionSettings();
+export const BookmarkCapsule = ({ title, url, settings }: BookmarkCapsuleProps) => {
 	const { classes } = useBookmarkCapsuleStyles({
-		size: extensionSettings.capsuleSize,
-		labelColor: extensionSettings.capsuleLabelColor,
+		size: settings.capsuleSize,
+		labelColor: settings.capsuleLabelColor,
 	});
 
 	return (
@@ -20,17 +20,17 @@ export const BookmarkCapsule = ({ title, url }: BookmarkCapsuleProps) => {
 			<Box className={classes.faviconWrap}>
 				<img
 					src={`https://simplestart-favicon-service.herokuapp.com/icon?url=${url}&size=64`}
-					height={extensionSettings.capsuleIconSize}
-					width={extensionSettings.capsuleIconSize}
+					height={settings.capsuleIconSize}
+					width={settings.capsuleIconSize}
 				/>
 			</Box>
 
-			{!extensionSettings.capsuleHiddenName && (
+			{!settings.capsuleHiddenName && (
 				<Text
 					className={classes.textWrap}
-					size={extensionSettings.capsuleLabelSize}
-					italic={extensionSettings.capsuleLabelItalic}
-					weight={extensionSettings.capsuleLabelBold ? '700' : '400'}
+					size={settings.capsuleLabelSize}
+					italic={settings.capsuleLabelItalic}
+					weight={settings.capsuleLabelBold ? '700' : '400'}
 				>
 					{title}
 				</Text>

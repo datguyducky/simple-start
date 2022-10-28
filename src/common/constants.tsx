@@ -19,7 +19,7 @@ export const constants = {
 		defaultCategory: null,
 		// settings for the capsule view
 		capsuleSpacing: 24,
-		capsuleSize: 110,
+		capsuleSize: 64,
 		capsuleIconSize: 32,
 		capsuleLabelSize: 14,
 		capsuleLabelItalic: false,
@@ -42,4 +42,9 @@ export const constants = {
 		listNameSize: 16,
 		listUrlSize: 14,
 	},
+	exampleBookmarks: [
+		{ name: 'Duckduckgo', url: 'https://duckduckgo.com' },
+		{ name: 'Stack Overflow', url: 'https://stackoverflow.com/' },
+		{ name: 'Wikipedia', url: 'https://wikipedia.org' },
+	],
 };
