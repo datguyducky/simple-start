@@ -6,5 +6,5 @@ export const bookmarkSchema = z.object({
 		.string()
 		.min(1)
 		.regex(/^(?:f|ht)tps?:\/\//, { message: 'Bookmark URL needs to start with "https://"' }),
-	bookmarkCategoryId: z.string(),
+	bookmarkCategoryId: z.string().nullable(),
 });
