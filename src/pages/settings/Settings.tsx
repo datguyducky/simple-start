@@ -16,12 +16,6 @@ export const Settings = () => {
 			<Title mb={32}>Simple Start - Settings</Title>
 
 			<Box>
-				<Title order={3} mb={8} sx={{ fontWeight: 600 }}>
-					General
-				</Title>
-			</Box>
-
-			<Box>
 				<Title order={3} mb={0} sx={{ fontWeight: 600 }}>
 					Theme
 				</Title>
