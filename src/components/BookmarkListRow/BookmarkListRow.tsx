@@ -1,18 +1,18 @@
 import { Box, Text, Group } from '@mantine/core';
 
 import { useBookmarkListRowStyles } from './BookmarkListRow.styles';
-import { useExtensionSettings } from '../../hooks/useExtensionSettings';
+import { ListSettings } from '../../types/settingsValues';
 
 type BookmarkListRowProps = {
 	title: string;
+	settings: ListSettings;
 	url?: string;
 };
 
-export const BookmarkListRow = ({ title, url }: BookmarkListRowProps) => {
-	const { extensionSettings } = useExtensionSettings();
+export const BookmarkListRow = ({ title, url, settings }: BookmarkListRowProps) => {
 	const { classes } = useBookmarkListRowStyles({
-		verticalPadding: extensionSettings.listVerticalPadding,
-		horizontalPadding: extensionSettings.listHorizontalPadding,
+		verticalPadding: settings.listVerticalPadding,
+		horizontalPadding: settings.listHorizontalPadding,
 	});
 
 	return (
@@ -21,35 +21,35 @@ export const BookmarkListRow = ({ title, url }: BookmarkListRowProps) => {
 				<Box className={classes.faviconWrap}>
 					<img
 						src={`https://simplestart-favicon-service.herokuapp.com/icon?url=${url}&size=64`}
-						height={extensionSettings.listIconSize}
-						width={extensionSettings.listIconSize}
+						height={settings.listIconSize}
+						width={settings.listIconSize}
 						style={{ marginRight: 8 }}
 					/>
 
-					{!extensionSettings.listHiddenName && (
+					{!settings.listHiddenName && (
 						<Text
 							sx={(theme) => ({
-								fontSize: extensionSettings.listNameSize,
-								color: extensionSettings.listNameColor ?? theme.colors.text,
+								fontSize: settings.listNameSize,
+								color: settings.listNameColor ?? theme.colors.text,
 							})}
 							inline
-							weight={extensionSettings.listNameBold ? '700' : '400'}
-							italic={extensionSettings.listNameItalic}
+							weight={settings.listNameBold ? '700' : '400'}
+							italic={settings.listNameItalic}
 						>
 							{title}
 						</Text>
 					)}
 				</Box>
 
-				{!extensionSettings.listHiddenUrl && (
+				{!settings.listHiddenUrl && (
 					<Text
 						sx={(theme) => ({
-							fontSize: extensionSettings.listUrlSize,
-							color: extensionSettings.listUrlColor ?? theme.colors.text,
+							fontSize: settings.listUrlSize,
+							color: settings.listUrlColor ?? theme.colors.text,
 						})}
 						inline
-						weight={extensionSettings.listUrlBold ? '700' : '400'}
-						italic={extensionSettings.listUrlItalic}
+						weight={settings.listUrlBold ? '700' : '400'}
+						italic={settings.listUrlItalic}
 					>
 						{url}
 					</Text>

@@ -43,8 +43,8 @@ export const constants = {
 		listUrlSize: 14,
 	},
 	exampleBookmarks: [
-		{ name: 'Duckduckgo', url: 'https://duckduckgo.com' },
-		{ name: 'Stack Overflow', url: 'https://stackoverflow.com/' },
-		{ name: 'Wikipedia', url: 'https://wikipedia.org' },
+		{ id: 1, name: 'Duckduckgo', url: 'https://duckduckgo.com' },
+		{ id: 2, name: 'Stack Overflow', url: 'https://stackoverflow.com/' },
+		{ id: 3, name: 'Wikipedia', url: 'https://wikipedia.org' },
 	],
 };
