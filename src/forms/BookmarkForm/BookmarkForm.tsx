@@ -42,7 +42,7 @@ export const BookmarkForm = ({
 	onEditBookmark,
 	initialValues,
 }: BookmarkFormProps) => {
-	const { values, errors, setFieldValue, onSubmit } = useForm({
+	const { values, onSubmit, getInputProps } = useForm({
 		initialValues: initialValues ?? {
 			bookmarkName: '',
 			bookmarkUrl: '',
@@ -133,18 +133,14 @@ export const BookmarkForm = ({
 				label="Bookmark name"
 				required
 				placeholder="e.g. DuckDuckGo"
-				value={values.bookmarkName}
-				error={errors.bookmarkName}
-				onChange={(event) => setFieldValue('bookmarkName', event.currentTarget.value)}
+				{...getInputProps('bookmarkName')}
 			/>
 			<TextInput
 				mb="xl"
 				label="Bookmark url"
 				required
 				placeholder="e.g. https://duckduckgo.com/"
-				value={values.bookmarkUrl}
-				error={errors.bookmarkUrl}
-				onChange={(event) => setFieldValue('bookmarkUrl', event.currentTarget.value)}
+				{...getInputProps('bookmarkUrl')}
 			/>
 
 			{categories.length > 0 ? (
@@ -158,8 +154,7 @@ export const BookmarkForm = ({
 					nothingFound="Category not found"
 					clearable
 					mb="xl"
-					value={values.bookmarkCategoryId}
-					onChange={(category) => setFieldValue('bookmarkCategoryId', category || '')}
+					{...getInputProps('bookmarkCategoryId')}
 				/>
 			) : (
 				<>

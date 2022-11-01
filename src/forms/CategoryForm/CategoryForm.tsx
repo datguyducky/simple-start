@@ -30,7 +30,7 @@ export const CategoryForm = ({
 	editCategory,
 	initialValues,
 }: CategoryFormProps) => {
-	const { values, errors, setFieldValue, onSubmit } = useForm({
+	const { values, onSubmit, getInputProps } = useForm({
 		initialValues: initialValues ?? {
 			categoryName: '',
 			defaultCategory: false,
@@ -93,6 +93,7 @@ export const CategoryForm = ({
 		}
 	};
 
+	console.log(values);
 	return (
 		<form
 			onSubmit={onSubmit(mode === 'create' ? handleCreateCategory : handleEditCategory)}
@@ -103,18 +104,13 @@ export const CategoryForm = ({
 				label="Category name"
 				required
 				placeholder="e.g. Home"
-				value={values.categoryName}
-				error={errors.categoryName}
-				onChange={(event) => setFieldValue('categoryName', event.currentTarget.value)}
+				{...getInputProps('categoryName')}
 			/>
-
-			{/* todo: add option to select icons for a category */}
 
 			<Checkbox
 				label="Set this category as a default one"
 				mb="xl"
-				checked={values.defaultCategory}
-				onChange={(event) => setFieldValue('defaultCategory', event.currentTarget.checked)}
+				{...getInputProps('defaultCategory', { type: 'checkbox' })}
 			/>
 
 			<Group position="right">
