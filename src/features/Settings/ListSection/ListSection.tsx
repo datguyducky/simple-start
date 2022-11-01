@@ -26,7 +26,7 @@ export const ListSection = () => {
 
 	const [resetModal, setResetModal] = useState(false);
 
-	const { getInputProps, setValues, onSubmit, values, resetDirty, isDirty, setFieldValue } =
+	const { getInputProps, setValues, onSubmit, values, resetDirty, isDirty } =
 		useForm<ListSettings>();
 
 	useEffect(() => {
@@ -156,69 +156,45 @@ export const ListSection = () => {
 										<Stack spacing={12} align="flex-start">
 											<Checkbox
 												label="Use bold text for bookmark name"
-												checked={values.listNameBold}
-												onChange={(event) =>
-													setFieldValue(
-														'listNameBold',
-														event.currentTarget.checked,
-													)
-												}
+												{...getInputProps('listNameBold', {
+													type: 'checkbox',
+												})}
 											/>
 
 											<Checkbox
 												label="Use bold text for bookmark url"
-												checked={values.listUrlBold}
-												onChange={(event) =>
-													setFieldValue(
-														'listUrlBold',
-														event.currentTarget.checked,
-													)
-												}
+												{...getInputProps('listUrlBold', {
+													type: 'checkbox',
+												})}
 											/>
 
 											<Checkbox
 												label="Use italic text for bookmark name"
-												checked={values.listNameItalic}
-												onChange={(event) =>
-													setFieldValue(
-														'listNameItalic',
-														event.currentTarget.checked,
-													)
-												}
+												{...getInputProps('listNameItalic', {
+													type: 'checkbox',
+												})}
 											/>
 
 											<Checkbox
 												label="Use italic text for bookmark url"
-												checked={values.listUrlItalic}
-												onChange={(event) =>
-													setFieldValue(
-														'listUrlItalic',
-														event.currentTarget.checked,
-													)
-												}
+												{...getInputProps('listUrlItalic', {
+													type: 'checkbox',
+												})}
 											/>
 										</Stack>
 
 										<Stack spacing={12} align="flex-start">
 											<Checkbox
 												label="Hide bookmarks name"
-												checked={values.listHiddenName}
-												onChange={(event) =>
-													setFieldValue(
-														'listHiddenName',
-														event.currentTarget.checked,
-													)
-												}
+												{...getInputProps('listHiddenName', {
+													type: 'checkbox',
+												})}
 											/>
 											<Checkbox
 												label="Hide bookmarks url"
-												checked={values.listHiddenUrl}
-												onChange={(event) =>
-													setFieldValue(
-														'listHiddenUrl',
-														event.currentTarget.checked,
-													)
-												}
+												{...getInputProps('listHiddenUrl', {
+													type: 'checkbox',
+												})}
 											/>
 										</Stack>
 									</Group>

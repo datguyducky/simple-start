@@ -26,7 +26,7 @@ export const CapsulesSection = () => {
 
 	const [resetModal, setResetModal] = useState(false);
 
-	const { getInputProps, setValues, onSubmit, values, resetDirty, isDirty, setFieldValue } =
+	const { getInputProps, setValues, onSubmit, values, resetDirty, isDirty } =
 		useForm<CapsuleSettings>();
 
 	useEffect(() => {
@@ -105,26 +105,23 @@ export const CapsulesSection = () => {
 
 							<Checkbox
 								label="Use bold text for labels"
-								checked={values.capsuleLabelBold}
-								onChange={(event) =>
-									setFieldValue('capsuleLabelBold', event.currentTarget.checked)
-								}
+								{...getInputProps('capsuleLabelBold', {
+									type: 'checkbox',
+								})}
 							/>
 
 							<Checkbox
 								label="Use italic text for labels"
-								checked={values.capsuleLabelItalic}
-								onChange={(event) =>
-									setFieldValue('capsuleLabelItalic', event.currentTarget.checked)
-								}
+								{...getInputProps('capsuleLabelItalic', {
+									type: 'checkbox',
+								})}
 							/>
 
 							<Checkbox
 								label="Hide labels for bookmarks"
-								checked={values.capsuleHiddenName}
-								onChange={(event) =>
-									setFieldValue('capsuleHiddenName', event.currentTarget.checked)
-								}
+								{...getInputProps('capsuleHiddenName', {
+									type: 'checkbox',
+								})}
 							/>
 						</Stack>
 
