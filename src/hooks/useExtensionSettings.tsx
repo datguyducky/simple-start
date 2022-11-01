@@ -1,4 +1,4 @@
-import { useContext, useLayoutEffect, useState } from 'react';
+import { useContext, useEffect, useLayoutEffect, useState } from 'react';
 
 import { constants } from '../common/constants';
 
@@ -18,6 +18,15 @@ export const useExtensionSettings = () => {
 		};
 
 		getExtensionSettings();
+	}, []);
+
+	useEffect(() => {
+		browser.storage.onChanged.addListener((changes) => {
+			if (changes?.extensionSettings) {
+				setCurrentSettings(changes.extensionSettings.newValue);
+			}
+		});
+		return () => browser.storage.onChanged.removeListener(saveExtensionSettings);
 	}, []);
 
 	const handleNextView = async () => {
