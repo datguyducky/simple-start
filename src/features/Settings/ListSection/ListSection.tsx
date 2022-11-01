@@ -10,12 +10,15 @@ import {
 	Group,
 	Text,
 	Modal,
+	Divider,
 } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { useMantineTheme } from '@mantine/core';
 
 import { useExtensionSettings } from '../../../hooks/useExtensionSettings';
 import { constants } from '../../../common/constants';
+import { ListSettings } from '../../../types/settingsValues';
+import { BookmarkListRow } from '../../../components/BookmarkListRow';
 
 export const ListSection = () => {
 	const theme = useMantineTheme();
@@ -24,30 +27,13 @@ export const ListSection = () => {
 	const [resetModal, setResetModal] = useState(false);
 
 	const { getInputProps, setValues, onSubmit, values, resetDirty, isDirty, setFieldValue } =
-		useForm({
-			initialValues: {
-				listHiddenName: false,
-				listHiddenUrl: false,
-				listNameItalic: false,
-				listNameBold: false,
-				listUrlItalic: false,
-				listUrlBold: false,
-				listUrlColor: (theme.colors.text as unknown as string) || '',
-				listNameColor: (theme.colors.text as unknown as string) || '',
-				listVerticalPadding: 12,
-				listHorizontalPadding: 20,
-				listSpacing: 4,
-				listIconSize: 24,
-				listNameSize: 16,
-				listUrlSize: 14,
-			}, // todo: any way to improve this?
-		});
+		useForm<ListSettings>();
 
 	useEffect(() => {
 		if (extensionSettings) {
 			const listSettings = Object.fromEntries(
 				Object.entries(extensionSettings).filter(([key]) => key.includes('list')),
-			);
+			) as ListSettings;
 
 			setValues({
 				...listSettings,
@@ -66,7 +52,7 @@ export const ListSection = () => {
 
 	const handleSaveExtensionSettings = async (formValues: typeof values) => {
 		if (isDirty()) {
-			await saveExtensionSettings(formValues);
+			await saveExtensionSettings(formValues as any); // todo: ANY-TYPE USAGE! Way to improve this?
 
 			resetDirty();
 		}
@@ -87,111 +73,168 @@ export const ListSection = () => {
 
 	return (
 		<>
-			<SimpleGrid cols={2} spacing={32} mb={32}>
-				<Box>
-					<form onSubmit={onSubmit(handleSaveExtensionSettings)} noValidate>
-						<Stack spacing={32} justify="flex-start">
-							<Box>
-								<Checkbox
-									label="Use bold text for bookmark name"
-									checked={values.listNameBold}
-									onChange={(event) =>
-										setFieldValue('listNameBold', event.currentTarget.checked)
-									}
-								/>
+			<Box>
+				<form onSubmit={onSubmit(handleSaveExtensionSettings)} noValidate>
+					<Stack>
+						<Box>
+							<Text weight={700} mb={8}>
+								Preview:
+							</Text>
 
-								<Checkbox
-									label="Use bold text for bookmark url"
-									checked={values.listUrlBold}
-									onChange={(event) =>
-										setFieldValue('listUrlBold', event.currentTarget.checked)
-									}
-								/>
-
-								<Checkbox
-									label="Use italic text for bookmark name"
-									checked={values.listNameItalic}
-									onChange={(event) =>
-										setFieldValue('listNameItalic', event.currentTarget.checked)
-									}
-								/>
-
-								<Checkbox
-									label="Use italic text for bookmark url"
-									checked={values.listUrlItalic}
-									onChange={(event) =>
-										setFieldValue('listUrlItalic', event.currentTarget.checked)
-									}
-								/>
-
-								<ColorInput
-									{...getInputProps('listNameColor')}
-									format="hex"
-									label="Color for bookmark name"
-								/>
-
-								<ColorInput
-									{...getInputProps('listUrlColor')}
-									format="hex"
-									label="Color for bookmark url"
-								/>
-
-								<Checkbox
-									label="Hide bookmarks name"
-									checked={values.listHiddenName}
-									onChange={(event) =>
-										setFieldValue('listHiddenName', event.currentTarget.checked)
-									}
-								/>
-
-								<Checkbox
-									label="Hide bookmarks url"
-									checked={values.listHiddenUrl}
-									onChange={(event) =>
-										setFieldValue('listHiddenUrl', event.currentTarget.checked)
-									}
-								/>
-
-								<Group spacing={12}>
-									<NumberInput
-										label="Vertical padding for each bookmark"
-										{...getInputProps('listVerticalPadding')}
+							<Stack justify="flex-start" spacing={values.listSpacing}>
+								{constants.exampleBookmarks.map((bookmark) => (
+									<BookmarkListRow
+										key={bookmark.id}
+										title={bookmark.name}
+										url={bookmark.url}
+										settings={values}
 									/>
+								))}
+							</Stack>
+						</Box>
+
+						<Divider />
+
+						<Box>
+							<Text weight={700} mb={8}>
+								Customize:
+							</Text>
+
+							<SimpleGrid cols={2} spacing={16} mb={24}>
+								<Stack spacing={12} align="flex-start">
+									<Group>
+										<NumberInput
+											label="Vertical padding for each bookmark"
+											{...getInputProps('listVerticalPadding')}
+										/>
+
+										<NumberInput
+											label="Horizontal padding for each bookmark"
+											{...getInputProps('listHorizontalPadding')}
+										/>
+									</Group>
 
 									<NumberInput
-										label="Horizontal padding for each bookmark"
-										{...getInputProps('listHorizontalPadding')}
+										label="Spacing between bookmarks"
+										{...getInputProps('listSpacing')}
 									/>
-								</Group>
 
-								<NumberInput
-									label="Spacing between bookmarks"
-									{...getInputProps('listSpacing')}
-								/>
+									<Group>
+										<NumberInput
+											label="Bookmark name size"
+											{...getInputProps('listNameSize')}
+										/>
 
-								<NumberInput label="Icon size" {...getInputProps('listIconSize')} />
+										<NumberInput
+											label="Bookmark url size"
+											{...getInputProps('listUrlSize')}
+										/>
 
-								<NumberInput
-									label="Bookmark name size"
-									{...getInputProps('listNameSize')}
-								/>
+										<NumberInput
+											label="Icon size"
+											{...getInputProps('listIconSize')}
+										/>
+									</Group>
+								</Stack>
 
-								<NumberInput
-									label="Bookmark url size"
-									{...getInputProps('listUrlSize')}
-								/>
-							</Box>
+								<Stack spacing={12} align="flex-start">
+									<Group align="flex-start">
+										<ColorInput
+											{...getInputProps('listNameColor')}
+											format="hex"
+											label="Color for bookmark name"
+										/>
 
-							<Group>
-								<Button variant="outline" onClick={() => setResetModal(true)}>
-									Reset to default
-								</Button>
-								<Button type="submit">Save</Button>
-							</Group>
-						</Stack>
-					</form>
-				</Box>
-			</SimpleGrid>
+										<ColorInput
+											{...getInputProps('listUrlColor')}
+											format="hex"
+											label="Color for bookmark url"
+										/>
+									</Group>
+
+									<Group align="flex-start">
+										<Stack spacing={12} align="flex-start">
+											<Checkbox
+												label="Use bold text for bookmark name"
+												checked={values.listNameBold}
+												onChange={(event) =>
+													setFieldValue(
+														'listNameBold',
+														event.currentTarget.checked,
+													)
+												}
+											/>
+
+											<Checkbox
+												label="Use bold text for bookmark url"
+												checked={values.listUrlBold}
+												onChange={(event) =>
+													setFieldValue(
+														'listUrlBold',
+														event.currentTarget.checked,
+													)
+												}
+											/>
+
+											<Checkbox
+												label="Use italic text for bookmark name"
+												checked={values.listNameItalic}
+												onChange={(event) =>
+													setFieldValue(
+														'listNameItalic',
+														event.currentTarget.checked,
+													)
+												}
+											/>
+
+											<Checkbox
+												label="Use italic text for bookmark url"
+												checked={values.listUrlItalic}
+												onChange={(event) =>
+													setFieldValue(
+														'listUrlItalic',
+														event.currentTarget.checked,
+													)
+												}
+											/>
+										</Stack>
+
+										<Stack spacing={12} align="flex-start">
+											<Checkbox
+												label="Hide bookmarks name"
+												checked={values.listHiddenName}
+												onChange={(event) =>
+													setFieldValue(
+														'listHiddenName',
+														event.currentTarget.checked,
+													)
+												}
+											/>
+											<Checkbox
+												label="Hide bookmarks url"
+												checked={values.listHiddenUrl}
+												onChange={(event) =>
+													setFieldValue(
+														'listHiddenUrl',
+														event.currentTarget.checked,
+													)
+												}
+											/>
+										</Stack>
+									</Group>
+								</Stack>
+							</SimpleGrid>
+						</Box>
+					</Stack>
+
+					<Group position="center" sx={{ width: '100%', marginLeft: '-28px' }} mt={0}>
+						<Button variant="outline" onClick={() => setResetModal(true)}>
+							Reset to default
+						</Button>
+						<Button type="submit">Save</Button>
+					</Group>
+				</form>
+			</Box>
 
 			<Modal
 				opened={resetModal}

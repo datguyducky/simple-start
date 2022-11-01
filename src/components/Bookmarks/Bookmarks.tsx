@@ -28,6 +28,7 @@ export const Bookmarks = ({ bookmarks }: BookmarksProps) => {
 			<Group spacing={extensionSettings.capsuleSpacing}>
 				{bookmarks.map((bookmark) => (
 					<BookmarkCapsule
+						key={bookmark.id}
 						title={bookmark.title}
 						url={bookmark?.url}
 						settings={extensionSettings}
@@ -45,7 +46,12 @@ export const Bookmarks = ({ bookmarks }: BookmarksProps) => {
 				className={classes.bookmarksListWrap}
 			>
 				{bookmarks.map((bookmark) => (
-					<BookmarkListRow key={bookmark.id} title={bookmark.title} url={bookmark.url} />
+					<BookmarkListRow
+						key={bookmark.id}
+						title={bookmark.title}
+						url={bookmark.url}
+						settings={extensionSettings}
+					/>
 				))}
 			</Stack>
 		);

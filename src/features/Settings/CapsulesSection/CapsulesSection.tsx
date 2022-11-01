@@ -69,7 +69,7 @@ export const CapsulesSection = () => {
 
 	return (
 		<>
-			<Box>
+			<Box mb={32}>
 				<form onSubmit={onSubmit(handleSaveExtensionSettings)} noValidate>
 					<SimpleGrid cols={2} spacing={32} mb={8}>
 						<Text weight={700}>Customize:</Text>
@@ -134,6 +134,7 @@ export const CapsulesSection = () => {
 							<Group spacing={values.capsuleSpacing} mx="auto">
 								{constants.exampleBookmarks.map((bookmark) => (
 									<BookmarkCapsule
+										key={bookmark.id}
 										title={bookmark.name}
 										url={bookmark?.url}
 										settings={values}
