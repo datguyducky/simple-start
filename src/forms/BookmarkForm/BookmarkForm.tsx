@@ -1,8 +1,9 @@
 import { Button, Group, Select, Text, TextInput } from '@mantine/core';
-import { useForm } from '@mantine/form';
+import { useForm, zodResolver } from '@mantine/form';
 import { showNotification } from '@mantine/notifications';
 
 import { useExtensionCategories } from '../../hooks/useExtensionCategories';
+import { bookmarkSchema } from '../../validation/bookmarkSchema';
 
 export type BookmarkValues = {
 	id: string;
@@ -47,15 +48,7 @@ export const BookmarkForm = ({
 			bookmarkUrl: '',
 			bookmarkCategoryId: '',
 		},
-		validate: (values) => ({
-			bookmarkName: values.bookmarkName.length <= 0 ? 'Bookmark name is required' : null,
-			bookmarkUrl:
-				values.bookmarkUrl.length <= 0
-					? 'Bookmark URL is required'
-					: !/^(?:f|ht)tps?:\/\//.test(values.bookmarkUrl)
-					? 'Bookmark URL needs to start with "https://"'
-					: null,
-		}),
+		validate: zodResolver(bookmarkSchema),
 	});
 
 	const { categories } = useExtensionCategories();

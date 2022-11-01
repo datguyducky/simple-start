@@ -1,6 +1,7 @@
 import { Button, Checkbox, Group, TextInput } from '@mantine/core';
-import { useForm } from '@mantine/form';
+import { useForm, zodResolver } from '@mantine/form';
 import { showNotification } from '@mantine/notifications';
+import { categorySchema } from '../../validation/categorySchema';
 
 export type CategoryValues = {
 	id: string;
@@ -34,9 +35,7 @@ export const CategoryForm = ({
 			categoryName: '',
 			defaultCategory: false,
 		},
-		validate: (values) => ({
-			categoryName: values.categoryName.length <= 0 ? 'Category name is required' : null,
-		}),
+		validate: zodResolver(categorySchema),
 	});
 
 	const handleCreateCategory = (formValues: typeof values) => {
