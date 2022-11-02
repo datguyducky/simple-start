@@ -3,6 +3,7 @@ import { useContext, useEffect, useLayoutEffect, useState } from 'react';
 import { constants } from '../common/constants';
 
 import { ExtensionSettingsContext } from '../context/extensionSettings';
+import StorageChange = browser.storage.StorageChange;
 
 export const useExtensionSettings = () => {
 	const { currentSettings, setCurrentSettings } = useContext(ExtensionSettingsContext);
@@ -20,13 +21,15 @@ export const useExtensionSettings = () => {
 		getExtensionSettings();
 	}, []);
 
+	const handleSettingsChanged = (changes: { [key: string]: StorageChange }) => {
+		if (changes?.extensionSettings) {
+			setCurrentSettings(changes.extensionSettings.newValue);
+		}
+	};
+
 	useEffect(() => {
-		browser.storage.onChanged.addListener((changes) => {
-			if (changes?.extensionSettings) {
-				setCurrentSettings(changes.extensionSettings.newValue);
-			}
-		});
-		return () => browser.storage.onChanged.removeListener(saveExtensionSettings);
+		browser.storage.onChanged.addListener(handleSettingsChanged);
+		return () => browser.storage.onChanged.removeListener(handleSettingsChanged);
 	}, []);
 
 	const handleNextView = async () => {

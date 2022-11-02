@@ -18,18 +18,17 @@ export const NewTab = () => {
 	const [newBookmarkModal, setNewBookmarkModal] = useState(false);
 	const [newCategoryModal, setNewCategoryModal] = useState(false);
 
-	const [selectedCategoryId, setSelectedCategoryId] = useState<string | null>(null);
+	const { activeCategory, setActiveCategory, categories, createCategory } =
+		useExtensionCategories();
 
 	const { bookmarks, uncategorizedBookmarks, createBookmark } = useExtensionBookmarks({
-		categoryId: selectedCategoryId,
+		categoryId: activeCategory,
 	});
-	const { categories, createCategory } = useExtensionCategories();
 
 	// todo: for sure this width handle needs rework as in some cases is way to big (long text + calculation makes it bigger than the whole page/monitor)
 	const { classes } = useNewTabStyles({
 		width:
-			(categories?.find((category) => category.id === selectedCategoryId)?.title?.length ||
-				11) *
+			(categories?.find((category) => category.id === activeCategory)?.title?.length || 11) *
 				8 +
 			64,
 	});
@@ -37,10 +36,10 @@ export const NewTab = () => {
 	const { extensionSettings } = useExtensionSettings();
 
 	useEffect(() => {
-		if (extensionSettings?.defaultCategory && !selectedCategoryId) {
-			setSelectedCategoryId(extensionSettings.defaultCategory);
+		if (extensionSettings?.defaultCategory && !activeCategory) {
+			setActiveCategory(extensionSettings.defaultCategory);
 		}
-	}, [extensionSettings, selectedCategoryId]);
+	}, [extensionSettings, activeCategory]);
 
 	return (
 		<>
@@ -70,17 +69,15 @@ export const NewTab = () => {
 						}}
 						allowDeselect
 						withinPortal={false}
-						value={selectedCategoryId}
-						onChange={setSelectedCategoryId}
+						value={activeCategory}
+						onChange={setActiveCategory}
 						placeholder="No category"
 					/>
 				)}
 
-				{(selectedCategoryId && bookmarks.length > 0) ||
-				(!selectedCategoryId && uncategorizedBookmarks?.length > 0) ? (
-					<Bookmarks
-						bookmarks={selectedCategoryId ? bookmarks : uncategorizedBookmarks}
-					/>
+				{(activeCategory && bookmarks.length > 0) ||
+				(!activeCategory && uncategorizedBookmarks?.length > 0) ? (
+					<Bookmarks bookmarks={activeCategory ? bookmarks : uncategorizedBookmarks} />
 				) : categories.length > 0 ? (
 					<Text>
 						Sorry, the currently selected category doesn't have any bookmarks. Click
