@@ -8,8 +8,8 @@ export const useSettingsViewStyles = createStyles((theme) => ({
 		boxSizing: 'border-box',
 		padding: '32px 96px',
 		backgroundColor: theme.colors.background[0],
-		transition: 'background-color 3s linear',
-		transitionDelay: '0.2s',
+		transition: 'background-color 1s ease',
+		transitionDelay: '0.1s',
 
 		[`@media (max-width: ${theme.breakpoints.xl}px)`]: {
 			padding: '32px 64px',
