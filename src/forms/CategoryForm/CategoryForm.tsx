@@ -93,7 +93,6 @@ export const CategoryForm = ({
 		}
 	};
 
-	console.log(values);
 	return (
 		<form
 			onSubmit={onSubmit(mode === 'create' ? handleCreateCategory : handleEditCategory)}
