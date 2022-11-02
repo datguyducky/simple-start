@@ -3,9 +3,13 @@ import { showNotification } from '@mantine/notifications';
 import BookmarkTreeNode = browser.bookmarks.BookmarkTreeNode;
 
 import { useExtensionSettings } from './useExtensionSettings';
+import _OnChangedChangeInfo = browser.bookmarks._OnChangedChangeInfo;
+import _OnRemovedRemoveInfo = browser.bookmarks._OnRemovedRemoveInfo;
 
 export const useExtensionCategories = () => {
 	const [categories, setCategories] = useState<BookmarkTreeNode[]>([]);
+	const [activeCategory, setActiveCategory] = useState<string | null>(null);
+
 	const { handleSetDefaultCategory, extensionSettings } = useExtensionSettings();
 
 	const getExtensionCategories = async (rootId: string) => {
@@ -36,6 +40,39 @@ export const useExtensionCategories = () => {
 
 		categoriesFromRoot();
 	}, []);
+
+	// making sure that edition of a category (aka bookmark folder) is synced between tabs and views
+	const syncCategoryChanges = (id: string, changeInfo: _OnChangedChangeInfo) => {
+		const updatedCategories = categories.map((category) =>
+			category.id === id ? { ...category, ...changeInfo } : category,
+		);
+
+		setCategories(updatedCategories);
+	};
+
+	// making sure that category (aka bookmark folder) deletion is synced between tabs and views
+	const syncCategoryDeletion = (id: string, removeInfo: _OnRemovedRemoveInfo) => {
+		if (removeInfo?.node?.type === 'folder') {
+			const cleanedCategories = categories.filter((category) => category.id !== id);
+
+			setCategories(cleanedCategories);
+
+			if (removeInfo?.node?.id === activeCategory) {
+				setActiveCategory(null);
+			}
+		}
+	};
+
+	useEffect(() => {
+		if (categories?.length > 0) {
+			browser.bookmarks.onChanged.addListener(syncCategoryChanges);
+			browser.bookmarks.onRemoved.addListener(syncCategoryDeletion);
+			return () => {
+				browser.bookmarks.onChanged.removeListener(syncCategoryChanges);
+				browser.bookmarks.onRemoved.removeListener(syncCategoryDeletion);
+			};
+		}
+	}, [categories, activeCategory]);
 
 	const createCategory = async ({
 		name,
@@ -101,6 +138,8 @@ export const useExtensionCategories = () => {
 	};
 
 	return {
+		activeCategory,
+		setActiveCategory,
 		categories,
 		createCategory,
 		editCategory,
