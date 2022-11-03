@@ -1,12 +1,11 @@
 import { Box, Title, Text } from '@mantine/core';
 
-import { ThemeSection } from '../../features/Settings/ThemeSection';
-
 import { useSettingsViewStyles } from './Settings.styles';
 
-import { CategoriesBookmarksSection } from '../../features/Settings/CategoriesBookmarksSection';
-import { CapsulesSection } from '../../features/Settings/CapsulesSection';
-import { ListSection } from '../../features/Settings/ListSection';
+import { CategoriesBookmarksSection } from '../../components/Settings/CategoriesBookmarksSection';
+import { CapsulesSection } from '../../components/Settings/CapsulesSection';
+import { ListSection } from '../../components/Settings/ListSection';
+import { ThemeSection } from '../../components/Settings/ThemeSection';
 
 export const Settings = () => {
 	const { classes } = useSettingsViewStyles();
