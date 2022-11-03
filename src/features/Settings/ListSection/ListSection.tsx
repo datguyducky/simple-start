@@ -218,7 +218,7 @@ export const ListSection = () => {
 				</Text>
 
 				<Group position="right">
-					<Button variant="outline" color="dark" onClick={() => setResetModal(false)}>
+					<Button variant="outline" color="gray" onClick={() => setResetModal(false)}>
 						Cancel
 					</Button>
 					<Button color="primary" onClick={handleResetSettings}>
