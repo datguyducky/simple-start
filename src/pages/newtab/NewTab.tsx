@@ -36,7 +36,7 @@ export const NewTab = () => {
 	const { extensionSettings } = useExtensionSettings();
 
 	useEffect(() => {
-		if (extensionSettings?.defaultCategory && !activeCategory) {
+		if (extensionSettings?.defaultCategory && activeCategory === undefined) {
 			setActiveCategory(extensionSettings.defaultCategory);
 		}
 	}, [extensionSettings, activeCategory]);

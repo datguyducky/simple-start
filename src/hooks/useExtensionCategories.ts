@@ -8,7 +8,7 @@ import _OnRemovedRemoveInfo = browser.bookmarks._OnRemovedRemoveInfo;
 
 export const useExtensionCategories = () => {
 	const [categories, setCategories] = useState<BookmarkTreeNode[]>([]);
-	const [activeCategory, setActiveCategory] = useState<string | null>(null);
+	const [activeCategory, setActiveCategory] = useState<string | null | undefined>(undefined);
 
 	const { handleSetDefaultCategory, extensionSettings } = useExtensionSettings();
 
