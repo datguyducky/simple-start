@@ -72,8 +72,8 @@ export const ThemeSection = () => {
 							const customThemeName = customThemeData.name
 								.replace('created-theme-', '')
 								.replace(/-/g, ' ');
-							const customThemeBackground = customThemeData.colors.background[0]; // todo: fix typing
-							const customThemeBorder = customThemeData.colors.background[2]; // todo: fix typing
+							const customThemeBackground = customThemeData.colors.background[0];
+							const customThemeBorder = customThemeData.colors.background[2];
 
 							return (
 								<CustomThemeBox

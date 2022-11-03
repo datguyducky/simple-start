@@ -10,7 +10,7 @@ export const useExtensionCategories = () => {
 	const [categories, setCategories] = useState<BookmarkTreeNode[]>([]);
 	const [activeCategory, setActiveCategory] = useState<string | null | undefined>(undefined);
 
-	const { handleSetDefaultCategory, extensionSettings } = useExtensionSettings();
+	const { saveExtensionSettings, extensionSettings } = useExtensionSettings();
 
 	const getExtensionCategories = async (rootId: string) => {
 		try {
@@ -90,7 +90,7 @@ export const useExtensionCategories = () => {
 		});
 
 		if (setAsDefault) {
-			await handleSetDefaultCategory({ newDefaultCategory: newCategory?.id });
+			await saveExtensionSettings({ defaultCategory: newCategory?.id });
 		}
 
 		await getExtensionCategories(rootId);
@@ -111,11 +111,11 @@ export const useExtensionCategories = () => {
 
 		// set category as a default one
 		if (defaultCategory) {
-			await handleSetDefaultCategory({ newDefaultCategory: id });
+			await saveExtensionSettings({ defaultCategory: id });
 		} else {
 			// if currently edited category is set as default one and got unselected then reset the defaultCategory in storage
 			if (extensionSettings?.defaultCategory === id) {
-				await handleSetDefaultCategory({ newDefaultCategory: '' });
+				await saveExtensionSettings({ defaultCategory: '' });
 			}
 		}
 
@@ -127,7 +127,7 @@ export const useExtensionCategories = () => {
 		// before removing category from the extension root folder
 		// make sure that the category is also removed from extensionSettings if it's saved there as a defaultCategory
 		if (extensionSettings?.defaultCategory === id) {
-			await handleSetDefaultCategory({ newDefaultCategory: '' });
+			await saveExtensionSettings({ defaultCategory: '' });
 		}
 
 		await browser.bookmarks.removeTree(id);

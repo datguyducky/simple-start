@@ -22,7 +22,7 @@ type CategoriesAccordion = {
 };
 
 export const CategoriesBookmarksSection = () => {
-	const { extensionSettings } = useExtensionSettings(); // todo: probably move this to Settings file in the future
+	const { extensionSettings } = useExtensionSettings();
 
 	const { classes } = useCategoriesBookmarksSectionStyles();
 

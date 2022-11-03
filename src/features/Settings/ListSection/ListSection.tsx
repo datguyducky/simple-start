@@ -45,7 +45,7 @@ export const ListSection = () => {
 
 	const handleSaveExtensionSettings = async (formValues: typeof values) => {
 		if (isDirty()) {
-			await saveExtensionSettings(formValues as any); // todo: ANY-TYPE USAGE! Way to improve this?
+			await saveExtensionSettings(formValues);
 
 			resetDirty();
 		}

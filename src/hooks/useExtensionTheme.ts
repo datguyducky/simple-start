@@ -50,17 +50,17 @@ export const useExtensionTheme = ({ key, defaultValue = 'light' }: UseExtensionT
 			.map((x) => x.toLowerCase())
 			.join('-')}`;
 
-		const isExistingTheme = await browser.storage.sync.get(`created-theme-${formattedName}`);
+		const isExistingTheme = await browser.storage.sync.get(formattedName);
 		if (Object.values(isExistingTheme).length > 0) {
 			throw new Error('CUSTOM_THEME_EXISTS');
 		}
 
 		await browser.storage.sync.set({
-			['created-theme-' + formattedName]: { colors: themeColors },
+			[formattedName]: { colors: themeColors },
 		});
 		setLocalCustomThemes((prevState) => [
 			...prevState,
-			{ name: 'created-theme-' + formattedName, colors: themeColors },
+			{ name: formattedName, colors: themeColors },
 		]);
 	};
 
