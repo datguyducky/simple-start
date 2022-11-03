@@ -13,7 +13,6 @@ import {
 	Divider,
 } from '@mantine/core';
 import { useForm } from '@mantine/form';
-import { useMantineTheme } from '@mantine/core';
 
 import { useExtensionSettings } from '../../../hooks/useExtensionSettings';
 import { constants } from '../../../common/constants';
@@ -21,7 +20,6 @@ import { BookmarkCapsule } from '../../../components/BookmarkCapsule';
 import { CapsuleSettings } from '../../../types/settingsValues';
 
 export const CapsulesSection = () => {
-	const theme = useMantineTheme();
 	const { extensionSettings, saveExtensionSettings } = useExtensionSettings();
 
 	const [resetModal, setResetModal] = useState(false);
@@ -39,7 +37,7 @@ export const CapsulesSection = () => {
 				...capsuleSettings,
 				capsuleLabelColor:
 					capsuleSettings.capsuleLabelColor === null
-						? (theme.colors.text as unknown as string)
+						? ''
 						: capsuleSettings.capsuleLabelColor,
 			});
 			resetDirty();

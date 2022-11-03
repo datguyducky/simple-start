@@ -13,7 +13,6 @@ import {
 	Divider,
 } from '@mantine/core';
 import { useForm } from '@mantine/form';
-import { useMantineTheme } from '@mantine/core';
 
 import { useExtensionSettings } from '../../../hooks/useExtensionSettings';
 import { constants } from '../../../common/constants';
@@ -21,7 +20,6 @@ import { ListSettings } from '../../../types/settingsValues';
 import { BookmarkListRow } from '../../../components/BookmarkListRow';
 
 export const ListSection = () => {
-	const theme = useMantineTheme();
 	const { extensionSettings, saveExtensionSettings } = useExtensionSettings();
 
 	const [resetModal, setResetModal] = useState(false);
@@ -37,14 +35,9 @@ export const ListSection = () => {
 
 			setValues({
 				...listSettings,
-				listUrlColor:
-					listSettings.listUrlColor === null
-						? (theme.colors.text as unknown as string)
-						: listSettings.listUrlColor,
+				listUrlColor: listSettings.listUrlColor === null ? '' : listSettings.listUrlColor,
 				listNameColor:
-					listSettings.listNameColor === null
-						? (theme.colors.text as unknown as string)
-						: listSettings.listNameColor,
+					listSettings.listNameColor === null ? '' : listSettings.listNameColor,
 			});
 			resetDirty();
 		}
