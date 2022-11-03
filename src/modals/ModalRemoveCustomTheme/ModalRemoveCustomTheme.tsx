@@ -18,7 +18,7 @@ export const ModalRemoveCustomTheme = ({
 		name
 			?.replace('created-theme-', '')
 			.replace(/-/g, ' ')
-			.replace(/(^\w|\s\w)/g, (m) => m.toUpperCase()) || ''; // todo: capitalize it too
+			.replace(/(^\w|\s\w)/g, (m) => m.toUpperCase()) || '';
 
 	const handleRemoveCategory = () => {
 		setTimeout(async () => {

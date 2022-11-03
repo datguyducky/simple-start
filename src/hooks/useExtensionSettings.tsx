@@ -4,6 +4,7 @@ import { constants } from '../common/constants';
 
 import { ExtensionSettingsContext } from '../context/extensionSettings';
 import StorageChange = browser.storage.StorageChange;
+import { AllExtensionSettings } from '../types/settingsValues';
 
 export const useExtensionSettings = () => {
 	const { currentSettings, setCurrentSettings } = useContext(ExtensionSettingsContext);
@@ -67,26 +68,8 @@ export const useExtensionSettings = () => {
 		}
 	};
 
-	const handleSetDefaultCategory = async ({
-		newDefaultCategory,
-	}: {
-		newDefaultCategory: string;
-	}) => {
-		await browser.storage.sync.set({
-			extensionSettings: {
-				...currentSettings,
-				defaultCategory: newDefaultCategory,
-			},
-		});
-		setCurrentSettings((prevSettings) => ({
-			...prevSettings,
-			defaultCategory: newDefaultCategory,
-		}));
-	};
-
-	// todo: better type for newValues argument
-	// todo: use this to save every setting? For example "defaultCategory" or "currentView"?
-	const saveExtensionSettings = async (newValues: Record<string, unknown>) => {
+	// this is used to save settings for the extension, except the "currentView" one as that requires some extra logic to properly change it
+	const saveExtensionSettings = async (newValues: Partial<AllExtensionSettings>) => {
 		await browser.storage.sync.set({
 			extensionSettings: {
 				...currentSettings,
@@ -104,7 +87,6 @@ export const useExtensionSettings = () => {
 		extensionSettings: currentSettings,
 		currentView: currentSettings?.currentView,
 		handleNextView,
-		handleSetDefaultCategory,
 		viewLoading,
 		saveExtensionSettings,
 	};
