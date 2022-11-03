@@ -25,12 +25,12 @@ export const NewTab = () => {
 		categoryId: activeCategory,
 	});
 
-	// todo: for sure this width handle needs rework as in some cases is way to big (long text + calculation makes it bigger than the whole page/monitor)
+	// todo: this is still far from being perfect, so it would be a good idea to find even better approach for this
+	const customWidth =
+		categories?.find((category) => category.id === activeCategory)?.title?.replace(' ', '')
+			?.length || 11;
 	const { classes } = useNewTabStyles({
-		width:
-			(categories?.find((category) => category.id === activeCategory)?.title?.length || 11) *
-				8 +
-			64,
+		width: customWidth > 40 ? customWidth * 7.5 : customWidth * 8 + 64,
 	});
 
 	const { extensionSettings } = useExtensionSettings();
@@ -63,9 +63,10 @@ export const NewTab = () => {
 						variant="unstyled"
 						classNames={{
 							root: classes.selectRoot,
-							wrapper: classes.selectInput,
+							wrapper: classes.selectInputWrapper,
 							dropdown: classes.selectDropdown,
 							item: classes.selectItem,
+							input: classes.selectInput,
 						}}
 						allowDeselect
 						withinPortal={false}
