@@ -99,6 +99,23 @@ export const themeComponents: MantineThemeOverride = {
 				},
 			}),
 		},
+		NumberInput: {
+			styles: (theme, params) => ({
+				control: {
+					borderColor:
+						params.variant === 'unstyled' ? 'transparent' : theme.colors.background[4],
+					color: theme.colors.text,
+
+					'&:hover': {
+						backgroundColor: `${theme.colors.background[4]} !important`,
+					},
+
+					'& > svg': {
+						color: 'inherit !important',
+					},
+				},
+			}),
+		},
 		InputWrapper: {
 			styles: (theme) => ({
 				label: {
@@ -180,6 +197,14 @@ export const themeComponents: MantineThemeOverride = {
 			styles: () => ({
 				root: {
 					opacity: '0.6 !important',
+				},
+			}),
+		},
+		ColorInput: {
+			styles: (theme) => ({
+				dropdown: {
+					backgroundColor: theme.colors.background[0],
+					borderColor: theme.colors.background[2],
 				},
 			}),
 		},

@@ -161,9 +161,10 @@ export const CapsulesSection = () => {
 				</Text>
 
 				<Group position="right">
-					<Button variant="outline" color="dark" onClick={() => setResetModal(false)}>
+					<Button variant="outline" color="gray" onClick={() => setResetModal(false)}>
 						Cancel
 					</Button>
+
 					<Button color="primaryColor" onClick={handleResetSettings}>
 						Reset
 					</Button>

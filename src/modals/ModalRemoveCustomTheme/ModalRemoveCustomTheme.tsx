@@ -54,7 +54,7 @@ export const ModalRemoveCustomTheme = ({
 			</Text>
 
 			<Group position="right">
-				<Button variant="outline" color="dark" onClick={onClose}>
+				<Button variant="outline" color="gray" onClick={onClose}>
 					Cancel
 				</Button>
 				<Button color="red" onClick={handleRemoveCategory}>

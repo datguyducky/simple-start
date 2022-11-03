@@ -63,7 +63,7 @@ export const ModalRemoveCategory = ({
 			<Group position="right">
 				<Button
 					variant="outline"
-					color="dark"
+					color="gray"
 					onClick={() => setRemoveCategoryModal({ isVisible: false, id: '' })}
 				>
 					Cancel
