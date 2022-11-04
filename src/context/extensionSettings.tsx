@@ -1,6 +1,7 @@
 import { createContext, Dispatch, ReactNode, SetStateAction, useState } from 'react';
-import { constants } from '../common/constants';
-import { AllExtensionSettings } from '../types/settingsValues';
+
+import { constants } from '@common/constants';
+import { AllExtensionSettings } from '@extensionTypes/settingsValues';
 
 export const ExtensionSettingsContext = createContext<{
 	setCurrentSettings: Dispatch<SetStateAction<AllExtensionSettings>>;

@@ -1,9 +1,9 @@
 import { Button, Grid, Group, Menu, Title, Text } from '@mantine/core';
 import { BookmarkIcon, CogIcon, CollectionIcon, PlusIcon } from '@heroicons/react/outline';
 
-import { constants } from '../../common/constants';
+import { constants } from '@common/constants';
 
-import { useExtensionSettings } from '../../hooks/useExtensionSettings';
+import { useExtensionSettings } from '@hooks/useExtensionSettings';
 
 import { useNewTabHeaderStyles } from './NewTabHeader.styles';
 

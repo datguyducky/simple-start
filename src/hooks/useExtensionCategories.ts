@@ -2,9 +2,10 @@ import { useEffect, useState } from 'react';
 import { showNotification } from '@mantine/notifications';
 import BookmarkTreeNode = browser.bookmarks.BookmarkTreeNode;
 
-import { useExtensionSettings } from './useExtensionSettings';
 import _OnChangedChangeInfo = browser.bookmarks._OnChangedChangeInfo;
 import _OnRemovedRemoveInfo = browser.bookmarks._OnRemovedRemoveInfo;
+
+import { useExtensionSettings } from './useExtensionSettings';
 
 export const useExtensionCategories = () => {
 	const [categories, setCategories] = useState<BookmarkTreeNode[]>([]);

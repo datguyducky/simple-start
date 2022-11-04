@@ -1,7 +1,8 @@
 import { Box, Text } from '@mantine/core';
 
+import { CapsuleSettings } from '@extensionTypes//settingsValues';
+
 import { useBookmarkCapsuleStyles } from './BookmarkCapsule.styles';
-import { CapsuleSettings } from '../../types/settingsValues';
 
 type BookmarkCapsuleProps = {
 	title: string;

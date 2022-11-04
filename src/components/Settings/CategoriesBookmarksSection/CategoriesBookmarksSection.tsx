@@ -3,18 +3,18 @@ import { Accordion, Box, Modal, Text } from '@mantine/core';
 
 import { useCategoriesBookmarksSectionStyles } from './CategoriesBookmarksSection.styles';
 
-import { useExtensionSettings } from '../../../hooks/useExtensionSettings';
+import { useExtensionSettings } from '@hooks/useExtensionSettings';
+import { useExtensionCategories } from '@hooks/useExtensionCategories';
+import { useExtensionBookmarks } from '@hooks/useExtensionBookmarks';
+
+import { ModalRemoveCategory } from '@modals/ModalRemoveCategory';
+import { ModalRemoveBookmark } from '@modals/ModalRemoveBookmark';
+
+import { BookmarkForm } from '@forms/BookmarkForm';
+import { CategoryForm } from '@forms/CategoryForm';
 
 import { CategoryRow } from '../CategoryRow';
 import { BookmarkRow } from '../BookmarkRow';
-
-import { ModalRemoveCategory } from '../../../modals/ModalRemoveCategory';
-import { ModalRemoveBookmark } from '../../../modals/ModalRemoveBookmark';
-
-import { BookmarkForm } from '../../../forms/BookmarkForm';
-import { CategoryForm } from '../../../forms/CategoryForm';
-import { useExtensionCategories } from '../../../hooks/useExtensionCategories';
-import { useExtensionBookmarks } from '../../../hooks/useExtensionBookmarks';
 
 type CategoriesAccordion = {
 	openedCategory: string | null;

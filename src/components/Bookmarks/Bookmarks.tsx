@@ -1,9 +1,9 @@
 import { Stack, Group } from '@mantine/core';
 import BookmarkTreeNode = browser.bookmarks.BookmarkTreeNode;
 
-import { constants } from '../../common/constants';
+import { constants } from '@common/constants';
 
-import { useExtensionSettings } from '../../hooks/useExtensionSettings';
+import { useExtensionSettings } from '@hooks/useExtensionSettings';
 
 import { BookmarkCapsule } from '../BookmarkCapsule';
 import { BookmarkListRow } from '../BookmarkListRow';

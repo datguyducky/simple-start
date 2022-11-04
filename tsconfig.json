@@ -19,7 +19,17 @@
     "noEmit": true,
     "jsx": "react-jsx",
     "noUnusedParameters": true,
-    "noUnusedLocals": true
+    "noUnusedLocals": true,
+    "baseUrl": ".",
+    "paths": {
+      "@components/*": ["./src/components/*"],
+      "@hooks/*": ["./src/hooks/*"],
+      "@forms/*": ["./src/forms/*"],
+      "@common/*": ["./src/common/*"],
+      "@extensionTypes/*": ["./src/types/*"],
+      "@modals/*": ["./src/modals/*"],
+      "@validation/*": ["./src/validation/*"]
+    },
   },
   "include": [
     "src"

@@ -13,10 +13,11 @@ import {
 	TextInput,
 } from '@mantine/core';
 import { useForm } from '@mantine/form';
+import { showNotification } from '@mantine/notifications';
+
+import { ModalCustomThemeValues } from '@extensionTypes/formValues';
 
 import { themeValidation } from '../../utils/themeValidation';
-import { showNotification } from '@mantine/notifications';
-import { ModalCustomThemeValues } from '../../types/formValues';
 
 type ModalCustomThemeProps = {
 	opened: boolean;

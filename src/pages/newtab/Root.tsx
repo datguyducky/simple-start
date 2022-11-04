@@ -1,12 +1,14 @@
 import { MantineProvider, Global } from '@mantine/core';
-import { NewTab } from './NewTab';
 import { NotificationsProvider } from '@mantine/notifications';
+
+import { NewTab } from './NewTab';
+
+import { useExtensionTheme } from '@hooks/useExtensionTheme';
+
 import { ExtensionSettingsProvider } from '../../context/extensionSettings';
 
 import { themeColors } from '../../themeColors';
 import { themeComponents } from '../../themeComponents';
-
-import { useExtensionTheme } from '../../hooks/useExtensionTheme';
 
 export const Root = () => {
 	const { theme, customThemes } = useExtensionTheme({

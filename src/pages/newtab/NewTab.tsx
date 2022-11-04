@@ -2,15 +2,15 @@ import { useEffect, useState } from 'react';
 import { Text, Modal, Box, Select } from '@mantine/core';
 import { ChevronDownIcon } from '@heroicons/react/outline';
 
-import { BookmarkForm } from '../../forms/BookmarkForm';
-import { CategoryForm } from '../../forms/CategoryForm';
+import { Bookmarks } from '@components/Bookmarks';
+import { NewTabHeader } from '@components/NewTabHeader';
 
-import { Bookmarks } from '../../components/Bookmarks';
-import { NewTabHeader } from '../../components/NewTabHeader';
+import { BookmarkForm } from '@forms/BookmarkForm';
+import { CategoryForm } from '@forms/CategoryForm';
 
-import { useExtensionBookmarks } from '../../hooks/useExtensionBookmarks';
-import { useExtensionCategories } from '../../hooks/useExtensionCategories';
-import { useExtensionSettings } from '../../hooks/useExtensionSettings';
+import { useExtensionBookmarks } from '@hooks/useExtensionBookmarks';
+import { useExtensionCategories } from '@hooks/useExtensionCategories';
+import { useExtensionSettings } from '@hooks/useExtensionSettings';
 
 import { useNewTabStyles } from './NewTab.styles';
 

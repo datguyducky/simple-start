@@ -2,12 +2,14 @@ import { useState } from 'react';
 import { Box, Group, Stack, Text } from '@mantine/core';
 import { PlusIcon } from '@heroicons/react/solid';
 
-import { useThemeSectionStyles } from './ThemeSection.styles';
+import { useExtensionTheme } from '@hooks/useExtensionTheme';
 
-import { useExtensionTheme } from '../../../hooks/useExtensionTheme';
-import { ModalCustomTheme } from '../../../modals/ModalCustomTheme';
-import { CustomThemeBox } from '../../../components/CustomThemeBox';
-import { ModalRemoveCustomTheme } from '../../../modals/ModalRemoveCustomTheme';
+import { ModalCustomTheme } from '@modals/ModalCustomTheme';
+import { ModalRemoveCustomTheme } from '@modals/ModalRemoveCustomTheme';
+
+import { CustomThemeBox } from '@components/CustomThemeBox';
+
+import { useThemeSectionStyles } from './ThemeSection.styles';
 
 export const ThemeSection = () => {
 	const { classes, cx } = useThemeSectionStyles();
