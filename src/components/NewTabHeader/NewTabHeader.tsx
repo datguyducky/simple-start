@@ -90,12 +90,7 @@ export const NewTabHeader = ({ onNewBookmarkClick, onNewCategoryClick }: NewTabH
 							compact
 							color="dark"
 							className={classes.headerButton}
-							onClick={async () =>
-								await browser.runtime
-									.openOptionsPage()
-									.then(() => console.log('did work?'))
-									.catch((error) => console.error(error))
-							}
+							onClick={async () => await browser.runtime.openOptionsPage()}
 						>
 							<Text inline size="sm" mt={3}>
 								Settings
