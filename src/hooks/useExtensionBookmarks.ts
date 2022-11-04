@@ -15,7 +15,7 @@ export const useExtensionBookmarks = ({ categoryId }: { categoryId?: string | nu
 	const retrieveExtensionRoot = async () => {
 		const extensionRoot = await browser.bookmarks.search({ title: 'simplestart' });
 
-		if (extensionRoot?.length) {
+		if (extensionRoot?.length && extensionRoot?.length > 0) {
 			const extensionRootContent = await browser.bookmarks.getChildren(extensionRoot[0].id);
 
 			setUncategorizedBookmarks(
