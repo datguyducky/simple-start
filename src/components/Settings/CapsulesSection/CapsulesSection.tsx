@@ -21,6 +21,7 @@ import { useExtensionSettings } from '@hooks/useExtensionSettings';
 import { useModal } from '@hooks/useModal';
 
 import { BookmarkCapsule } from '@components/BookmarkCapsule';
+import { showNotification } from '@mantine/notifications';
 
 export const CapsulesSection = () => {
 	const { extensionSettings, saveExtensionSettings } = useExtensionSettings();
@@ -49,7 +50,24 @@ export const CapsulesSection = () => {
 
 	const handleSaveExtensionSettings = async (formValues: typeof values) => {
 		if (isDirty()) {
-			await saveExtensionSettings(formValues);
+			setTimeout(async () => {
+				try {
+					await saveExtensionSettings(formValues);
+
+					showNotification({
+						color: 'dark',
+						message: 'Settings for capsule view were successfully saved!',
+						autoClose: 3000,
+					});
+				} catch (error) {
+					showNotification({
+						color: 'red',
+						title: 'Settings could not be saved!',
+						message: 'Sorry, but something went wrong, please try again.',
+						autoClose: 5000,
+					});
+				}
+			}, 600);
 
 			resetDirty();
 		}
@@ -62,7 +80,24 @@ export const CapsulesSection = () => {
 			),
 		);
 
-		await saveExtensionSettings(defaultValues);
+		setTimeout(async () => {
+			try {
+				await saveExtensionSettings(defaultValues);
+
+				showNotification({
+					color: 'dark',
+					message: 'Capsule view settings have been reset to their default values!',
+					autoClose: 3000,
+				});
+			} catch (error) {
+				showNotification({
+					color: 'red',
+					title: 'Settings could not be reset!',
+					message: 'Sorry, but something went wrong, please try again.',
+					autoClose: 5000,
+				});
+			}
+		}, 600);
 
 		resetCapsuleSettingsModal.close(); // hide modal
 		resetDirty();
