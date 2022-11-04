@@ -33,13 +33,7 @@ export const CustomThemeBox = ({
 				})}
 			>
 				<Stack
-					sx={{
-						position: 'absolute',
-						top: 0,
-						right: 0,
-						marginTop: 1,
-						marginRight: 1,
-					}}
+					className={classes.absoluteWrapper}
 					spacing={2}
 				>
 					<ActionIcon

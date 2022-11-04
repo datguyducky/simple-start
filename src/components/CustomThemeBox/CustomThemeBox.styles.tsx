@@ -29,6 +29,14 @@ export const useCustomThemeBoxStyles = createStyles(
 				display: 'flex',
 			},
 		},
+		
+		absoluteWrapper: {
+			position: 'absolute',
+			top: 0,
+			right: 0,
+			marginTop: 1,
+			marginRight: 1,
+		},
 
 		active: {
 			borderColor: theme.colors[theme.primaryColor][6],
