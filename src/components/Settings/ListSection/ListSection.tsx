@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import {
 	Box,
 	SimpleGrid,
@@ -18,14 +18,14 @@ import { constants } from '@common/constants';
 import { ListSettings } from '@extensionTypes/settingsValues';
 
 import { useExtensionSettings } from '@hooks/useExtensionSettings';
+import { useModal } from '@hooks/useModal';
 
 import { BookmarkListRow } from '@components/BookmarkListRow';
 
 export const ListSection = () => {
 	const { extensionSettings, saveExtensionSettings } = useExtensionSettings();
 
-	const [resetModal, setResetModal] = useState(false);
-
+	const resetListSettingsModal = useModal();
 	const { getInputProps, setValues, onSubmit, values, resetDirty, isDirty } =
 		useForm<ListSettings>();
 
@@ -62,7 +62,7 @@ export const ListSection = () => {
 
 		await saveExtensionSettings(defaultValues);
 
-		setResetModal(false); // hide modal
+		resetListSettingsModal.close(); // hide modal
 		resetDirty();
 	};
 
@@ -199,7 +199,7 @@ export const ListSection = () => {
 					</Stack>
 
 					<Group position="center" sx={{ width: '100%', marginLeft: '-28px' }} mt={0}>
-						<Button variant="outline" onClick={() => setResetModal(true)}>
+						<Button variant="outline" onClick={() => resetListSettingsModal.open()}>
 							Reset to default
 						</Button>
 						<Button type="submit">Save</Button>
@@ -208,8 +208,8 @@ export const ListSection = () => {
 			</Box>
 
 			<Modal
-				opened={resetModal}
-				onClose={() => setResetModal(false)}
+				opened={resetListSettingsModal.isOpen}
+				onClose={resetListSettingsModal.close}
 				centered
 				title="Reset settings for list view to default ones?"
 				size="lg"
@@ -220,7 +220,11 @@ export const ListSection = () => {
 				</Text>
 
 				<Group position="right">
-					<Button variant="outline" color="gray" onClick={() => setResetModal(false)}>
+					<Button
+						variant="outline"
+						color="gray"
+						onClick={() => resetListSettingsModal.close()}
+					>
 						Cancel
 					</Button>
 					<Button color="primary" onClick={handleResetSettings}>

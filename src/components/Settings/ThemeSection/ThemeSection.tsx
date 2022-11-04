@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { Box, Group, Stack, Text } from '@mantine/core';
 import { PlusIcon } from '@heroicons/react/solid';
 
@@ -6,6 +5,7 @@ import { useExtensionTheme } from '@hooks/useExtensionTheme';
 
 import { ModalCustomTheme } from '@modals/ModalCustomTheme';
 import { ModalRemoveCustomTheme } from '@modals/ModalRemoveCustomTheme';
+import { useModal } from '@hooks/useModal';
 
 import { CustomThemeBox } from '@components/CustomThemeBox';
 
@@ -19,26 +19,8 @@ export const ThemeSection = () => {
 			defaultValue: 'light',
 		});
 
-	const [addThemeModal, setAddThemeModal] = useState<{
-		isOpen: boolean;
-		args: Record<string, any>;
-	}>({
-		isOpen: false,
-		args: {
-			data: null,
-			mode: null,
-		},
-	});
-
-	const [removeThemeModal, setRemoveThemeModal] = useState<{
-		isOpen: boolean;
-		args: Record<string, any>;
-	}>({
-		isOpen: false,
-		args: {
-			name: null,
-		},
-	});
+	const customThemeModal = useModal();
+	const removeCustomThemeModal = useModal();
 
 	return (
 		<>
@@ -80,14 +62,10 @@ export const ThemeSection = () => {
 							return (
 								<CustomThemeBox
 									onEdit={() =>
-										setAddThemeModal((prevState) => ({
-											...prevState,
-											isOpen: true,
-											args: {
-												mode: 'edit',
-												data: customThemeData,
-											},
-										}))
+										customThemeModal.open({
+											mode: 'edit',
+											data: customThemeData,
+										})
 									}
 									setActive={() => setTheme(customThemeData.name)}
 									customThemeName={customThemeName}
@@ -95,13 +73,9 @@ export const ThemeSection = () => {
 									borderColor={customThemeBorder}
 									isActive={theme === customThemeData.name}
 									onRemove={() =>
-										setRemoveThemeModal((prevState) => ({
-											...prevState,
-											isOpen: true,
-											args: {
-												name: customThemeData.name,
-											},
-										}))
+										removeCustomThemeModal.open({
+											name: customThemeData.name,
+										})
 									}
 								/>
 							);
@@ -111,11 +85,9 @@ export const ThemeSection = () => {
 						align="center"
 						sx={{ width: 80 }}
 						onClick={() =>
-							setAddThemeModal((prevState) => ({
-								...prevState,
-								isOpen: true,
-								args: { mode: 'create' },
-							}))
+							customThemeModal.open({
+								mode: 'create',
+							})
 						}
 					>
 						<Box className={cx(classes.colorBox, classes.customAdd)}>
@@ -130,20 +102,20 @@ export const ThemeSection = () => {
 			</Box>
 
 			<ModalCustomTheme
-				opened={addThemeModal?.isOpen}
-				onClose={() => setAddThemeModal((prevState) => ({ ...prevState, isOpen: false }))}
+				opened={customThemeModal.isOpen}
+				onClose={customThemeModal.close}
 				title="Add new custom theme"
 				saveCustomTheme={saveCustomTheme}
-				mode={addThemeModal?.args.mode}
-				initialValues={addThemeModal?.args?.data}
+				mode={customThemeModal?.args?.mode as 'edit' | 'create'}
+				initialValues={customThemeModal?.args?.data as Record<string, unknown>}
 				editCustomTheme={editCustomTheme}
 			/>
 
 			<ModalRemoveCustomTheme
-				isOpen={removeThemeModal.isOpen}
-				onClose={() => setRemoveThemeModal({ isOpen: false, args: {} })}
-				name={removeThemeModal.args?.name}
-				removeTheme={() => removeCustomTheme(removeThemeModal?.args?.name)}
+				isOpen={removeCustomThemeModal.isOpen}
+				onClose={removeCustomThemeModal.close}
+				name={removeCustomThemeModal.args?.name as string}
+				removeTheme={() => removeCustomTheme(removeCustomThemeModal?.args?.name as string)}
 			/>
 		</>
 	);

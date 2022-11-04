@@ -1,5 +1,3 @@
-import { Dispatch, SetStateAction } from 'react';
-
 import { Button, Group, Modal, Text } from '@mantine/core';
 import { showNotification } from '@mantine/notifications';
 
@@ -7,7 +5,7 @@ type ModalRemoveCategoryProps = {
 	id: string;
 	opened: boolean;
 	removeCategory: ({ id }: { id: string }) => Promise<void>;
-	setRemoveCategoryModal: Dispatch<SetStateAction<{ isVisible: boolean; id: string }>>;
+	onClose: () => void;
 	name?: string;
 };
 
@@ -15,7 +13,7 @@ export const ModalRemoveCategory = ({
 	id,
 	name,
 	opened,
-	setRemoveCategoryModal,
+	onClose,
 	removeCategory,
 }: ModalRemoveCategoryProps) => {
 	const handleRemoveCategory = () => {
@@ -37,17 +35,11 @@ export const ModalRemoveCategory = ({
 				});
 			}
 		}, 500);
-		setRemoveCategoryModal({ isVisible: false, id: '' }); // hide modal
+		onClose(); // hide modal
 	};
 
 	return (
-		<Modal
-			opened={opened}
-			onClose={() => setRemoveCategoryModal({ isVisible: false, id: '' })}
-			centered
-			title="Remove category"
-			size="lg"
-		>
+		<Modal opened={opened} onClose={onClose} centered title="Remove category" size="lg">
 			<Text mb={16}>
 				{'Are you sure you want to remove the '}
 				<Text weight={600} inline sx={{ display: 'inline' }}>
@@ -61,11 +53,7 @@ export const ModalRemoveCategory = ({
 			</Text>
 
 			<Group position="right">
-				<Button
-					variant="outline"
-					color="gray"
-					onClick={() => setRemoveCategoryModal({ isVisible: false, id: '' })}
-				>
+				<Button variant="outline" color="gray" onClick={onClose}>
 					Cancel
 				</Button>
 				<Button color="red" onClick={handleRemoveCategory}>

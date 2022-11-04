@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import {
 	Box,
 	SimpleGrid,
@@ -18,13 +18,14 @@ import { constants } from '@common/constants';
 import { CapsuleSettings } from '@extensionTypes/settingsValues';
 
 import { useExtensionSettings } from '@hooks/useExtensionSettings';
+import { useModal } from '@hooks/useModal';
 
 import { BookmarkCapsule } from '@components/BookmarkCapsule';
 
 export const CapsulesSection = () => {
 	const { extensionSettings, saveExtensionSettings } = useExtensionSettings();
 
-	const [resetModal, setResetModal] = useState(false);
+	const resetCapsuleSettingsModal = useModal();
 
 	const { getInputProps, setValues, onSubmit, values, resetDirty, isDirty } =
 		useForm<CapsuleSettings>();
@@ -63,7 +64,7 @@ export const CapsulesSection = () => {
 
 		await saveExtensionSettings(defaultValues);
 
-		setResetModal(false); // hide modal
+		resetCapsuleSettingsModal.close(); // hide modal
 		resetDirty();
 	};
 
@@ -142,7 +143,7 @@ export const CapsulesSection = () => {
 					</SimpleGrid>
 
 					<Group position="center" sx={{ width: '100%', marginLeft: '-28px' }} mt={0}>
-						<Button variant="outline" onClick={() => setResetModal(true)}>
+						<Button variant="outline" onClick={() => resetCapsuleSettingsModal.open()}>
 							Reset to default
 						</Button>
 						<Button type="submit">Save</Button>
@@ -151,8 +152,8 @@ export const CapsulesSection = () => {
 			</Box>
 
 			<Modal
-				opened={resetModal}
-				onClose={() => setResetModal(false)}
+				opened={resetCapsuleSettingsModal.isOpen}
+				onClose={resetCapsuleSettingsModal.close}
 				centered
 				title="Reset settings for capsule view to default ones?"
 				size="lg"
@@ -163,7 +164,11 @@ export const CapsulesSection = () => {
 				</Text>
 
 				<Group position="right">
-					<Button variant="outline" color="gray" onClick={() => setResetModal(false)}>
+					<Button
+						variant="outline"
+						color="gray"
+						onClick={() => resetCapsuleSettingsModal.close()}
+					>
 						Cancel
 					</Button>
 

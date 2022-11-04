@@ -9,9 +9,10 @@ import { useExtensionBookmarks } from '@hooks/useExtensionBookmarks';
 
 import { ModalRemoveCategory } from '@modals/ModalRemoveCategory';
 import { ModalRemoveBookmark } from '@modals/ModalRemoveBookmark';
+import { useModal } from '@hooks/useModal';
 
-import { BookmarkForm } from '@forms/BookmarkForm';
-import { CategoryForm } from '@forms/CategoryForm';
+import { BookmarkForm, BookmarkValues } from '@forms/BookmarkForm';
+import { CategoryForm, CategoryValues } from '@forms/CategoryForm';
 
 import { CategoryRow } from '../CategoryRow';
 import { BookmarkRow } from '../BookmarkRow';
@@ -37,55 +38,11 @@ export const CategoriesBookmarksSection = () => {
 			categoryId: categoriesAccordion?.categoryId,
 		});
 
-	const [editCategoryModal, setEditCategoryModal] = useState({
-		isVisible: false,
-		categoryData: {
-			id: '',
-			categoryName: '',
-			defaultCategory: false,
-		},
-	});
-	const [removeCategoryModal, setRemoveCategoryModal] = useState({
-		isVisible: false,
-		id: '',
-	});
+	const editCategoryModal = useModal();
+	const removeCategoryModal = useModal();
 
-	const [editBookmarkModal, setEditBookmarkModal] = useState<{
-		isVisible: boolean;
-		bookmarkData: {
-			id: string;
-			bookmarkName: string;
-			bookmarkUrl: string;
-			bookmarkCategoryId?: string;
-			prevBookmarkCategoryId?: string;
-		};
-	}>({
-		isVisible: false,
-		bookmarkData: {
-			id: '',
-			bookmarkName: '',
-			bookmarkUrl: '',
-			bookmarkCategoryId: '',
-		},
-	});
-	const [removeBookmarkModal, setRemoveBookmarkModal] = useState({
-		isVisible: false,
-		id: '',
-	});
-
-	function onCloseEditBookmarkModal() {
-		setEditBookmarkModal((prevEditBookmarkModal) => ({
-			...prevEditBookmarkModal,
-			isVisible: false,
-		}));
-	}
-
-	function onCloseEditCategoryModal() {
-		setEditCategoryModal((prevEditCategoryModal) => ({
-			...prevEditCategoryModal,
-			isVisible: false,
-		}));
-	}
+	const editBookmarkModal = useModal();
+	const removeBookmarkModal = useModal();
 
 	return (
 		<>
@@ -122,8 +79,7 @@ export const CategoriesBookmarksSection = () => {
 									name={title}
 									key={categoryId}
 									onEditAction={() =>
-										setEditCategoryModal((prevEditCategoryModal) => ({
-											...prevEditCategoryModal,
+										editCategoryModal.open({
 											categoryData: {
 												id: categoryId,
 												categoryName:
@@ -134,15 +90,12 @@ export const CategoriesBookmarksSection = () => {
 													categoryId ===
 													extensionSettings?.defaultCategory,
 											},
-											isVisible: true,
-										}))
+										})
 									}
 									onRemoveAction={() =>
-										setRemoveCategoryModal((prevRemoveCategoryModal) => ({
-											...prevRemoveCategoryModal,
-											isVisible: true,
+										removeCategoryModal.open({
 											id: categoryId,
-										}))
+										})
 									}
 								/>
 							</Accordion.Control>
@@ -158,8 +111,7 @@ export const CategoriesBookmarksSection = () => {
 													(bookmark) => bookmark.id === id,
 												);
 
-												setEditBookmarkModal((prevEditBookmarkModal) => ({
-													...prevEditBookmarkModal,
+												editBookmarkModal.open({
 													bookmarkData: {
 														id: id,
 														bookmarkName: selectedBookmark?.title || '',
@@ -167,12 +119,10 @@ export const CategoriesBookmarksSection = () => {
 														bookmarkCategoryId:
 															selectedBookmark?.parentId || '',
 													},
-													isVisible: true,
-												}));
+												});
 											}}
 											onRemoveAction={() =>
-												setRemoveBookmarkModal({
-													isVisible: true,
+												removeBookmarkModal.open({
 													id: id,
 												})
 											}
@@ -202,19 +152,16 @@ export const CategoriesBookmarksSection = () => {
 												(bookmark) => bookmark.id === id,
 											);
 
-											setEditBookmarkModal((prevEditBookmarkModal) => ({
-												...prevEditBookmarkModal,
+											editBookmarkModal.open({
 												bookmarkData: {
 													id: id,
 													bookmarkName: selectedBookmark?.title || '',
 													bookmarkUrl: selectedBookmark?.url || '',
 												},
-												isVisible: true,
-											}));
+											});
 										}}
 										onRemoveAction={() =>
-											setRemoveBookmarkModal({
-												isVisible: true,
+											removeBookmarkModal.open({
 												id: id,
 											})
 										}
@@ -229,23 +176,25 @@ export const CategoriesBookmarksSection = () => {
 			</Box>
 
 			<Modal
-				opened={editCategoryModal?.isVisible}
-				onClose={onCloseEditCategoryModal}
+				opened={editCategoryModal.isOpen}
+				onClose={editCategoryModal.close}
 				centered
 				title="Edit category"
 				size="lg"
 			>
 				<CategoryForm
 					mode="edit"
-					onClose={onCloseEditCategoryModal}
-					initialValues={editCategoryModal?.categoryData}
+					onClose={editCategoryModal.close}
+					initialValues={
+						editCategoryModal?.args?.categoryData as CategoryValues | undefined
+					}
 					editCategory={editCategory}
 				/>
 			</Modal>
 
 			<Modal
-				opened={editBookmarkModal?.isVisible}
-				onClose={onCloseEditBookmarkModal}
+				opened={editBookmarkModal?.isOpen}
+				onClose={editBookmarkModal.close}
 				centered
 				title="Edit bookmark"
 				size="lg"
@@ -253,33 +202,39 @@ export const CategoriesBookmarksSection = () => {
 				<BookmarkForm
 					mode="edit"
 					onClose={() => {
-						onCloseEditBookmarkModal();
+						editBookmarkModal.close();
 
 						setCategoriesAccordion({
 							categoryId: null,
 							openedCategory: null,
 						});
 					}}
-					initialValues={editBookmarkModal?.bookmarkData}
+					initialValues={
+						editBookmarkModal?.args?.bookmarkData as BookmarkValues | undefined
+					}
 					editBookmark={editBookmark}
 				/>
 			</Modal>
 
 			<ModalRemoveCategory
-				setRemoveCategoryModal={setRemoveCategoryModal}
-				opened={removeCategoryModal.isVisible}
-				id={removeCategoryModal.id}
+				onClose={removeCategoryModal.close}
+				opened={removeCategoryModal.isOpen}
+				id={removeCategoryModal?.args?.id as string}
 				name={
-					categories?.find((category) => category.id === removeCategoryModal?.id)?.title
+					categories?.find((category) => category.id === removeCategoryModal?.args?.id)
+						?.title
 				}
 				removeCategory={removeCategory}
 			/>
 
 			<ModalRemoveBookmark
-				onClose={() => setRemoveBookmarkModal({ isVisible: false, id: '' })}
-				opened={removeBookmarkModal.isVisible}
-				id={removeBookmarkModal.id}
-				name={bookmarks?.find((bookmark) => bookmark.id === removeBookmarkModal?.id)?.title}
+				onClose={removeBookmarkModal.close}
+				opened={removeBookmarkModal.isOpen}
+				id={removeBookmarkModal?.args?.id as string}
+				name={
+					bookmarks?.find((bookmark) => bookmark.id === removeBookmarkModal?.args?.id)
+						?.title
+				}
 				removeBookmark={removeBookmark}
 			/>
 		</>

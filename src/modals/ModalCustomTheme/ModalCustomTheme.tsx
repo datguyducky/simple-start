@@ -50,7 +50,7 @@ export const ModalCustomTheme = ({
 	}>();
 	const [activeStep, setActive] = useState(0);
 
-	const { values, getInputProps, onSubmit, validate, setValues } =
+	const { values, getInputProps, onSubmit, validate, setValues, reset } =
 		useForm<ModalCustomThemeValues>({
 			initialValues: {
 				text: '#101113',
@@ -86,6 +86,9 @@ export const ModalCustomTheme = ({
 				text: colors.text,
 				oldCustomThemeName: name,
 			});
+		} else {
+			// making sure that the custom theme form is empty when going from the "edit" mode to the "create"
+			reset();
 		}
 	}, [mode, initialValues]);
 
