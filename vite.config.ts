@@ -9,7 +9,6 @@ const pagesDir = resolve(root, 'pages');
 const outDir = resolve(__dirname, 'dist');
 const publicDir = resolve(__dirname, 'public');
 
-// https://vitejs.dev/config/
 export default defineConfig({
 	plugins: [
 		react({
