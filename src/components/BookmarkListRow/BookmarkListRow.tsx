@@ -25,6 +25,7 @@ export const BookmarkListRow = ({ title, url, settings }: BookmarkListRowProps) 
 						height={settings.listIconSize}
 						width={settings.listIconSize}
 						style={{ marginRight: 8 }}
+						alt="website-favicon"
 					/>
 
 					{!settings.listHiddenName && (

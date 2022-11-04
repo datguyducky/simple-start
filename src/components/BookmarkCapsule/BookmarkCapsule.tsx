@@ -23,6 +23,7 @@ export const BookmarkCapsule = ({ title, url, settings }: BookmarkCapsuleProps) 
 					src={`https://simplestart-favicon-service.herokuapp.com/icon?url=${url}&size=64`}
 					height={settings.capsuleIconSize}
 					width={settings.capsuleIconSize}
+					alt="website-favicon"
 				/>
 			</Box>
 
