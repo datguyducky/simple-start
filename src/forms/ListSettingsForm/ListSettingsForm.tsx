@@ -79,7 +79,11 @@ export const ListSettingsForm = ({ openResetModal }: ListSettingsFormProps) => {
 					Preview:
 				</Text>
 
-				<Stack justify="flex-start" spacing={values.listSpacing}>
+				<Stack
+					justify="flex-start"
+					spacing={values.listSpacing}
+					sx={{ overflow: 'hidden' }}
+				>
 					{constants.exampleBookmarks.map((bookmark) => (
 						<BookmarkListRow
 							key={bookmark.id}
