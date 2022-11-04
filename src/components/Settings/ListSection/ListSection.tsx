@@ -21,6 +21,7 @@ import { useExtensionSettings } from '@hooks/useExtensionSettings';
 import { useModal } from '@hooks/useModal';
 
 import { BookmarkListRow } from '@components/BookmarkListRow';
+import { showNotification } from '@mantine/notifications';
 
 export const ListSection = () => {
 	const { extensionSettings, saveExtensionSettings } = useExtensionSettings();
@@ -47,7 +48,24 @@ export const ListSection = () => {
 
 	const handleSaveExtensionSettings = async (formValues: typeof values) => {
 		if (isDirty()) {
-			await saveExtensionSettings(formValues);
+			setTimeout(async () => {
+				try {
+					await saveExtensionSettings(formValues);
+
+					showNotification({
+						color: 'dark',
+						message: 'Settings for list view were successfully saved!',
+						autoClose: 3000,
+					});
+				} catch (error) {
+					showNotification({
+						color: 'red',
+						title: 'Settings could not be saved!',
+						message: 'Sorry, but something went wrong, please try again.',
+						autoClose: 5000,
+					});
+				}
+			}, 600);
 
 			resetDirty();
 		}
@@ -60,7 +78,24 @@ export const ListSection = () => {
 			),
 		);
 
-		await saveExtensionSettings(defaultValues);
+		setTimeout(async () => {
+			try {
+				await saveExtensionSettings(defaultValues);
+
+				showNotification({
+					color: 'dark',
+					message: 'List view settings have been reset to their default values!',
+					autoClose: 3000,
+				});
+			} catch (error) {
+				showNotification({
+					color: 'red',
+					title: 'Settings could not be reset!',
+					message: 'Sorry, but something went wrong, please try again.',
+					autoClose: 5000,
+				});
+			}
+		}, 600);
 
 		resetListSettingsModal.close(); // hide modal
 		resetDirty();
