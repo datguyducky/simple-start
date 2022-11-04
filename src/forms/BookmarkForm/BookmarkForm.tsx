@@ -2,8 +2,9 @@ import { Button, Group, Select, Text, TextInput } from '@mantine/core';
 import { useForm, zodResolver } from '@mantine/form';
 import { showNotification } from '@mantine/notifications';
 
-import { useExtensionCategories } from '../../hooks/useExtensionCategories';
-import { bookmarkSchema } from '../../validation/bookmarkSchema';
+import { useExtensionCategories } from '@hooks/useExtensionCategories';
+
+import { bookmarkSchema } from '@validation/bookmarkSchema';
 
 export type BookmarkValues = {
 	id: string;

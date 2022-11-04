@@ -21,6 +21,17 @@ export default defineConfig({
 		createManifest(),
 	],
 	publicDir,
+	resolve: {
+		alias: {
+			'@components': resolve(root, 'components'),
+			'@hooks': resolve(root, 'hooks'),
+			'@forms': resolve(root, 'forms'),
+			'@extensionTypes': resolve(root, 'types'),
+			'@common': resolve(root, 'common'),
+			'@modals': resolve(root, 'modals'),
+			'@validation': resolve(root, 'validation'),
+		},
+	},
 	build: {
 		outDir,
 		rollupOptions: {

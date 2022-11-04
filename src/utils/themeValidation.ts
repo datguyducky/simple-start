@@ -1,8 +1,8 @@
-import { backgroundColorSchema } from '../validation/backgroundColorSchema';
-import { primaryColorSchema } from '../validation/primaryColorSchema';
-import { textColorSchema } from '../validation/textColorSchema';
-import { customThemeSchema } from '../validation/customThemeSchema';
-import { themeErrorMap } from '../validation/themeErrorMap';
+import { backgroundColorSchema } from '@validation/backgroundColorSchema';
+import { primaryColorSchema } from '@validation/primaryColorSchema';
+import { textColorSchema } from '@validation/textColorSchema';
+import { customThemeSchema } from '@validation/customThemeSchema';
+import { themeErrorMap } from '@validation/themeErrorMap';
 
 export const themeValidation = (activeStep: number, values: Record<string, unknown>) => {
 	let result; // correct type here

@@ -1,7 +1,8 @@
 import { Button, Checkbox, Group, TextInput } from '@mantine/core';
 import { useForm, zodResolver } from '@mantine/form';
 import { showNotification } from '@mantine/notifications';
-import { categorySchema } from '../../validation/categorySchema';
+
+import { categorySchema } from '@validation/categorySchema';
 
 export type CategoryValues = {
 	id: string;

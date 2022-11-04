@@ -14,10 +14,12 @@ import {
 } from '@mantine/core';
 import { useForm } from '@mantine/form';
 
-import { useExtensionSettings } from '../../../hooks/useExtensionSettings';
-import { constants } from '../../../common/constants';
-import { BookmarkCapsule } from '../../../components/BookmarkCapsule';
-import { CapsuleSettings } from '../../../types/settingsValues';
+import { constants } from '@common/constants';
+import { CapsuleSettings } from '@extensionTypes/settingsValues';
+
+import { useExtensionSettings } from '@hooks/useExtensionSettings';
+
+import { BookmarkCapsule } from '@components/BookmarkCapsule';
 
 export const CapsulesSection = () => {
 	const { extensionSettings, saveExtensionSettings } = useExtensionSettings();

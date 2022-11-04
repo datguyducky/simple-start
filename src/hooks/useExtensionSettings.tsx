@@ -1,10 +1,10 @@
 import { useContext, useEffect, useLayoutEffect, useState } from 'react';
+import StorageChange = browser.storage.StorageChange;
 
-import { constants } from '../common/constants';
+import { constants } from '@common/constants';
+import { AllExtensionSettings } from '@extensionTypes/settingsValues';
 
 import { ExtensionSettingsContext } from '../context/extensionSettings';
-import StorageChange = browser.storage.StorageChange;
-import { AllExtensionSettings } from '../types/settingsValues';
 
 export const useExtensionSettings = () => {
 	const { currentSettings, setCurrentSettings } = useContext(ExtensionSettingsContext);

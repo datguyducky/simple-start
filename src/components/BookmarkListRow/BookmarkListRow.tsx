@@ -1,7 +1,8 @@
 import { Box, Text, Group } from '@mantine/core';
 
+import { ListSettings } from '@extensionTypes/settingsValues';
+
 import { useBookmarkListRowStyles } from './BookmarkListRow.styles';
-import { ListSettings } from '../../types/settingsValues';
 
 type BookmarkListRowProps = {
 	title: string;
