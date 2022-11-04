@@ -32,10 +32,7 @@ export const CustomThemeBox = ({
 					[classes.active]: isActive,
 				})}
 			>
-				<Stack
-					className={classes.absoluteWrapper}
-					spacing={2}
-				>
+				<Stack className={classes.absoluteWrapper} spacing={2}>
 					<ActionIcon
 						color="red"
 						onClick={(event: React.MouseEvent<HTMLSpanElement, MouseEvent>) => {
@@ -66,7 +63,12 @@ export const CustomThemeBox = ({
 				</Stack>
 			</Box>
 
-			<Text size="sm" transform="capitalize" align="center">
+			<Text
+				size="sm"
+				transform="capitalize"
+				align="center"
+				sx={{ overflow: 'hidden', textOverflow: 'ellipsis', maxWidth: '100%' }}
+			>
 				{customThemeName}
 			</Text>
 		</Stack>
