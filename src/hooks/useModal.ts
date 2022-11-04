@@ -17,12 +17,10 @@ export const useModal = (): UseModal => {
 	};
 
 	const close = () => {
-		console.log('Dsd');
 		setModalArgs({});
 		setIsOpen(false);
 	};
 
-	console.log(modalArgs);
 	return {
 		args: modalArgs,
 		isOpen,
