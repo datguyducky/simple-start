@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { Text, Modal, Box, Select } from '@mantine/core';
 import { ChevronDownIcon } from '@heroicons/react/outline';
 
@@ -11,12 +11,13 @@ import { CategoryForm } from '@forms/CategoryForm';
 import { useExtensionBookmarks } from '@hooks/useExtensionBookmarks';
 import { useExtensionCategories } from '@hooks/useExtensionCategories';
 import { useExtensionSettings } from '@hooks/useExtensionSettings';
+import { useModal } from '@hooks/useModal';
 
 import { useNewTabStyles } from './NewTab.styles';
 
 export const NewTab = () => {
-	const [newBookmarkModal, setNewBookmarkModal] = useState(false);
-	const [newCategoryModal, setNewCategoryModal] = useState(false);
+	const newBookmarkModal = useModal();
+	const newCategoryModal = useModal();
 
 	const { activeCategory, setActiveCategory, categories, createCategory } =
 		useExtensionCategories();
@@ -45,8 +46,8 @@ export const NewTab = () => {
 		<>
 			<Box className={classes.newTabLayout}>
 				<NewTabHeader
-					onNewBookmarkClick={() => setNewBookmarkModal(true)}
-					onNewCategoryClick={() => setNewCategoryModal(true)}
+					onNewBookmarkClick={newBookmarkModal.open}
+					onNewCategoryClick={newCategoryModal.open}
 				/>
 
 				{categories?.length <= 0 && uncategorizedBookmarks?.length <= 0 ? (
@@ -90,29 +91,29 @@ export const NewTab = () => {
 			</Box>
 
 			<Modal
-				opened={newBookmarkModal}
-				onClose={() => setNewBookmarkModal(false)}
+				opened={newBookmarkModal.isOpen}
+				onClose={newBookmarkModal.close}
 				centered
 				title="Add new bookmark"
 				size="lg"
 			>
 				<BookmarkForm
 					mode="create"
-					onClose={() => setNewBookmarkModal(false)}
+					onClose={newBookmarkModal.close}
 					createNewBookmark={createBookmark}
 				/>
 			</Modal>
 
 			<Modal
-				opened={newCategoryModal}
-				onClose={() => setNewCategoryModal(false)}
+				opened={newCategoryModal.isOpen}
+				onClose={newCategoryModal.close}
 				centered
 				title="Add new category"
 				size="lg"
 			>
 				<CategoryForm
 					mode="create"
-					onClose={() => setNewCategoryModal(false)}
+					onClose={newCategoryModal.close}
 					createNewCategory={createCategory}
 				/>
 			</Modal>
