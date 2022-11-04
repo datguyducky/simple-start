@@ -91,7 +91,11 @@ export const useExtensionBookmarks = ({ categoryId }: { categoryId?: string | nu
 			type: 'bookmark',
 		});
 
-		await retrieveCategoryBookmarks(categoryId || extensionRootFolder[0].id);
+		if (categoryId) {
+			await retrieveCategoryBookmarks(categoryId);
+		} else {
+			await retrieveExtensionRoot();
+		}
 	};
 
 	const editBookmark = async ({
