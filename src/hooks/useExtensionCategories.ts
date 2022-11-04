@@ -29,14 +29,24 @@ export const useExtensionCategories = () => {
 
 	const retrieveRootId = async () => {
 		const extensionRoot = await browser.bookmarks.search({ title: 'simplestart' });
-		return extensionRoot[0].id;
+
+		if (extensionRoot?.length && extensionRoot?.length > 0) {
+			return extensionRoot[0].id;
+		} else {
+			// when extension root folder is not found - create it
+			await browser.bookmarks.create({ title: 'simplestart' });
+		}
 	};
 
 	useEffect(() => {
 		//retrieveRoot();
 		const categoriesFromRoot = async () => {
 			const rootId = await retrieveRootId();
-			await getExtensionCategories(rootId);
+
+			// it's only possible to retrieve extension categories when the root of the extension exists
+			if (rootId) {
+				await getExtensionCategories(rootId);
+			}
 		};
 
 		categoriesFromRoot();
@@ -85,7 +95,7 @@ export const useExtensionCategories = () => {
 		const rootId = await retrieveRootId();
 
 		const newCategory = await browser.bookmarks.create({
-			parentId: rootId,
+			parentId: rootId as string,
 			title: name,
 			type: 'folder',
 		});
@@ -94,7 +104,7 @@ export const useExtensionCategories = () => {
 			await saveExtensionSettings({ defaultCategory: newCategory?.id });
 		}
 
-		await getExtensionCategories(rootId);
+		await getExtensionCategories(rootId as string);
 	};
 
 	const editCategory = async ({
@@ -121,7 +131,7 @@ export const useExtensionCategories = () => {
 		}
 
 		const rootId = await retrieveRootId();
-		await getExtensionCategories(rootId);
+		await getExtensionCategories(rootId as string);
 	};
 
 	const removeCategory = async ({ id }: { id: string }) => {
@@ -135,7 +145,7 @@ export const useExtensionCategories = () => {
 
 		// retrieve updated list of extension categories
 		const rootId = await retrieveRootId();
-		await getExtensionCategories(rootId);
+		await getExtensionCategories(rootId as string);
 	};
 
 	return {
