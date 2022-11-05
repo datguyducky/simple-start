@@ -4,7 +4,7 @@
   "version": "2.0.0",
   "description": "Minimalistic new tab page extension. Organize bookmarks into groups - be more productive with bookmarks sorted by groups for your Work, Home and Hobbies.",
   "scripts": {
-    "build": "tsc && vite build",
+    "build": "vite build",
     "dev-watch": "vite build --watch",
     "eslint": "eslint . --ext .js,.jsx,.ts,.tsx"
   },
