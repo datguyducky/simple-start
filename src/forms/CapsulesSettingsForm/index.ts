@@ -1,0 +1,1 @@
+export { CapsulesSettingsForm } from './CapsulesSettingsForm';

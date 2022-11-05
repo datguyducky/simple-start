@@ -1,0 +1,1 @@
+export { ModalCustomTheme } from './ModalCustomTheme';

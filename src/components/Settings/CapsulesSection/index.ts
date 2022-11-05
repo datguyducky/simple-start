@@ -1,0 +1,1 @@
+export { CapsulesSection } from './CapsulesSection';
