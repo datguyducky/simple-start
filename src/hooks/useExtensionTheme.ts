@@ -26,20 +26,45 @@ export const useExtensionTheme = ({ key, defaultValue = 'light' }: UseExtensionT
 		getStorageTheme();
 	}, []);
 
+	// retrieved all saved custom themes on load
+	useLayoutEffect(() => {
+		getSavedCustomThemes();
+	}, []);
+
+	// every custom theme starts with a "created-theme" key, we filter them all here and add key as object "name" property
+	const getSavedCustomThemes = async () => {
+		const customThemes = await browser.storage.sync.get();
+		setLocalCustomThemes(
+			Object.entries(customThemes)
+				.filter(([key]) => key.includes('created-theme'))
+				.map(([key, object]) => ({ name: key, ...object })),
+		);
+	};
+
 	// save theme in browser storage and state
 	const setLocalStorageValue = useCallback((val: any) => {
 		browser.storage.sync.set({ [key]: val });
 		setLocalTheme(val);
 	}, []);
 
+	const syncSavedCustomThemes = async (changes: any) => {
+		const createdThemeKey = Object.keys(changes).find((key) => key.includes('created-theme'));
+
+		// when existing was edited or a new one was added then we call a function to retrieve updated themes in storage
+		// and store them in local state - this will also sync the changes between all the tabs of the extension
+		if (createdThemeKey) {
+			await getSavedCustomThemes();
+		}
+
+		if (changes?.simpleStartTheme) {
+			setLocalTheme(changes.simpleStartTheme.newValue);
+		}
+	};
+
 	// making sure that theme is correctly updated also on other tabs that are currently opened
 	useEffect(() => {
-		browser.storage.onChanged.addListener((changes) => {
-			if (changes?.simpleStartTheme) {
-				setLocalTheme(changes.simpleStartTheme.newValue);
-			}
-		});
-		return () => browser.storage.onChanged.removeListener(setLocalStorageValue);
+		browser.storage.onChanged.addListener(syncSavedCustomThemes);
+		return () => browser.storage.onChanged.removeListener(syncSavedCustomThemes);
 	}, []);
 
 	// todo: proper type for colors object
@@ -58,10 +83,6 @@ export const useExtensionTheme = ({ key, defaultValue = 'light' }: UseExtensionT
 		await browser.storage.sync.set({
 			[formattedName]: { colors: themeColors },
 		});
-		setLocalCustomThemes((prevState) => [
-			...prevState,
-			{ name: formattedName, colors: themeColors },
-		]);
 	};
 
 	const editCustomTheme = async (
@@ -84,37 +105,15 @@ export const useExtensionTheme = ({ key, defaultValue = 'light' }: UseExtensionT
 			[formattedName]: { colors: themeColors },
 		});
 
-		// update existing customTheme in local state, or remove old one and add the new one to local state
-		if (formattedName === oldName) {
-			setLocalCustomThemes((prevState) =>
-				prevState.map((el) =>
-					el.name === formattedName ? { ...el, colors: themeColors } : el,
-				),
-			);
-		} else {
-			// also removing old theme from local storage if we're updating under a new name
+		// when edited theme was updated under a different name then we delete the old one from the storage
+		if (formattedName !== oldName) {
 			await browser.storage.sync.remove(oldName);
 
-			setLocalCustomThemes((prevState) => [
-				...prevState.filter((item) => item.name !== oldName),
-				{ name: formattedName, colors: themeColors },
-			]);
+			// if current set theme is saved under a different one then we make sure that it's now set under the new name
+			if (oldName === localTheme) {
+				await browser.storage.sync.set({ [key]: formattedName });
+			}
 		}
-	};
-
-	// retrieved all saved custom themes on load
-	useEffect(() => {
-		getSavedCustomThemes();
-	}, []);
-
-	// every custom theme starts with a "created-theme" key, we filter them all here and add key as object "name" property
-	const getSavedCustomThemes = async () => {
-		const customThemes = await browser.storage.sync.get();
-		setLocalCustomThemes(
-			Object.entries(customThemes)
-				.filter(([key]) => key.includes('created-theme'))
-				.map(([key, object]) => ({ name: key, ...object })),
-		);
 	};
 
 	const removeCustomTheme = async (name: string) => {
