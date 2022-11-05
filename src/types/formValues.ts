@@ -1,0 +1,25 @@
+export type ModalCustomThemeValues = {
+	background0?: string;
+	background1?: string;
+	background2?: string;
+	background3?: string;
+	background4?: string;
+	background5?: string;
+	background6?: string;
+	background7?: string;
+	background8?: string;
+	background9?: string;
+	primary0?: string;
+	primary1?: string;
+	primary2?: string;
+	primary3?: string;
+	primary4?: string;
+	primary5?: string;
+	primary6?: string;
+	primary7?: string;
+	primary8?: string;
+	primary9?: string;
+	text?: string;
+	customThemeName: string;
+	oldCustomThemeName?: string;
+};

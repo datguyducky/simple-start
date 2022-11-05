@@ -1,0 +1,1 @@
+export { BookmarkCapsule } from './BookmarkCapsule';
