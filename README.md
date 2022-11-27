@@ -33,7 +33,8 @@ I strongly encourage to contribute to development of Simple Start extension. Bug
 * Add the extension to your Firefox, by going to `about:debugging` page, `This Firefox` tab and loading *Simple Start* as a temporary add-on by choosing the `dist/manifest.json` file. 
 
 ## 📦 Favicon Service
-Simple Start use [Besticon](https://github.com/mat/besticon) to gain ability to show websites favicon. Hosted on Heroku.
+Simple Start uses [Favicon Kit - Homepage](https://faviconkit.com/) to provide users with correct icons for each and every website.
+To check the service code, navigate to here: [Favicon Kit - Github](https://github.com/faviconkit/javascript-api).
 
 ## 📝 License:
 Simple Start extension is open-source project licensed under the [GLP-3.0 license](LICENSE).

@@ -16,14 +16,16 @@ export const BookmarkCapsule = ({ title, url, settings }: BookmarkCapsuleProps) 
 		labelColor: settings.capsuleLabelColor,
 	});
 
+	const urlWithoutPrefix = url?.replace(/^https?:\/\//, '');
+
 	return (
 		<Box className={classes.bookmarkCapsuleWrap} component="a" href={url}>
 			<Box className={classes.faviconWrap}>
 				<img
-					src={`https://simplestart-favicon-service.herokuapp.com/icon?url=${url}&size=64`}
+					src={`https://stable-lavender-crane.faviconkit.com/${urlWithoutPrefix}/64`}
 					height={settings.capsuleIconSize}
 					width={settings.capsuleIconSize}
-					alt="website-favicon"
+					alt=""
 				/>
 			</Box>
 
