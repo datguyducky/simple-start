@@ -16,16 +16,18 @@ export const BookmarkListRow = ({ title, url, settings }: BookmarkListRowProps) 
 		horizontalPadding: settings.listHorizontalPadding,
 	});
 
+	const urlWithoutPrefix = url?.replace(/^https?:\/\//, '');
+
 	return (
 		<Box className={classes.bookmarkListRowWrap} component="a" href={url}>
 			<Group spacing={24} position="apart" grow sx={{ width: '100%' }}>
 				<Box className={classes.faviconWrap}>
 					<img
-						src={`https://simplestart-favicon-service.herokuapp.com/icon?url=${url}&size=64`}
+						src={`https://stable-lavender-crane.faviconkit.com/${urlWithoutPrefix}/32`}
 						height={settings.listIconSize}
 						width={settings.listIconSize}
 						style={{ marginRight: 8 }}
-						alt="website-favicon"
+						alt=""
 					/>
 
 					{!settings.listHiddenName && (
