@@ -30,6 +30,7 @@ export const NewTab = () => {
 	const customWidth =
 		categories?.find((category) => category.id === activeCategory)?.title?.replace(' ', '')
 			?.length || 11;
+
 	const { classes } = useNewTabStyles({
 		width: customWidth > 40 ? customWidth * 7.5 : customWidth * 8 + 64,
 	});
@@ -68,6 +69,7 @@ export const NewTab = () => {
 							dropdown: classes.selectDropdown,
 							item: classes.selectItem,
 							input: classes.selectInput,
+							rightSection: classes.selectInputRightSection,
 						}}
 						allowDeselect
 						withinPortal={false}

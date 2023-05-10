@@ -48,7 +48,7 @@ export const useNewTabStyles = createStyles((theme, { width }: { width: number }
 	selectInput: {
 		overflow: 'hidden',
 		textOverflow: 'ellipsis',
-		maxWidth: 'calc(100% - 40px)',
+		maxWidth: '100%',
 	},
 	selectDropdown: {
 		minWidth: '210px !important',
@@ -61,5 +61,8 @@ export const useNewTabStyles = createStyles((theme, { width }: { width: number }
 		'&[data-hovered]': {
 			backgroundColor: theme.colors.background[2],
 		},
+	},
+	selectInputRightSection: {
+		pointerEvents: 'none',
 	},
 }));
