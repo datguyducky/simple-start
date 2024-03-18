@@ -16,14 +16,18 @@ export const BookmarkListRow = ({ title, url, settings }: BookmarkListRowProps) 
 		horizontalPadding: settings.listHorizontalPadding,
 	});
 
-	const urlWithoutPrefix = url?.replace(/^https?:\/\//, '');
+	const urlObject = new URL(url || '');
+	const cleanedUrl = urlObject.hostname;
+	const perfectIconSize = Math.max(settings.listIconSize, 8);
 
 	return (
 		<Box className={classes.bookmarkListRowWrap} component="a" href={url}>
 			<Group spacing={24} position="apart" grow sx={{ width: '100%' }}>
 				<Box className={classes.faviconWrap}>
 					<img
-						src={`https://stable-lavender-crane.faviconkit.com/${urlWithoutPrefix}/32`}
+						src={`https://simple-start-api.fly.dev/icon?url=${cleanedUrl}&size=8..${perfectIconSize}..${
+							settings.listIconSize + 40
+						}`}
 						height={settings.listIconSize}
 						width={settings.listIconSize}
 						style={{ marginRight: 8 }}

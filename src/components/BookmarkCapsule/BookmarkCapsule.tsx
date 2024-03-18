@@ -16,13 +16,17 @@ export const BookmarkCapsule = ({ title, url, settings }: BookmarkCapsuleProps) 
 		labelColor: settings.capsuleLabelColor,
 	});
 
-	const urlWithoutPrefix = url?.replace(/^https?:\/\//, '');
+	const urlObject = new URL(url || '');
+	const cleanedUrl = urlObject.hostname;
+	const perfectIconSize = Math.max(settings.capsuleIconSize, 8);
 
 	return (
 		<Box className={classes.bookmarkCapsuleWrap} component="a" href={url}>
 			<Box className={classes.faviconWrap}>
 				<img
-					src={`https://stable-lavender-crane.faviconkit.com/${urlWithoutPrefix}/64`}
+					src={`https://simple-start-api.fly.dev/icon?url=${cleanedUrl}&size=8..${perfectIconSize}..${
+						settings.capsuleIconSize + 40
+					}`}
 					height={settings.capsuleIconSize}
 					width={settings.capsuleIconSize}
 					alt=""
