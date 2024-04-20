@@ -15,9 +15,6 @@ export const manifest = {
 	chrome_url_overrides: {
 		newtab: 'src/pages/newtab/index.html',
 	},
-	chrome_settings_overrides: {
-		homepage: 'src/pages/newtab/index.html',
-	},
 
 	icons: {
 		'48': 'icon48.png',

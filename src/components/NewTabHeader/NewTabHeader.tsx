@@ -90,7 +90,7 @@ export const NewTabHeader = ({ onNewBookmarkClick, onNewCategoryClick }: NewTabH
 							compact
 							color="dark"
 							className={classes.headerButton}
-							onClick={async () => await browser.runtime.openOptionsPage()}
+							onClick={async () => await chrome.runtime.openOptionsPage()}
 						>
 							<Text inline size="sm" mt={3}>
 								Settings
