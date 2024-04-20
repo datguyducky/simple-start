@@ -1,11 +1,11 @@
 {
   "name": "simple-start",
   "private": true,
-  "version": "2.0.3",
+  "version": "2.0.4",
   "description": "Minimalistic new tab page extension. Organize bookmarks into groups - be more productive with bookmarks sorted by groups for your Work, Home and Hobbies.",
   "scripts": {
     "build": "vite build",
-    "dev-watch": "vite build --watch",
+    "dev": "vite build --watch",
     "eslint": "eslint . --ext .js,.jsx,.ts,.tsx"
   },
   "dependencies": {

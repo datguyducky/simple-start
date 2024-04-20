@@ -1,7 +1,7 @@
 import packageJson from '../package.json';
 
 export const manifest = {
-	manifest_version: 2,
+	manifest_version: 3,
 	name: 'Simple Start',
 	version: packageJson.version,
 	description: packageJson.description,
