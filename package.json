@@ -1,11 +1,11 @@
 {
   "name": "simple-start",
   "private": true,
-  "version": "2.0.3",
-  "description": "Minimalistic new tab page extension. Organize bookmarks into groups - be more productive with bookmarks sorted by groups for your Work, Home and Hobbies.",
+  "version": "2.1.0",
+  "description": "Highly customizable new tab extension with categorized bookmark groups",
   "scripts": {
     "build": "vite build",
-    "dev-watch": "vite build --watch",
+    "dev": "vite build --watch",
     "eslint": "eslint . --ext .js,.jsx,.ts,.tsx"
   },
   "dependencies": {
@@ -15,6 +15,7 @@
     "@mantine/form": "~5.6.3",
     "@mantine/hooks": "~5.6.3",
     "@mantine/notifications": "~5.6.3",
+    "@types/chrome": "~0.0.266",
     "react": "~18.2.0",
     "react-dom": "~18.2.0",
     "zod": "~3.19.1"

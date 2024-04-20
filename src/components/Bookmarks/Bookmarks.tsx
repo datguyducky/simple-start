@@ -1,5 +1,5 @@
 import { Stack, Group } from '@mantine/core';
-import BookmarkTreeNode = browser.bookmarks.BookmarkTreeNode;
+import BookmarkTreeNode = chrome.bookmarks.BookmarkTreeNode;
 
 import { constants } from '@common/constants';
 

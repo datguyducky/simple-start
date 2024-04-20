@@ -16,8 +16,23 @@ export function createManifest(): PluginOption {
 			}
 
 			const manifestPath = resolve(outDir, 'manifest.json');
+			const { browser_specific_settings, ...manifestCopy } = manifest;
 
-			fs.writeFileSync(manifestPath, JSON.stringify(manifest, null, 2));
+			fs.writeFileSync(
+				manifestPath,
+				JSON.stringify(
+					{
+						...manifestCopy,
+						browser_specific_settings:
+							process.env.BROWSER === 'chrome'
+								? undefined
+								: browser_specific_settings,
+					},
+					null,
+					2,
+				),
+				{ flag: 'w' },
+			);
 		},
 	};
 }

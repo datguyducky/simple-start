@@ -1,5 +1,5 @@
 import { useContext, useEffect, useLayoutEffect, useState } from 'react';
-import StorageChange = browser.storage.StorageChange;
+import StorageChange = chrome.storage.StorageChange;
 
 import { constants } from '@common/constants';
 import { AllExtensionSettings } from '@extensionTypes/settingsValues';
@@ -12,7 +12,7 @@ export const useExtensionSettings = () => {
 
 	useLayoutEffect(() => {
 		const getExtensionSettings = async () => {
-			const storage = await browser.storage.sync.get('extensionSettings');
+			const storage = await chrome.storage.sync.get('extensionSettings');
 			if (storage?.extensionSettings) {
 				setCurrentSettings({ ...currentSettings, ...storage.extensionSettings });
 			}
@@ -29,8 +29,8 @@ export const useExtensionSettings = () => {
 	};
 
 	useEffect(() => {
-		browser.storage.onChanged.addListener(handleSettingsChanged);
-		return () => browser.storage.onChanged.removeListener(handleSettingsChanged);
+		chrome.storage.onChanged.addListener(handleSettingsChanged);
+		return () => chrome.storage.onChanged.removeListener(handleSettingsChanged);
 	}, []);
 
 	const handleNextView = async () => {
@@ -40,7 +40,7 @@ export const useExtensionSettings = () => {
 
 		// when switching from last view to another one - switch to the first view in an array
 		if (currentViewIndex === constants.availableViews.length - 1) {
-			await browser.storage.sync.set({
+			await chrome.storage.sync.set({
 				extensionSettings: {
 					...currentSettings,
 					currentView: constants.availableViews[0].id,
@@ -54,7 +54,7 @@ export const useExtensionSettings = () => {
 		}
 		// next view in an array
 		else {
-			await browser.storage.sync.set({
+			await chrome.storage.sync.set({
 				extensionSettings: {
 					...currentSettings,
 					currentView: constants.availableViews[currentViewIndex + 1].id,
@@ -70,7 +70,7 @@ export const useExtensionSettings = () => {
 
 	// this is used to save settings for the extension, except the "currentView" one as that requires some extra logic to properly change it
 	const saveExtensionSettings = async (newValues: Partial<AllExtensionSettings>) => {
-		await browser.storage.sync.set({
+		await chrome.storage.sync.set({
 			extensionSettings: {
 				...currentSettings,
 				...newValues,

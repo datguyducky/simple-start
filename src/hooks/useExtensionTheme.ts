@@ -16,7 +16,7 @@ export const useExtensionTheme = ({ key, defaultValue = 'light' }: UseExtensionT
 				return defaultValue;
 			}
 
-			const storedTheme = await browser.storage.sync.get(key);
+			const storedTheme = await chrome.storage.sync.get(key);
 			if (Object.values(storedTheme).length > 0) {
 				setLocalTheme(storedTheme[key]);
 			} else {
@@ -33,7 +33,7 @@ export const useExtensionTheme = ({ key, defaultValue = 'light' }: UseExtensionT
 
 	// every custom theme starts with a "created-theme" key, we filter them all here and add key as object "name" property
 	const getSavedCustomThemes = async () => {
-		const customThemes = await browser.storage.sync.get();
+		const customThemes = await chrome.storage.sync.get();
 		setLocalCustomThemes(
 			Object.entries(customThemes)
 				.filter(([key]) => key.includes('created-theme'))
@@ -43,7 +43,7 @@ export const useExtensionTheme = ({ key, defaultValue = 'light' }: UseExtensionT
 
 	// save theme in browser storage and state
 	const setLocalStorageValue = useCallback((val: any) => {
-		browser.storage.sync.set({ [key]: val });
+		chrome.storage.sync.set({ [key]: val });
 		setLocalTheme(val);
 	}, []);
 
@@ -63,8 +63,8 @@ export const useExtensionTheme = ({ key, defaultValue = 'light' }: UseExtensionT
 
 	// making sure that theme is correctly updated also on other tabs that are currently opened
 	useEffect(() => {
-		browser.storage.onChanged.addListener(syncSavedCustomThemes);
-		return () => browser.storage.onChanged.removeListener(syncSavedCustomThemes);
+		chrome.storage.onChanged.addListener(syncSavedCustomThemes);
+		return () => chrome.storage.onChanged.removeListener(syncSavedCustomThemes);
 	}, []);
 
 	// todo: proper type for colors object
@@ -75,12 +75,12 @@ export const useExtensionTheme = ({ key, defaultValue = 'light' }: UseExtensionT
 			.map((x) => x.toLowerCase())
 			.join('-')}`;
 
-		const isExistingTheme = await browser.storage.sync.get(formattedName);
+		const isExistingTheme = await chrome.storage.sync.get(formattedName);
 		if (Object.values(isExistingTheme).length > 0) {
 			throw new Error('CUSTOM_THEME_EXISTS');
 		}
 
-		await browser.storage.sync.set({
+		await chrome.storage.sync.set({
 			[formattedName]: { colors: themeColors },
 		});
 	};
@@ -95,23 +95,23 @@ export const useExtensionTheme = ({ key, defaultValue = 'light' }: UseExtensionT
 			.map((x) => x.toLowerCase())
 			.join('-')}`;
 
-		const isExistingTheme = await browser.storage.sync.get(formattedName);
+		const isExistingTheme = await chrome.storage.sync.get(formattedName);
 		if (Object.values(isExistingTheme).length > 0 && formattedName !== oldName) {
 			throw new Error('CUSTOM_THEME_EXISTS');
 		}
 
 		// creating or updating theme by passed named
-		await browser.storage.sync.set({
+		await chrome.storage.sync.set({
 			[formattedName]: { colors: themeColors },
 		});
 
 		// when edited theme was updated under a different name then we delete the old one from the storage
 		if (formattedName !== oldName) {
-			await browser.storage.sync.remove(oldName);
+			await chrome.storage.sync.remove(oldName);
 
 			// if current set theme is saved under a different one then we make sure that it's now set under the new name
 			if (oldName === localTheme) {
-				await browser.storage.sync.set({ [key]: formattedName });
+				await chrome.storage.sync.set({ [key]: formattedName });
 			}
 		}
 	};
@@ -122,7 +122,7 @@ export const useExtensionTheme = ({ key, defaultValue = 'light' }: UseExtensionT
 			const newCustomThemes = localCustomThemes.filter((theme) => theme.name !== name);
 			setLocalCustomThemes(newCustomThemes);
 
-			await browser.storage.sync.remove(name);
+			await chrome.storage.sync.remove(name);
 
 			// when selected theme is removed and is currently set active then the extension theme is reset to "light" version
 			if (localTheme === name) {

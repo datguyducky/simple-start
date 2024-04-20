@@ -1,7 +1,7 @@
 import packageJson from '../package.json';
 
 export const manifest = {
-	manifest_version: 2,
+	manifest_version: 3,
 	name: 'Simple Start',
 	version: packageJson.version,
 	description: packageJson.description,
@@ -14,9 +14,6 @@ export const manifest = {
 
 	chrome_url_overrides: {
 		newtab: 'src/pages/newtab/index.html',
-	},
-	chrome_settings_overrides: {
-		homepage: 'src/pages/newtab/index.html',
 	},
 
 	icons: {

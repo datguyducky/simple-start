@@ -1,11 +1,10 @@
 import { useEffect, useState } from 'react';
 import { showNotification } from '@mantine/notifications';
-import BookmarkTreeNode = browser.bookmarks.BookmarkTreeNode;
-
-import _OnChangedChangeInfo = browser.bookmarks._OnChangedChangeInfo;
-import _OnRemovedRemoveInfo = browser.bookmarks._OnRemovedRemoveInfo;
+import BookmarkTreeNode = chrome.bookmarks.BookmarkTreeNode;
 
 import { useExtensionSettings } from './useExtensionSettings';
+import BookmarkChangeInfo = chrome.bookmarks.BookmarkChangeInfo;
+import BookmarkRemoveInfo = chrome.bookmarks.BookmarkRemoveInfo;
 
 export const useExtensionCategories = () => {
 	const [categories, setCategories] = useState<BookmarkTreeNode[]>([]);
@@ -15,8 +14,8 @@ export const useExtensionCategories = () => {
 
 	const getExtensionCategories = async (rootId: string) => {
 		try {
-			const extensionCategories = await browser.bookmarks.getChildren(rootId);
-			setCategories(extensionCategories.filter((content) => content.type === 'folder'));
+			const extensionCategories = await chrome.bookmarks.getChildren(rootId);
+			setCategories(extensionCategories.filter((content) => content?.url === undefined));
 		} catch (error) {
 			showNotification({
 				color: 'red',
@@ -28,13 +27,13 @@ export const useExtensionCategories = () => {
 	};
 
 	const retrieveRootId = async () => {
-		const extensionRoot = await browser.bookmarks.search({ title: 'simplestart' });
+		const extensionRoot = await chrome.bookmarks.search({ title: 'simplestart' });
 
 		if (extensionRoot?.length && extensionRoot?.length > 0) {
 			return extensionRoot[0].id;
 		} else {
 			// when extension root folder is not found - create it
-			await browser.bookmarks.create({ title: 'simplestart' });
+			await chrome.bookmarks.create({ title: 'simplestart' });
 		}
 	};
 
@@ -53,7 +52,7 @@ export const useExtensionCategories = () => {
 	}, []);
 
 	// making sure that edition of a category (aka bookmark folder) is synced between tabs and views
-	const syncCategoryChanges = (id: string, changeInfo: _OnChangedChangeInfo) => {
+	const syncCategoryChanges = (id: string, changeInfo: BookmarkChangeInfo) => {
 		const updatedCategories = categories.map((category) =>
 			category.id === id ? { ...category, ...changeInfo } : category,
 		);
@@ -62,8 +61,8 @@ export const useExtensionCategories = () => {
 	};
 
 	// making sure that category (aka bookmark folder) deletion is synced between tabs and views
-	const syncCategoryDeletion = (id: string, removeInfo: _OnRemovedRemoveInfo) => {
-		if (removeInfo?.node?.type === 'folder') {
+	const syncCategoryDeletion = (id: string, removeInfo: BookmarkRemoveInfo) => {
+		if (removeInfo?.node?.url === 'undefined') {
 			const cleanedCategories = categories.filter((category) => category.id !== id);
 
 			setCategories(cleanedCategories);
@@ -76,11 +75,11 @@ export const useExtensionCategories = () => {
 
 	useEffect(() => {
 		if (categories?.length > 0) {
-			browser.bookmarks.onChanged.addListener(syncCategoryChanges);
-			browser.bookmarks.onRemoved.addListener(syncCategoryDeletion);
+			chrome.bookmarks.onChanged.addListener(syncCategoryChanges);
+			chrome.bookmarks.onRemoved.addListener(syncCategoryDeletion);
 			return () => {
-				browser.bookmarks.onChanged.removeListener(syncCategoryChanges);
-				browser.bookmarks.onRemoved.removeListener(syncCategoryDeletion);
+				chrome.bookmarks.onChanged.removeListener(syncCategoryChanges);
+				chrome.bookmarks.onRemoved.removeListener(syncCategoryDeletion);
 			};
 		}
 	}, [categories, activeCategory]);
@@ -94,10 +93,9 @@ export const useExtensionCategories = () => {
 	}) => {
 		const rootId = await retrieveRootId();
 
-		const newCategory = await browser.bookmarks.create({
+		const newCategory = await chrome.bookmarks.create({
 			parentId: rootId as string,
 			title: name,
-			type: 'folder',
 		});
 
 		if (setAsDefault) {
@@ -116,7 +114,7 @@ export const useExtensionCategories = () => {
 		categoryName: string;
 		defaultCategory?: boolean;
 	}) => {
-		await browser.bookmarks.update(id, {
+		await chrome.bookmarks.update(id, {
 			title: categoryName,
 		});
 
@@ -141,7 +139,7 @@ export const useExtensionCategories = () => {
 			await saveExtensionSettings({ defaultCategory: '' });
 		}
 
-		await browser.bookmarks.removeTree(id);
+		await chrome.bookmarks.removeTree(id);
 
 		// retrieve updated list of extension categories
 		const rootId = await retrieveRootId();
