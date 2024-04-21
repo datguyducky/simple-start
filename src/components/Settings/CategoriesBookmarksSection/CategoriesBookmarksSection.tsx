@@ -129,7 +129,9 @@ export const CategoriesBookmarksSection = () => {
 										/>
 									))
 								) : (
-									<Text size="sm">No bookmarks for this cateogry</Text>
+									<Text size="sm" p={16}>
+										No bookmarks for this category
+									</Text>
 								)}
 							</Accordion.Panel>
 						</Accordion.Item>
@@ -139,7 +141,9 @@ export const CategoriesBookmarksSection = () => {
 						key="uncategorized__simplestart__bookmarks"
 						value="category__uncategorized__"
 					>
-						<Accordion.Control>Uncategorized bookmarks</Accordion.Control>
+						<Accordion.Control>
+							<Text sx={{ height: 28 }}>Uncategorized bookmarks</Text>
+						</Accordion.Control>
 
 						<Accordion.Panel>
 							{uncategorizedBookmarks?.length > 0 ? (
@@ -168,7 +172,9 @@ export const CategoriesBookmarksSection = () => {
 									/>
 								))
 							) : (
-								<Text size="sm">No bookmarks for this cateogry</Text>
+								<Text size="sm" p={16}>
+									No bookmarks for this category
+								</Text>
 							)}
 						</Accordion.Panel>
 					</Accordion.Item>

@@ -1,5 +1,6 @@
 import { ActionIcon, Group, Text } from '@mantine/core';
 import { PencilAltIcon, TrashIcon } from '@heroicons/react/solid';
+import { useHover } from '@mantine/hooks';
 
 type BookmarkRowProps = {
 	name: string;
@@ -8,8 +9,18 @@ type BookmarkRowProps = {
 };
 
 export const BookmarkRow = ({ name, onRemoveAction, onEditAction }: BookmarkRowProps) => {
+	const { hovered, ref } = useHover();
+
 	return (
-		<Group position="apart" spacing={0}>
+		<Group
+			position="apart"
+			spacing={0}
+			ref={ref}
+			sx={(theme) => ({
+				padding: '8px 16px',
+				backgroundColor: hovered ? theme.colors.background[2] : 'transparent',
+			})}
+		>
 			<Text
 				sx={{
 					maxWidth: '90%',

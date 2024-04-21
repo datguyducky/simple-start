@@ -16,9 +16,7 @@ export const useCategoriesBookmarksSectionStyles = createStyles((theme) => ({
 		paddingBottom: 8,
 		paddingRight: 11,
 
-		'& > div': {
-			marginBottom: 8,
-		},
+		padding: 0,
 	},
 
 	categoriesAccordionChevron: {
