@@ -7,13 +7,16 @@ import { useBookmarkListRowStyles } from './BookmarkListRow.styles';
 type BookmarkListRowProps = {
 	title: string;
 	settings: ListSettings;
+	isOdd: boolean;
 	url?: string;
 };
 
-export const BookmarkListRow = ({ title, url, settings }: BookmarkListRowProps) => {
+export const BookmarkListRow = ({ title, url, isOdd, settings }: BookmarkListRowProps) => {
 	const { classes } = useBookmarkListRowStyles({
 		verticalPadding: settings.listVerticalPadding,
 		horizontalPadding: settings.listHorizontalPadding,
+		isOdd,
+		useStrippedRows: settings.listUseStrippedRows,
 	});
 
 	const urlObject = new URL(url || '');

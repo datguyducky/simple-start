@@ -41,6 +41,7 @@ export const constants = {
 		listIconSize: 24,
 		listNameSize: 16,
 		listUrlSize: 14,
+		listUseStrippedRows: false,
 	},
 	exampleBookmarks: [
 		{ id: 1, name: 'Duckduckgo', url: 'https://duckduckgo.com' },

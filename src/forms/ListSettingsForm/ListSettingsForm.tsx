@@ -84,12 +84,13 @@ export const ListSettingsForm = ({ openResetModal }: ListSettingsFormProps) => {
 					spacing={values.listSpacing}
 					sx={{ overflow: 'hidden' }}
 				>
-					{constants.exampleBookmarks.map((bookmark) => (
+					{constants.exampleBookmarks.map((bookmark, index) => (
 						<BookmarkListRow
 							key={bookmark.id}
 							title={bookmark.name}
 							url={bookmark.url}
 							settings={values}
+							isOdd={index % 2 === 0}
 						/>
 					))}
 				</Stack>
@@ -104,6 +105,13 @@ export const ListSettingsForm = ({ openResetModal }: ListSettingsFormProps) => {
 
 				<SimpleGrid cols={2} spacing={16} mb={24}>
 					<Stack spacing={12} align="flex-start">
+						<Checkbox
+							label="Use striped rows"
+							{...getInputProps('listUseStrippedRows', {
+								type: 'checkbox',
+							})}
+						/>
+
 						<Group>
 							<NumberInput
 								label="Vertical padding for each bookmark"
