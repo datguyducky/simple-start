@@ -50,7 +50,7 @@ export const ModalCustomTheme = ({
 	const [themeColors, setThemeColors] = useState<CustomThemeFormColors>();
 	const [activeStep, setActive] = useState(0);
 
-	const { values, getInputProps, onSubmit, validate, setValues, reset } =
+	const { values, getInputProps, onSubmit, validate, setValues, reset, isValid } =
 		useForm<ModalCustomThemeValues>({
 			initialValues: {
 				text: '#101113',
@@ -477,9 +477,9 @@ export const ModalCustomTheme = ({
 						Back
 					</Button>
 
-					{activeStep < 3 && <Button onClick={nextStep}>Next Step</Button>}
+					{activeStep < 3 && <Button onClick={nextStep} disabled={!isValid()}>Next Step</Button>}
 
-					{activeStep === 3 && <Button type="submit">Save</Button>}
+					{activeStep === 3 && <Button type="submit" disabled={!isValid()}>Save</Button>}
 				</Group>
 			</form>
 		</Modal>
