@@ -76,7 +76,6 @@ export const ListSettingsForm = ({ openResetModal }: ListSettingsFormProps) => {
 		}
 	};
 
-	console.log(errors, '?');
 	return (
 		<Stack>
 			<Box>
