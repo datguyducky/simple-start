@@ -62,7 +62,7 @@ export const useExtensionCategories = () => {
 
 	// making sure that category (aka bookmark folder) deletion is synced between tabs and views
 	const syncCategoryDeletion = (id: string, removeInfo: BookmarkRemoveInfo) => {
-		if (removeInfo?.node?.url === 'undefined') {
+		if (removeInfo?.node?.url === undefined) {
 			const cleanedCategories = categories.filter((category) => category.id !== id);
 
 			setCategories(cleanedCategories);
@@ -73,12 +73,21 @@ export const useExtensionCategories = () => {
 		}
 	};
 
+	const syncCategoryCreation = (_id: string, category: BookmarkTreeNode) => {
+		if (category?.url === undefined) {
+			const updatedCategories = [...categories, category];
+			setCategories(updatedCategories);
+		}
+	};
+
 	useEffect(() => {
 		if (categories?.length > 0) {
 			chrome.bookmarks.onChanged.addListener(syncCategoryChanges);
+			chrome.bookmarks.onCreated.addListener(syncCategoryCreation);
 			chrome.bookmarks.onRemoved.addListener(syncCategoryDeletion);
 			return () => {
 				chrome.bookmarks.onChanged.removeListener(syncCategoryChanges);
+				chrome.bookmarks.onCreated.removeListener(syncCategoryCreation);
 				chrome.bookmarks.onRemoved.removeListener(syncCategoryDeletion);
 			};
 		}

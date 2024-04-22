@@ -38,15 +38,17 @@ export const useExtensionBookmarks = ({ categoryId }: { categoryId?: string | nu
 
 	// making sure that edition of a bookmark is synced between tabs and views
 	const syncBookmarkChanges = (id: string, changeInfo: BookmarkChangeInfo) => {
-		const updatedBookmarks = bookmarks.map((bookmark) =>
-			bookmark.id === id ? { ...bookmark, ...changeInfo } : bookmark,
-		);
-		const updatedUncategorizedBookmarks = uncategorizedBookmarks.map((bookmark) =>
-			bookmark.id === id ? { ...bookmark, ...changeInfo } : bookmark,
-		);
+		if (changeInfo?.url !== undefined) {
+			const updatedBookmarks = bookmarks.map((bookmark) =>
+				bookmark.id === id ? { ...bookmark, ...changeInfo } : bookmark,
+			);
+			const updatedUncategorizedBookmarks = uncategorizedBookmarks.map((bookmark) =>
+				bookmark.id === id ? { ...bookmark, ...changeInfo } : bookmark,
+			);
 
-		setBookmarks(updatedBookmarks);
-		setUncategorizedBookmarks(updatedUncategorizedBookmarks);
+			setBookmarks(updatedBookmarks);
+			setUncategorizedBookmarks(updatedUncategorizedBookmarks);
+		}
 	};
 
 	// making sure that deletion of a bookmark is synced between tabs and views
@@ -62,12 +64,27 @@ export const useExtensionBookmarks = ({ categoryId }: { categoryId?: string | nu
 		}
 	};
 
+	const syncBookmarkCreation = async (_id: string, bookmark: BookmarkTreeNode) => {
+		if (bookmark?.url !== undefined) {
+			const extensionRoot = (await chrome.bookmarks.search({ title: 'simplestart' }))?.[0];
+			if (extensionRoot?.id === bookmark.parentId) {
+				const updatedUncategorizedBookmarks = [...uncategorizedBookmarks, bookmark];
+				setUncategorizedBookmarks(updatedUncategorizedBookmarks);
+			} else {
+				const updatedBookmarks = [...bookmarks, bookmark];
+				setBookmarks(updatedBookmarks);
+			}
+		}
+	};
+
 	useEffect(() => {
 		if (bookmarks?.length > 0 || uncategorizedBookmarks?.length > 0) {
 			chrome.bookmarks.onChanged.addListener(syncBookmarkChanges);
+			chrome.bookmarks.onCreated.addListener(syncBookmarkCreation);
 			chrome.bookmarks.onRemoved.addListener(syncBookmarkDeletion);
 			return () => {
 				chrome.bookmarks.onChanged.removeListener(syncBookmarkChanges);
+				chrome.bookmarks.onCreated.removeListener(syncBookmarkCreation);
 				chrome.bookmarks.onRemoved.removeListener(syncBookmarkDeletion);
 			};
 		}
