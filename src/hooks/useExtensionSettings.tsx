@@ -19,7 +19,7 @@ export const useExtensionSettings = () => {
 			setViewLoading(false);
 		};
 
-		getExtensionSettings();
+		void getExtensionSettings();
 	}, []);
 
 	const handleSettingsChanged = (changes: { [key: string]: StorageChange }) => {

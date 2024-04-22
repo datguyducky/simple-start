@@ -12,7 +12,7 @@
  * 		[8] - looks like is not used for now
  * 		[9] - looks like is not used for now
  *
- * 	- "primary" - 10 shades of a color, used for buttons, checkboxes, highlights etc,
+ * 	- "primary" - 10 shades of a color, used for buttons, checkboxes, highlights etc.,
  * 	basically as name suggests a primary color of the extension.
  * 	NOT used for pre-defined "light" and "dark" themes (there we use Mantine's built-in blue color)
  *

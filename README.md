@@ -1,6 +1,6 @@
 # Simple Start
 I've created this extension as I always felt that other browsers had better new tab views than Firefox. I wanted to have a simple and minimalistic new tab view that would allow me to organize my bookmarks into categories. 
-This is something that I use daily across different devices so there's no reason to be worried that this extension will no longer be supported and it's still highly updated.
+This is something that I use daily across different devices so there's no reason to be worried that this extension will no longer be supported.
 
 <a href="https://addons.mozilla.org/en-US/firefox/addon/simple-start/"><img src="./readme-img/get-addon-firefox.svg" width="148" /></a>
 <a href="https://chromewebstore.google.com/detail/simple-start/efllhkadadnbifclloeinnlpneehbkfh"><img src="./readme-img/get-addon-chrome.png" width="172" /></a>

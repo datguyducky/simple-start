@@ -6,7 +6,7 @@ import { useExtensionTheme } from '@hooks/useExtensionTheme';
 import { ModalCustomTheme } from '@modals/ModalCustomTheme';
 import { ModalRemoveCustomTheme } from '@modals/ModalRemoveCustomTheme';
 import { useModal } from '@hooks/useModal';
-
+import { CustomTheme } from '@extensionTypes/customTheme';
 import { CustomThemeBox } from '@components/CustomThemeBox';
 
 import { useThemeSectionStyles } from './ThemeSection.styles';
@@ -52,7 +52,6 @@ export const ThemeSection = () => {
 
 					{customThemes &&
 						customThemes.map((customThemeData) => {
-							// todo: types for name and background
 							const customThemeName = customThemeData.name
 								.replace('created-theme-', '')
 								.replace(/-/g, ' ');
@@ -107,7 +106,7 @@ export const ThemeSection = () => {
 				title="Add new custom theme"
 				saveCustomTheme={saveCustomTheme}
 				mode={customThemeModal?.args?.mode as 'edit' | 'create'}
-				initialValues={customThemeModal?.args?.data as Record<string, unknown>}
+				initialValues={customThemeModal?.args?.data as CustomTheme}
 				editCustomTheme={editCustomTheme}
 			/>
 

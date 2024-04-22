@@ -14,7 +14,12 @@ import {
 } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { showNotification } from '@mantine/notifications';
-
+import {
+	ColorsArray,
+	CustomTheme,
+	CustomThemeColors,
+	CustomThemeFormColors,
+} from '@extensionTypes/customTheme';
 import { ModalCustomThemeValues } from '@extensionTypes/formValues';
 
 import { themeValidation } from '../../utils/themeValidation';
@@ -23,14 +28,14 @@ type ModalCustomThemeProps = {
 	opened: boolean;
 	onClose: () => void;
 	title: string;
-	saveCustomTheme: (name: string, themeColors: Record<string, any>) => Promise<void>;
+	saveCustomTheme: (name: string, themeColors: CustomThemeColors) => Promise<void>;
 	editCustomTheme: (
 		name: string,
 		oldName: string,
-		themeColors: Record<string, any>,
+		themeColors: CustomThemeColors,
 	) => Promise<void>;
 	mode: 'edit' | 'create';
-	initialValues: Record<string, unknown>;
+	initialValues: CustomTheme;
 };
 
 export const ModalCustomTheme = ({
@@ -42,12 +47,7 @@ export const ModalCustomTheme = ({
 	initialValues,
 	editCustomTheme,
 }: ModalCustomThemeProps) => {
-	const [themeColors, setThemeColors] = useState<{
-		background: string[];
-		'background-local': string[];
-		'custom-primary': string[];
-		text: string;
-	}>();
+	const [themeColors, setThemeColors] = useState<CustomThemeFormColors>();
 	const [activeStep, setActive] = useState(0);
 
 	const { values, getInputProps, onSubmit, validate, setValues, reset } =
@@ -128,16 +128,16 @@ export const ModalCustomTheme = ({
 				});
 
 			setThemeColors({
-				'background-local': backgroundLocalArray,
-				background: backgroundArray,
-				'custom-primary': primaryArray,
+				'background-local': backgroundLocalArray as ColorsArray,
+				background: backgroundArray as ColorsArray,
+				'custom-primary': primaryArray as ColorsArray,
 				text,
 			});
 		}
 	}, [activeStep]);
 
 	const handleSubmit = async () => {
-		const { 'background-local': bgLocal, ...colors } = themeColors as Record<string, unknown>;
+		const { 'background-local': _bgLocal, ...colors } = themeColors as CustomThemeFormColors;
 
 		if (mode === 'create') {
 			try {

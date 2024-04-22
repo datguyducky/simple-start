@@ -29,7 +29,7 @@ export const useCustomThemeBoxStyles = createStyles(
 				display: 'flex',
 			},
 		},
-		
+
 		absoluteWrapper: {
 			position: 'absolute',
 			top: 0,

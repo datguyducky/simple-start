@@ -48,7 +48,7 @@ export const useExtensionCategories = () => {
 			}
 		};
 
-		categoriesFromRoot();
+		void categoriesFromRoot();
 	}, []);
 
 	// making sure that edition of a category (aka bookmark folder) is synced between tabs and views

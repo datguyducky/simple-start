@@ -26,7 +26,7 @@ export const Root = () => {
 					? name !== undefined
 						? selectedCustomTheme
 						: themeColors['light']
-					: themeColors[theme]),
+					: (themeColors as any)[theme as string]),
 				primaryColor:
 					theme === 'dark' || theme === 'light' || name === undefined
 						? 'blue'

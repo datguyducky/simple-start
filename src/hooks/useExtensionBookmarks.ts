@@ -25,12 +25,12 @@ export const useExtensionBookmarks = ({ categoryId }: { categoryId?: string | nu
 	};
 
 	useEffect(() => {
-		retrieveExtensionRoot();
+		void retrieveExtensionRoot();
 	}, []);
 
 	useEffect(() => {
 		if (categoryId) {
-			retrieveCategoryBookmarks(categoryId);
+			void retrieveCategoryBookmarks(categoryId);
 		} else {
 			setBookmarks([]);
 		}
