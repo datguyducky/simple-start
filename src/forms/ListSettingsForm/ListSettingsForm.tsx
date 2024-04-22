@@ -11,7 +11,7 @@ import {
 	Text,
 	Divider,
 } from '@mantine/core';
-import { useForm } from '@mantine/form';
+import { useForm, zodResolver } from '@mantine/form';
 
 import { ListSettings } from '@extensionTypes/settingsValues';
 
@@ -20,6 +20,7 @@ import { useExtensionSettings } from '@hooks/useExtensionSettings';
 import { showNotification } from '@mantine/notifications';
 import { constants } from '@common/constants';
 import { BookmarkListRow } from '@components/BookmarkListRow';
+import { listSettingsSchema } from '@validation/ListSettingsSchema';
 
 type ListSettingsFormProps = {
 	openResetModal: () => void;
@@ -28,8 +29,11 @@ type ListSettingsFormProps = {
 export const ListSettingsForm = ({ openResetModal }: ListSettingsFormProps) => {
 	const { extensionSettings, saveExtensionSettings } = useExtensionSettings();
 
-	const { getInputProps, setValues, onSubmit, values, resetDirty, isDirty } =
-		useForm<ListSettings>();
+	const { errors, getInputProps, setValues, onSubmit, values, resetDirty, isDirty, isValid } =
+		useForm<ListSettings>({
+			validate: zodResolver(listSettingsSchema),
+			validateInputOnChange: true,
+		});
 
 	useEffect(() => {
 		if (extensionSettings) {
@@ -72,6 +76,7 @@ export const ListSettingsForm = ({ openResetModal }: ListSettingsFormProps) => {
 		}
 	};
 
+	console.log(errors, '?');
 	return (
 		<Stack>
 			<Box>
@@ -112,7 +117,7 @@ export const ListSettingsForm = ({ openResetModal }: ListSettingsFormProps) => {
 							})}
 						/>
 
-						<Group>
+						<Group align="flex-start">
 							<NumberInput
 								label="Vertical padding for each bookmark"
 								{...getInputProps('listVerticalPadding')}
@@ -129,7 +134,7 @@ export const ListSettingsForm = ({ openResetModal }: ListSettingsFormProps) => {
 							{...getInputProps('listSpacing')}
 						/>
 
-						<Group>
+						<Group align="flex-start">
 							<NumberInput
 								label="Bookmark name size"
 								{...getInputProps('listNameSize')}
@@ -212,7 +217,9 @@ export const ListSettingsForm = ({ openResetModal }: ListSettingsFormProps) => {
 					<Button variant="outline" onClick={openResetModal}>
 						Reset to default
 					</Button>
-					<Button type="submit">Save</Button>
+					<Button type="submit" disabled={!isValid()}>
+						Save
+					</Button>
 				</Group>
 			</Box>
 		</Stack>
