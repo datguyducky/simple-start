@@ -1,7 +1,7 @@
 {
   "name": "simple-start",
   "private": true,
-  "version": "2.1.0",
+  "version": "2.1.1",
   "description": "Highly customizable new tab extension with categorized bookmark groups",
   "scripts": {
     "build": "vite build",

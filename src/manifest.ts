@@ -27,4 +27,8 @@ export const manifest = {
 			strict_min_version: '55.0',
 		},
 	},
+
+	chrome_settings_overrides: {
+		homepage: 'src/pages/newtab/index.html',
+	},
 };

@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Simple Start",
-  "version": "2.1.0",
+  "version": "2.1.1",
   "description": "Highly customizable new tab extension with categorized bookmark groups",
   "permissions": [
     "bookmarks",
@@ -17,5 +17,14 @@
   "icons": {
     "48": "icon48.png",
     "96": "icon96.png"
+  },
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "{6938c509-173c-416e-b440-69a7218af76f}",
+      "strict_min_version": "55.0"
+    }
+  },
+  "chrome_settings_overrides": {
+    "homepage": "src/pages/newtab/index.html"
   }
 }
