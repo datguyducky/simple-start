@@ -43,7 +43,7 @@ export const Root = () => {
 					},
 				})}
 			/>
-			<NotificationsProvider position="top-right">
+			<NotificationsProvider position="top-center">
 				<ExtensionSettingsProvider>
 					<Settings />
 				</ExtensionSettingsProvider>
