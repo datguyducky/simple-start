@@ -19,14 +19,23 @@ export const useExtensionSettings = () => {
 					const extensionRootId = (
 						await chrome.bookmarks.search({ title: 'simplestart' })
 					)?.[0]?.id;
-					const categoryDetails = (
-						await chrome.bookmarks.get(storage.extensionSettings.defaultCategory)
-					)?.[0];
 
-					if (categoryDetails?.parentId !== extensionRootId) {
-						await saveExtensionSettings({ defaultCategory: '' });
-						setViewLoading(false);
-						return;
+					try {
+						const categoryDetails = (
+							await chrome.bookmarks.get(storage.extensionSettings.defaultCategory)
+						)?.[0];
+
+						if (categoryDetails?.parentId !== extensionRootId) {
+							await saveExtensionSettings({ defaultCategory: '' });
+							setViewLoading(false);
+							return;
+						}
+					} catch (e: any) {
+						if (e?.message === "Can't find bookmark for id.") {
+							await saveExtensionSettings({ defaultCategory: '' });
+							setViewLoading(false);
+							return;
+						}
 					}
 				}
 
