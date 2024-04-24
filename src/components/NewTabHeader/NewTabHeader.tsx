@@ -17,6 +17,10 @@ export const NewTabHeader = ({ onNewBookmarkClick, onNewCategoryClick }: NewTabH
 
 	const { currentView, handleNextView, viewLoading } = useExtensionSettings();
 
+	const currentViewIndex = constants.availableViews.findIndex((view) => view.id === currentView);
+	const nextView =
+		constants.availableViews[(currentViewIndex + 1) % constants.availableViews.length];
+
 	return (
 		<Grid columns={3} style={{ marginBottom: 32 }}>
 			<Grid.Col span={1}>
@@ -78,10 +82,7 @@ export const NewTabHeader = ({ onNewBookmarkClick, onNewCategoryClick }: NewTabH
 							className={classes.headerButton}
 							onClick={handleNextView}
 						>
-							<Text inline size="sm">{`${
-								constants.availableViews.find((view) => view.id === currentView)
-									?.title
-							} view`}</Text>
+							<Text inline size="sm">{`${nextView?.title} view`}</Text>
 						</Button>
 
 						<Button
