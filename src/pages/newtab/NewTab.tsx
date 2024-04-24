@@ -51,11 +51,13 @@ export const NewTab = () => {
 					onNewCategoryClick={newCategoryModal.open}
 				/>
 
-				{categories?.length <= 0 && uncategorizedBookmarks?.length <= 0 ? (
+				{categories?.length <= 0 && uncategorizedBookmarks?.length <= 0 && (
 					<Text color="dimmed">
 						Click "add" button to add your first bookmark and category to this view.
 					</Text>
-				) : (
+				)}
+
+				{categories?.length > 0 && (
 					<Select
 						data={categories.map((category) => ({
 							value: category.id,

@@ -14,6 +14,22 @@ export const useExtensionSettings = () => {
 		const getExtensionSettings = async () => {
 			const storage = await chrome.storage.sync.get('extensionSettings');
 			if (storage?.extensionSettings) {
+				// This resets default category if for some reason the the extension root folder was removed somehow and the selected category doesn't really belong to Simple Start anymore
+				if (storage.extensionSettings?.defaultCategory !== '') {
+					const extensionRootId = (
+						await chrome.bookmarks.search({ title: 'simplestart' })
+					)?.[0]?.id;
+					const categoryDetails = (
+						await chrome.bookmarks.get(storage.extensionSettings.defaultCategory)
+					)?.[0];
+
+					if (categoryDetails?.parentId !== extensionRootId) {
+						await saveExtensionSettings({ defaultCategory: '' });
+						setViewLoading(false);
+						return;
+					}
+				}
+
 				setCurrentSettings({ ...currentSettings, ...storage.extensionSettings });
 			}
 			setViewLoading(false);
