@@ -42,7 +42,7 @@ export const NewTabHeader = ({ onNewBookmarkClick, onNewCategoryClick }: NewTabH
 									compact
 									className={classes.headerButton}
 								>
-									<Text size="sm" inline mt={3}>
+									<Text size="sm" inline>
 										Add
 									</Text>
 								</Button>
@@ -78,7 +78,7 @@ export const NewTabHeader = ({ onNewBookmarkClick, onNewCategoryClick }: NewTabH
 							className={classes.headerButton}
 							onClick={handleNextView}
 						>
-							<Text inline size="sm" mt={3}>{`${
+							<Text inline size="sm">{`${
 								constants.availableViews.find((view) => view.id === currentView)
 									?.title
 							} view`}</Text>
@@ -92,7 +92,7 @@ export const NewTabHeader = ({ onNewBookmarkClick, onNewCategoryClick }: NewTabH
 							className={classes.headerButton}
 							onClick={async () => await chrome.runtime.openOptionsPage()}
 						>
-							<Text inline size="sm" mt={3}>
+							<Text inline size="sm">
 								Settings
 							</Text>
 						</Button>
