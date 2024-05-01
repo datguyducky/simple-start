@@ -43,7 +43,7 @@ export const BookmarkForm = ({
 	onEditBookmark,
 	initialValues,
 }: BookmarkFormProps) => {
-	const { values, onSubmit, getInputProps, isValid } = useForm({
+	const { values, onSubmit, getInputProps, isValid, isDirty } = useForm({
 		initialValues: initialValues ?? {
 			bookmarkName: '',
 			bookmarkUrl: '',
@@ -167,7 +167,7 @@ export const BookmarkForm = ({
 			)}
 
 			<Group position="right">
-				<Button type="submit" disabled={!isValid()}>
+				<Button type="submit" disabled={!isValid() || !isDirty()}>
 					{mode === 'create' ? 'Create new bookmark' : 'Save changes'}
 				</Button>
 			</Group>

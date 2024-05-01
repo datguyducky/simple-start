@@ -26,7 +26,8 @@ type CapsulesSettingsFormProps = {
 };
 
 export const CapsulesSettingsForm = ({ openResetModal }: CapsulesSettingsFormProps) => {
-	const { extensionSettings, saveExtensionSettings } = useExtensionSettings();
+	const { extensionSettings, saveExtensionSettings, hasCapsuleSettingsChanged } =
+		useExtensionSettings();
 
 	const { getInputProps, setValues, onSubmit, values, resetDirty, isDirty, isValid } =
 		useForm<CapsuleSettings>({
@@ -47,6 +48,7 @@ export const CapsulesSettingsForm = ({ openResetModal }: CapsulesSettingsFormPro
 						? ''
 						: capsuleSettings.capsuleLabelColor,
 			});
+
 			resetDirty();
 		}
 	}, [extensionSettings]);
@@ -138,10 +140,14 @@ export const CapsulesSettingsForm = ({ openResetModal }: CapsulesSettingsFormPro
 			</SimpleGrid>
 
 			<Group position="center" sx={{ width: '100%', marginLeft: '-28px' }} mt={0}>
-				<Button variant="outline" onClick={openResetModal}>
+				<Button
+					variant="outline"
+					onClick={openResetModal}
+					disabled={!hasCapsuleSettingsChanged()}
+				>
 					Reset to default
 				</Button>
-				<Button type="submit" disabled={!isValid()}>
+				<Button type="submit" disabled={!isValid() || !isDirty()}>
 					Save
 				</Button>
 			</Group>

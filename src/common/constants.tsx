@@ -49,3 +49,17 @@ export const constants = {
 		{ id: 3, name: 'Wikipedia', url: 'https://wikipedia.org' },
 	],
 };
+
+export const defaultListSettings = Object.keys(constants.defaultExtensionSettings)
+	.filter((key) => key.startsWith('list'))
+	.reduce((obj, key) => {
+		obj[key] = constants.defaultExtensionSettings[key];
+		return obj;
+	}, {});
+
+export const defaultCapsuleSettings = Object.keys(constants.defaultExtensionSettings)
+	.filter((key) => key.startsWith('capsule'))
+	.reduce((obj, key) => {
+		obj[key] = constants.defaultExtensionSettings[key];
+		return obj;
+	}, {});

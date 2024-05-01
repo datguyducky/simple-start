@@ -27,9 +27,10 @@ type ListSettingsFormProps = {
 };
 
 export const ListSettingsForm = ({ openResetModal }: ListSettingsFormProps) => {
-	const { extensionSettings, saveExtensionSettings } = useExtensionSettings();
+	const { extensionSettings, saveExtensionSettings, hasListSettingsChanged } =
+		useExtensionSettings();
 
-	const { errors, getInputProps, setValues, onSubmit, values, resetDirty, isDirty, isValid } =
+	const { getInputProps, setValues, onSubmit, values, resetDirty, isDirty, isValid } =
 		useForm<ListSettings>({
 			validate: zodResolver(listSettingsSchema),
 			validateInputOnChange: true,
@@ -213,10 +214,14 @@ export const ListSettingsForm = ({ openResetModal }: ListSettingsFormProps) => {
 				</SimpleGrid>
 
 				<Group position="center" sx={{ width: '100%', marginLeft: '-28px' }} mt={0}>
-					<Button variant="outline" onClick={openResetModal}>
+					<Button
+						variant="outline"
+						onClick={openResetModal}
+						disabled={!hasListSettingsChanged()}
+					>
 						Reset to default
 					</Button>
-					<Button type="submit" disabled={!isValid()}>
+					<Button type="submit" disabled={!isValid() || !isDirty()}>
 						Save
 					</Button>
 				</Group>

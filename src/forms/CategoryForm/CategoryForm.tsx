@@ -31,7 +31,7 @@ export const CategoryForm = ({
 	editCategory,
 	initialValues,
 }: CategoryFormProps) => {
-	const { values, onSubmit, getInputProps, isValid } = useForm({
+	const { values, onSubmit, getInputProps, isValid, isDirty } = useForm({
 		initialValues: initialValues ?? {
 			categoryName: '',
 			defaultCategory: false,
@@ -114,7 +114,7 @@ export const CategoryForm = ({
 			/>
 
 			<Group position="right">
-				<Button type="submit" disabled={!isValid()}>
+				<Button type="submit" disabled={!isValid() || !isDirty()}>
 					{mode === 'create' ? 'Create new category' : 'Save changes'}
 				</Button>
 			</Group>
