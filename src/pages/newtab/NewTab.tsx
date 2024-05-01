@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { Text, Modal, Box, Select } from '@mantine/core';
-import { ChevronDownIcon } from '@heroicons/react/outline';
+import { IconChevronDown } from '@tabler/icons-react';
 
 import { Bookmarks } from '@components/Bookmarks';
 import { NewTabHeader } from '@components/NewTabHeader';
@@ -63,7 +63,7 @@ export const NewTab = () => {
 							value: category.id,
 							label: category.title,
 						}))}
-						rightSection={<ChevronDownIcon style={{ width: 18, height: 18 }} />}
+						rightSection={<IconChevronDown size={18} />}
 						variant="unstyled"
 						classNames={{
 							root: classes.selectRoot,

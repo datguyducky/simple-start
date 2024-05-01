@@ -1,5 +1,5 @@
 import { Box, Group, Stack, Text } from '@mantine/core';
-import { PlusIcon } from '@heroicons/react/solid';
+import { IconPlus } from '@tabler/icons-react';
 
 import { useExtensionTheme } from '@hooks/useExtensionTheme';
 
@@ -90,7 +90,7 @@ export const ThemeSection = () => {
 						}
 					>
 						<Box className={cx(classes.colorBox, classes.customAdd)}>
-							<PlusIcon style={{ width: 32, height: 32 }} />
+							<IconPlus size={32} />
 						</Box>
 
 						<Text size="sm" align="center">

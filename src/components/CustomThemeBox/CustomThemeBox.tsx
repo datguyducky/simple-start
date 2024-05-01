@@ -1,6 +1,6 @@
 import React from 'react';
 import { ActionIcon, Box, Stack, Text } from '@mantine/core';
-import { PencilAltIcon, TrashIcon } from '@heroicons/react/solid';
+import { IconEdit, IconTrash } from '@tabler/icons-react';
 
 import { useCustomThemeBoxStyles } from './CustomThemeBox.styles';
 
@@ -44,7 +44,7 @@ export const CustomThemeBox = ({
 						variant="filled"
 						className={classes.removeAction}
 					>
-						<TrashIcon style={{ width: 14, height: 14 }} />
+						<IconTrash size={14} />
 					</ActionIcon>
 
 					<ActionIcon
@@ -58,7 +58,7 @@ export const CustomThemeBox = ({
 						color="blue"
 						className={classes.editAction}
 					>
-						<PencilAltIcon style={{ width: 14, height: 14 }} />
+						<IconEdit size={14} />
 					</ActionIcon>
 				</Stack>
 			</Box>
