@@ -1,4 +1,5 @@
 import { useCallback, useLayoutEffect, useEffect, useState } from 'react';
+import { CustomTheme, CustomThemeColors } from '@extensionTypes/customTheme';
 
 type UseExtensionThemeProps = {
 	key: string;
@@ -6,8 +7,8 @@ type UseExtensionThemeProps = {
 };
 
 export const useExtensionTheme = ({ key, defaultValue = 'light' }: UseExtensionThemeProps) => {
-	const [localTheme, setLocalTheme] = useState();
-	const [localCustomThemes, setLocalCustomThemes] = useState<Record<string, unknown>[]>([]);
+	const [localTheme, setLocalTheme] = useState<string | undefined>();
+	const [localCustomThemes, setLocalCustomThemes] = useState<CustomTheme[]>([]);
 
 	// getting theme from browser storage on page load
 	useLayoutEffect(() => {
@@ -23,12 +24,12 @@ export const useExtensionTheme = ({ key, defaultValue = 'light' }: UseExtensionT
 				setLocalTheme(undefined);
 			}
 		};
-		getStorageTheme();
+		void getStorageTheme();
 	}, []);
 
 	// retrieved all saved custom themes on load
 	useLayoutEffect(() => {
-		getSavedCustomThemes();
+		void getSavedCustomThemes();
 	}, []);
 
 	// every custom theme starts with a "created-theme" key, we filter them all here and add key as object "name" property
@@ -42,8 +43,8 @@ export const useExtensionTheme = ({ key, defaultValue = 'light' }: UseExtensionT
 	};
 
 	// save theme in browser storage and state
-	const setLocalStorageValue = useCallback((val: any) => {
-		chrome.storage.sync.set({ [key]: val });
+	const setLocalStorageValue = useCallback((val: string) => {
+		void chrome.storage.sync.set({ [key]: val });
 		setLocalTheme(val);
 	}, []);
 
@@ -67,9 +68,8 @@ export const useExtensionTheme = ({ key, defaultValue = 'light' }: UseExtensionT
 		return () => chrome.storage.onChanged.removeListener(syncSavedCustomThemes);
 	}, []);
 
-	// todo: proper type for colors object
 	// saving custom theme in browser sync storage and in state for local use
-	const saveCustomTheme = async (name: string, themeColors: Record<string, any>) => {
+	const saveCustomTheme = async (name: string, themeColors: CustomThemeColors) => {
 		const formattedName = `created-theme-${name
 			.match(/[A-Z]{2,}(?=[A-Z][a-z]+[0-9]*|\b)|[A-Z]?[a-z]+[0-9]*|[A-Z]|[0-9]+/g)!
 			.map((x) => x.toLowerCase())
@@ -88,7 +88,7 @@ export const useExtensionTheme = ({ key, defaultValue = 'light' }: UseExtensionT
 	const editCustomTheme = async (
 		name: string,
 		oldName: string,
-		themeColors: Record<string, any>,
+		themeColors: CustomThemeColors,
 	) => {
 		const formattedName = `created-theme-${name
 			.match(/[A-Z]{2,}(?=[A-Z][a-z]+[0-9]*|\b)|[A-Z]?[a-z]+[0-9]*|[A-Z]|[0-9]+/g)!

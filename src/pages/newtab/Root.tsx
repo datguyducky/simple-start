@@ -6,6 +6,7 @@ import { NewTab } from './NewTab';
 import { useExtensionTheme } from '@hooks/useExtensionTheme';
 
 import { ExtensionSettingsProvider } from '../../context/extensionSettings';
+import { ExtensionProvider } from '../../context/extensionRoot';
 
 import { themeColors } from '../../themeColors';
 import { themeComponents } from '../../themeComponents';
@@ -26,7 +27,7 @@ export const Root = () => {
 					? name !== undefined
 						? selectedCustomTheme
 						: themeColors['light']
-					: themeColors[theme]),
+					: (themeColors as any)[theme as string]),
 				primaryColor:
 					theme === 'dark' || theme === 'light' || name === undefined
 						? 'blue'
@@ -44,9 +45,11 @@ export const Root = () => {
 				})}
 			/>
 
-			<NotificationsProvider position="top-right">
+			<NotificationsProvider position="top-center">
 				<ExtensionSettingsProvider>
-					<NewTab />
+					<ExtensionProvider>
+						<NewTab />
+					</ExtensionProvider>
 				</ExtensionSettingsProvider>
 			</NotificationsProvider>
 		</MantineProvider>

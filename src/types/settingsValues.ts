@@ -29,4 +29,5 @@ export interface ListSettings {
 	listIconSize: number;
 	listNameSize: number;
 	listUrlSize: number;
+	listUseStrippedRows: boolean;
 }

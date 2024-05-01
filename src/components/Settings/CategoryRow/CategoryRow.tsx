@@ -1,26 +1,38 @@
 import React from 'react';
 import { ActionIcon, Group, Text } from '@mantine/core';
-import { PencilAltIcon, TrashIcon } from '@heroicons/react/solid';
+import { IconGripVertical, IconEdit, IconTrash } from '@tabler/icons-react';
 
 type CategoryRowProps = {
 	name: string;
 	onRemoveAction?: () => void;
 	onEditAction?: () => void;
+	isBeingMoved?: boolean;
 };
 
-export const CategoryRow = ({ name, onRemoveAction, onEditAction }: CategoryRowProps) => {
+export const CategoryRow = ({
+	name,
+	onRemoveAction,
+	onEditAction,
+	...otherProps
+}: CategoryRowProps) => {
 	return (
-		<Group position="apart" spacing={0}>
-			<Text
-				sx={{
-					maxWidth: '90%',
-					textOverflow: 'ellipsis',
-					overflow: 'hidden',
-					whiteSpace: 'nowrap',
-				}}
-			>
-				{name}
-			</Text>
+		<Group position="apart" spacing={0} {...otherProps}>
+			<Group>
+				<div {...otherProps}>
+					<IconGripVertical size={16} />
+				</div>
+
+				<Text
+					sx={{
+						maxWidth: '90%',
+						textOverflow: 'ellipsis',
+						overflow: 'hidden',
+						whiteSpace: 'nowrap',
+					}}
+				>
+					{name}
+				</Text>
+			</Group>
 
 			<Group spacing={8}>
 				{onRemoveAction && (
@@ -32,7 +44,7 @@ export const CategoryRow = ({ name, onRemoveAction, onEditAction }: CategoryRowP
 						}}
 						component="span"
 					>
-						<TrashIcon style={{ width: 14, height: 14 }} />
+						<IconTrash size={16} />
 					</ActionIcon>
 				)}
 				{onEditAction && (
@@ -44,7 +56,7 @@ export const CategoryRow = ({ name, onRemoveAction, onEditAction }: CategoryRowP
 						component="span"
 						sx={(theme) => ({ color: theme.colors.text })}
 					>
-						<PencilAltIcon style={{ width: 14, height: 14 }} />
+						<IconEdit size={16} />
 					</ActionIcon>
 				)}
 			</Group>

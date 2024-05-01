@@ -1,12 +1,12 @@
 import { Box, Group, Stack, Text } from '@mantine/core';
-import { PlusIcon } from '@heroicons/react/solid';
+import { IconPlus } from '@tabler/icons-react';
 
 import { useExtensionTheme } from '@hooks/useExtensionTheme';
 
 import { ModalCustomTheme } from '@modals/ModalCustomTheme';
 import { ModalRemoveCustomTheme } from '@modals/ModalRemoveCustomTheme';
 import { useModal } from '@hooks/useModal';
-
+import { CustomTheme } from '@extensionTypes/customTheme';
 import { CustomThemeBox } from '@components/CustomThemeBox';
 
 import { useThemeSectionStyles } from './ThemeSection.styles';
@@ -52,7 +52,6 @@ export const ThemeSection = () => {
 
 					{customThemes &&
 						customThemes.map((customThemeData) => {
-							// todo: types for name and background
 							const customThemeName = customThemeData.name
 								.replace('created-theme-', '')
 								.replace(/-/g, ' ');
@@ -91,7 +90,7 @@ export const ThemeSection = () => {
 						}
 					>
 						<Box className={cx(classes.colorBox, classes.customAdd)}>
-							<PlusIcon style={{ width: 32, height: 32 }} />
+							<IconPlus size={32} />
 						</Box>
 
 						<Text size="sm" align="center">
@@ -107,7 +106,7 @@ export const ThemeSection = () => {
 				title="Add new custom theme"
 				saveCustomTheme={saveCustomTheme}
 				mode={customThemeModal?.args?.mode as 'edit' | 'create'}
-				initialValues={customThemeModal?.args?.data as Record<string, unknown>}
+				initialValues={customThemeModal?.args?.data as CustomTheme}
 				editCustomTheme={editCustomTheme}
 			/>
 

@@ -1,5 +1,5 @@
 import { Button, Grid, Group, Menu, Title, Text } from '@mantine/core';
-import { BookmarkIcon, CogIcon, CollectionIcon, PlusIcon } from '@heroicons/react/outline';
+import { IconPlus, IconBookmark, IconBoxMultiple, IconSettings } from '@tabler/icons-react';
 
 import { constants } from '@common/constants';
 
@@ -16,6 +16,10 @@ export const NewTabHeader = ({ onNewBookmarkClick, onNewCategoryClick }: NewTabH
 	const { classes } = useNewTabHeaderStyles();
 
 	const { currentView, handleNextView, viewLoading } = useExtensionSettings();
+
+	const currentViewIndex = constants.availableViews.findIndex((view) => view.id === currentView);
+	const nextView =
+		constants.availableViews[(currentViewIndex + 1) % constants.availableViews.length];
 
 	return (
 		<Grid columns={3} style={{ marginBottom: 32 }}>
@@ -38,11 +42,11 @@ export const NewTabHeader = ({ onNewBookmarkClick, onNewCategoryClick }: NewTabH
 							<Menu.Target>
 								<Button
 									variant="subtle"
-									leftIcon={<PlusIcon style={{ width: 18, height: 18 }} />}
+									leftIcon={<IconPlus size={18} />}
 									compact
 									className={classes.headerButton}
 								>
-									<Text size="sm" inline mt={3}>
+									<Text size="sm" inline>
 										Add
 									</Text>
 								</Button>
@@ -50,7 +54,7 @@ export const NewTabHeader = ({ onNewBookmarkClick, onNewCategoryClick }: NewTabH
 
 							<Menu.Dropdown>
 								<Menu.Item
-									icon={<BookmarkIcon style={{ width: 14, height: 14 }} />}
+									icon={<IconBookmark size={14} />}
 									className={classes.headerButton}
 									onClick={onNewBookmarkClick}
 								>
@@ -58,7 +62,7 @@ export const NewTabHeader = ({ onNewBookmarkClick, onNewCategoryClick }: NewTabH
 								</Menu.Item>
 
 								<Menu.Item
-									icon={<CollectionIcon style={{ width: 14, height: 14 }} />}
+									icon={<IconBoxMultiple size={14} />}
 									className={classes.headerButton}
 									onClick={onNewCategoryClick}
 								>
@@ -69,30 +73,24 @@ export const NewTabHeader = ({ onNewBookmarkClick, onNewCategoryClick }: NewTabH
 
 						<Button
 							variant="subtle"
-							leftIcon={
-								constants.availableViews.find((view) => view.id === currentView)
-									?.icon
-							}
+							leftIcon={nextView?.icon}
 							compact
 							color="dark"
 							className={classes.headerButton}
 							onClick={handleNextView}
 						>
-							<Text inline size="sm" mt={3}>{`${
-								constants.availableViews.find((view) => view.id === currentView)
-									?.title
-							} view`}</Text>
+							<Text inline size="sm">{`${nextView?.title} view`}</Text>
 						</Button>
 
 						<Button
 							variant="subtle"
-							leftIcon={<CogIcon style={{ width: 18, height: 18 }} />}
+							leftIcon={<IconSettings size={18} />}
 							compact
 							color="dark"
 							className={classes.headerButton}
 							onClick={async () => await chrome.runtime.openOptionsPage()}
 						>
-							<Text inline size="sm" mt={3}>
+							<Text inline size="sm">
 								Settings
 							</Text>
 						</Button>

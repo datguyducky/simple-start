@@ -1,15 +1,15 @@
-import { MenuIcon, ServerIcon } from '@heroicons/react/outline';
+import { IconCapsuleHorizontal, IconMenu2 } from '@tabler/icons-react';
 
 export const constants = {
 	availableViews: [
 		{
 			id: 1,
-			icon: <ServerIcon style={{ width: 18, height: 18 }} />,
+			icon: <IconCapsuleHorizontal size={18} />,
 			title: 'Capsules',
 		},
 		{
 			id: 3,
-			icon: <MenuIcon style={{ width: 18, height: 18 }} />,
+			icon: <IconMenu2 size={18} />,
 			title: 'List',
 		},
 	],
@@ -41,6 +41,7 @@ export const constants = {
 		listIconSize: 24,
 		listNameSize: 16,
 		listUrlSize: 14,
+		listUseStrippedRows: false,
 	},
 	exampleBookmarks: [
 		{ id: 1, name: 'Duckduckgo', url: 'https://duckduckgo.com' },
@@ -48,3 +49,17 @@ export const constants = {
 		{ id: 3, name: 'Wikipedia', url: 'https://wikipedia.org' },
 	],
 };
+
+export const defaultListSettings = Object.keys(constants.defaultExtensionSettings)
+	.filter((key) => key.startsWith('list'))
+	.reduce((obj, key) => {
+		obj[key] = constants.defaultExtensionSettings[key];
+		return obj;
+	}, {});
+
+export const defaultCapsuleSettings = Object.keys(constants.defaultExtensionSettings)
+	.filter((key) => key.startsWith('capsule'))
+	.reduce((obj, key) => {
+		obj[key] = constants.defaultExtensionSettings[key];
+		return obj;
+	}, {});

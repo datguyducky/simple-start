@@ -31,5 +31,14 @@ module.exports = {
 		'import/prefer-default-export': 'off',
 		'no-console': 'warn',
 		quotes: ['error', 'single'],
+		'no-unused-vars': 'off',
+		'@typescript-eslint/no-unused-vars': [
+			'warn',
+			{
+				argsIgnorePattern: '^_',
+				varsIgnorePattern: '^_',
+				caughtErrorsIgnorePattern: '^_',
+			},
+		],
 	},
 };

@@ -10,7 +10,7 @@ import {
 	Divider,
 	Box,
 } from '@mantine/core';
-import { useForm } from '@mantine/form';
+import { useForm, zodResolver } from '@mantine/form';
 
 import { constants } from '@common/constants';
 import { CapsuleSettings } from '@extensionTypes/settingsValues';
@@ -19,16 +19,21 @@ import { useExtensionSettings } from '@hooks/useExtensionSettings';
 
 import { BookmarkCapsule } from '@components/BookmarkCapsule';
 import { showNotification } from '@mantine/notifications';
+import { capsulesSettingsSchema } from '@validation/capsulesSettingsSchema';
 
 type CapsulesSettingsFormProps = {
 	openResetModal: () => void;
 };
 
 export const CapsulesSettingsForm = ({ openResetModal }: CapsulesSettingsFormProps) => {
-	const { extensionSettings, saveExtensionSettings } = useExtensionSettings();
+	const { extensionSettings, saveExtensionSettings, hasCapsuleSettingsChanged } =
+		useExtensionSettings();
 
-	const { getInputProps, setValues, onSubmit, values, resetDirty, isDirty } =
-		useForm<CapsuleSettings>();
+	const { getInputProps, setValues, onSubmit, values, resetDirty, isDirty, isValid } =
+		useForm<CapsuleSettings>({
+			validate: zodResolver(capsulesSettingsSchema),
+			validateInputOnChange: true,
+		});
 
 	useEffect(() => {
 		if (extensionSettings) {
@@ -43,6 +48,7 @@ export const CapsulesSettingsForm = ({ openResetModal }: CapsulesSettingsFormPro
 						? ''
 						: capsuleSettings.capsuleLabelColor,
 			});
+
 			resetDirty();
 		}
 	}, [extensionSettings]);
@@ -85,7 +91,7 @@ export const CapsulesSettingsForm = ({ openResetModal }: CapsulesSettingsFormPro
 
 					<NumberInput label="Favicon size" {...getInputProps('capsuleIconSize')} />
 
-					<Group>
+					<Group align="flex-start">
 						<NumberInput label="Labels size" {...getInputProps('capsuleLabelSize')} />
 
 						<ColorInput
@@ -134,10 +140,16 @@ export const CapsulesSettingsForm = ({ openResetModal }: CapsulesSettingsFormPro
 			</SimpleGrid>
 
 			<Group position="center" sx={{ width: '100%', marginLeft: '-28px' }} mt={0}>
-				<Button variant="outline" onClick={openResetModal}>
+				<Button
+					variant="outline"
+					onClick={openResetModal}
+					disabled={!hasCapsuleSettingsChanged()}
+				>
 					Reset to default
 				</Button>
-				<Button type="submit">Save</Button>
+				<Button type="submit" disabled={!isValid() || !isDirty()}>
+					Save
+				</Button>
 			</Group>
 		</Box>
 	);

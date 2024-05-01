@@ -1,15 +1,33 @@
 import { ActionIcon, Group, Text } from '@mantine/core';
-import { PencilAltIcon, TrashIcon } from '@heroicons/react/solid';
+import { IconEdit, IconTrash } from '@tabler/icons-react';
+import { useHover } from '@mantine/hooks';
 
 type BookmarkRowProps = {
 	name: string;
 	onRemoveAction?: () => void;
 	onEditAction?: () => void;
+	isBeingMoved?: boolean;
 };
 
-export const BookmarkRow = ({ name, onRemoveAction, onEditAction }: BookmarkRowProps) => {
+export const BookmarkRow = ({
+	name,
+	onRemoveAction,
+	onEditAction,
+	isBeingMoved,
+}: BookmarkRowProps) => {
+	const { hovered, ref } = useHover();
+
 	return (
-		<Group position="apart" spacing={0}>
+		<Group
+			position="apart"
+			spacing={0}
+			ref={ref}
+			sx={(theme) => ({
+				padding: '8px 16px',
+				backgroundColor:
+					hovered || isBeingMoved ? theme.colors.background[2] : 'transparent',
+			})}
+		>
 			<Text
 				sx={{
 					maxWidth: '90%',
@@ -24,7 +42,7 @@ export const BookmarkRow = ({ name, onRemoveAction, onEditAction }: BookmarkRowP
 			<Group spacing={8}>
 				{onRemoveAction && (
 					<ActionIcon color="red" onClick={onRemoveAction} component="span">
-						<TrashIcon style={{ width: 14, height: 14 }} />
+						<IconTrash size={14} />
 					</ActionIcon>
 				)}
 				{onEditAction && (
@@ -35,7 +53,7 @@ export const BookmarkRow = ({ name, onRemoveAction, onEditAction }: BookmarkRowP
 							color: theme.colors.text,
 						})}
 					>
-						<PencilAltIcon style={{ width: 14, height: 14 }} />
+						<IconEdit size={14} />
 					</ActionIcon>
 				)}
 			</Group>

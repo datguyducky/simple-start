@@ -6,6 +6,7 @@ import { Settings } from './Settings';
 import { useExtensionTheme } from '@hooks/useExtensionTheme';
 
 import { ExtensionSettingsProvider } from '../../context/extensionSettings';
+import { ExtensionProvider } from '../../context/extensionRoot';
 
 import { themeColors } from '../../themeColors';
 import { themeComponents } from '../../themeComponents';
@@ -43,9 +44,11 @@ export const Root = () => {
 					},
 				})}
 			/>
-			<NotificationsProvider position="top-right">
+			<NotificationsProvider position="top-center">
 				<ExtensionSettingsProvider>
-					<Settings />
+					<ExtensionProvider>
+						<Settings />
+					</ExtensionProvider>
 				</ExtensionSettingsProvider>
 			</NotificationsProvider>
 		</MantineProvider>

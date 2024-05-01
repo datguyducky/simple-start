@@ -45,12 +45,13 @@ export const Bookmarks = ({ bookmarks }: BookmarksProps) => {
 				spacing={extensionSettings.listSpacing}
 				className={classes.bookmarksListWrap}
 			>
-				{bookmarks.map((bookmark) => (
+				{bookmarks.map((bookmark, index) => (
 					<BookmarkListRow
 						key={bookmark.id}
 						title={bookmark.title}
 						url={bookmark.url}
 						settings={extensionSettings}
+						isOdd={index % 2 === 0}
 					/>
 				))}
 			</Stack>

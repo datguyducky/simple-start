@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { Text, Modal, Box, Select } from '@mantine/core';
-import { ChevronDownIcon } from '@heroicons/react/outline';
+import { IconChevronDown } from '@tabler/icons-react';
 
 import { Bookmarks } from '@components/Bookmarks';
 import { NewTabHeader } from '@components/NewTabHeader';
@@ -51,17 +51,19 @@ export const NewTab = () => {
 					onNewCategoryClick={newCategoryModal.open}
 				/>
 
-				{categories?.length <= 0 && uncategorizedBookmarks?.length <= 0 ? (
+				{categories?.length <= 0 && uncategorizedBookmarks?.length <= 0 && (
 					<Text color="dimmed">
 						Click "add" button to add your first bookmark and category to this view.
 					</Text>
-				) : (
+				)}
+
+				{categories?.length > 0 && (
 					<Select
 						data={categories.map((category) => ({
 							value: category.id,
 							label: category.title,
 						}))}
-						rightSection={<ChevronDownIcon style={{ width: 18, height: 18 }} />}
+						rightSection={<IconChevronDown size={18} />}
 						variant="unstyled"
 						classNames={{
 							root: classes.selectRoot,

@@ -2,6 +2,8 @@ import { createStyles } from '@mantine/core';
 
 export const useCategoriesBookmarksSectionStyles = createStyles((theme) => ({
 	categoriesAccordionItem: {
+		backgroundColor: 'transparent',
+
 		'&[data-active] .mantine-Accordion-control': {
 			backgroundColor: theme.colors.background[1],
 			borderBottom: `1px solid ${theme.colors.background[3]}`,
@@ -16,9 +18,7 @@ export const useCategoriesBookmarksSectionStyles = createStyles((theme) => ({
 		paddingBottom: 8,
 		paddingRight: 11,
 
-		'& > div': {
-			marginBottom: 8,
-		},
+		padding: 0,
 	},
 
 	categoriesAccordionChevron: {
