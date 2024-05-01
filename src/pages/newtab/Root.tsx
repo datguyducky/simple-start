@@ -6,6 +6,7 @@ import { NewTab } from './NewTab';
 import { useExtensionTheme } from '@hooks/useExtensionTheme';
 
 import { ExtensionSettingsProvider } from '../../context/extensionSettings';
+import { ExtensionProvider } from '../../context/extensionRoot';
 
 import { themeColors } from '../../themeColors';
 import { themeComponents } from '../../themeComponents';
@@ -46,7 +47,9 @@ export const Root = () => {
 
 			<NotificationsProvider position="top-center">
 				<ExtensionSettingsProvider>
-					<NewTab />
+					<ExtensionProvider>
+						<NewTab />
+					</ExtensionProvider>
 				</ExtensionSettingsProvider>
 			</NotificationsProvider>
 		</MantineProvider>

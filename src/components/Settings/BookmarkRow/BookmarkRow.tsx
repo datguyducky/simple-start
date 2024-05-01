@@ -6,9 +6,15 @@ type BookmarkRowProps = {
 	name: string;
 	onRemoveAction?: () => void;
 	onEditAction?: () => void;
+	isBeingMoved?: boolean;
 };
 
-export const BookmarkRow = ({ name, onRemoveAction, onEditAction }: BookmarkRowProps) => {
+export const BookmarkRow = ({
+	name,
+	onRemoveAction,
+	onEditAction,
+	isBeingMoved,
+}: BookmarkRowProps) => {
 	const { hovered, ref } = useHover();
 
 	return (
@@ -18,7 +24,8 @@ export const BookmarkRow = ({ name, onRemoveAction, onEditAction }: BookmarkRowP
 			ref={ref}
 			sx={(theme) => ({
 				padding: '8px 16px',
-				backgroundColor: hovered ? theme.colors.background[2] : 'transparent',
+				backgroundColor:
+					hovered || isBeingMoved ? theme.colors.background[2] : 'transparent',
 			})}
 		>
 			<Text
