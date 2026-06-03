@@ -1,87 +1,139 @@
-import { useCallback, useLayoutEffect, useEffect, useState } from 'react';
-import { CustomTheme, CustomThemeColors } from '@extensionTypes/customTheme';
+import { useCallback, useEffect, useLayoutEffect, useState } from 'react';
+import { browser } from 'wxt/browser';
+
+import {
+	type CustomTheme,
+	type CustomThemeColors,
+	type CustomThemesByName,
+} from '@/types/customTheme';
+import {
+	customThemesMigrationStorage,
+	customThemesStorage,
+	simpleStartThemeStorage,
+} from '@/storage/extensionStorage';
 
 type UseExtensionThemeProps = {
-	key: string;
 	defaultValue?: string;
 };
 
-export const useExtensionTheme = ({ key, defaultValue = 'light' }: UseExtensionThemeProps) => {
+type StoredCustomTheme = {
+	colors: CustomThemeColors;
+};
+
+const isStoredCustomTheme = (value: unknown): value is StoredCustomTheme => {
+	return typeof value === 'object' && value !== null && 'colors' in value;
+};
+
+const formatCustomThemeName = (name: string) => {
+	const nameParts =
+		name.match(/[A-Z]{2,}(?=[A-Z][a-z]+[0-9]*|\b)|[A-Z]?[a-z]+[0-9]*|[A-Z]|[0-9]+/g) ?? [];
+
+	if (nameParts.length === 0) {
+		throw new Error('INVALID_CUSTOM_THEME_NAME');
+	}
+
+	return `created-theme-${nameParts.map((x) => x.toLowerCase()).join('-')}`;
+};
+
+const removeCustomThemeFromRecord = (
+	customThemes: CustomThemesByName,
+	themeName: string,
+): CustomThemesByName => {
+	return Object.fromEntries(Object.entries(customThemes).filter(([name]) => name !== themeName));
+};
+
+export const useExtensionTheme = ({ defaultValue = 'light' }: UseExtensionThemeProps = {}) => {
 	const [localTheme, setLocalTheme] = useState<string | undefined>();
 	const [localCustomThemes, setLocalCustomThemes] = useState<CustomTheme[]>([]);
 
-	// getting theme from browser storage on page load
-	useLayoutEffect(() => {
-		const getStorageTheme = async () => {
-			if (typeof window === 'undefined') {
-				return defaultValue;
+	const migrateLegacyCustomThemes = useCallback(async () => {
+		const migrationCompleted = await customThemesMigrationStorage.getValue();
+		if (migrationCompleted) {
+			return;
+		}
+
+		const currentCustomThemes = await customThemesStorage.getValue();
+		const legacyStorage = await browser.storage.sync.get();
+		const legacyCustomThemes: CustomThemesByName = {};
+
+		for (const [storageKey, value] of Object.entries(legacyStorage)) {
+			if (!storageKey.startsWith('created-theme-') || !isStoredCustomTheme(value)) {
+				continue;
 			}
 
-			const storedTheme = await chrome.storage.sync.get(key);
-			if (Object.values(storedTheme).length > 0) {
-				setLocalTheme(storedTheme[key]);
-			} else {
-				setLocalTheme(undefined);
-			}
+			legacyCustomThemes[storageKey] = {
+				name: storageKey,
+				colors: value.colors,
+			};
+		}
+
+		if (Object.keys(legacyCustomThemes).length > 0) {
+			const migratedCustomThemes: CustomThemesByName = {
+				...legacyCustomThemes,
+				...currentCustomThemes,
+			};
+
+			await customThemesStorage.setValue(migratedCustomThemes);
+			await browser.storage.sync.remove(Object.keys(legacyCustomThemes));
+		}
+
+		await customThemesMigrationStorage.setValue(true);
+	}, []);
+
+	const loadSavedCustomThemes = useCallback(async () => {
+		const customThemes = await customThemesStorage.getValue();
+		setLocalCustomThemes(Object.values(customThemes));
+	}, []);
+
+	const loadSavedTheme = useCallback(async () => {
+		const savedTheme = await simpleStartThemeStorage.getValue();
+		setLocalTheme(savedTheme);
+	}, []);
+
+	useLayoutEffect(() => {
+		const initializeCustomThemes = async () => {
+			await loadSavedTheme();
+			await migrateLegacyCustomThemes();
+			await loadSavedCustomThemes();
 		};
-		void getStorageTheme();
+
+		void initializeCustomThemes();
 	}, []);
 
-	// retrieved all saved custom themes on load
-	useLayoutEffect(() => {
-		void getSavedCustomThemes();
-	}, []);
-
-	// every custom theme starts with a "created-theme" key, we filter them all here and add key as object "name" property
-	const getSavedCustomThemes = async () => {
-		const customThemes = await chrome.storage.sync.get();
-		setLocalCustomThemes(
-			Object.entries(customThemes)
-				.filter(([key]) => key.includes('created-theme'))
-				.map(([key, object]) => ({ name: key, ...object })),
-		);
-	};
-
-	// save theme in browser storage and state
 	const setLocalStorageValue = useCallback((val: string) => {
-		void chrome.storage.sync.set({ [key]: val });
+		void simpleStartThemeStorage.setValue(val);
 		setLocalTheme(val);
 	}, []);
 
-	const syncSavedCustomThemes = async (changes: any) => {
-		const createdThemeKey = Object.keys(changes).find((key) => key.includes('created-theme'));
-
-		// when existing was edited or a new one was added then we call a function to retrieve updated themes in storage
-		// and store them in local state - this will also sync the changes between all the tabs of the extension
-		if (createdThemeKey) {
-			await getSavedCustomThemes();
-		}
-
-		if (changes?.simpleStartTheme) {
-			setLocalTheme(changes.simpleStartTheme.newValue);
-		}
-	};
-
-	// making sure that theme is correctly updated also on other tabs that are currently opened
 	useEffect(() => {
-		chrome.storage.onChanged.addListener(syncSavedCustomThemes);
-		return () => chrome.storage.onChanged.removeListener(syncSavedCustomThemes);
+		const unwatchTheme = simpleStartThemeStorage.watch((newTheme) => {
+			setLocalTheme(newTheme);
+		});
+
+		const unwatchCustomThemes = customThemesStorage.watch((newCustomThemes) => {
+			setLocalCustomThemes(Object.values(newCustomThemes));
+		});
+
+		return () => {
+			unwatchTheme();
+			unwatchCustomThemes();
+		};
 	}, []);
 
-	// saving custom theme in browser sync storage and in state for local use
 	const saveCustomTheme = async (name: string, themeColors: CustomThemeColors) => {
-		const formattedName = `created-theme-${name
-			.match(/[A-Z]{2,}(?=[A-Z][a-z]+[0-9]*|\b)|[A-Z]?[a-z]+[0-9]*|[A-Z]|[0-9]+/g)!
-			.map((x) => x.toLowerCase())
-			.join('-')}`;
+		const formattedName = formatCustomThemeName(name);
+		const customThemes = await customThemesStorage.getValue();
 
-		const isExistingTheme = await chrome.storage.sync.get(formattedName);
-		if (Object.values(isExistingTheme).length > 0) {
+		if (Object.hasOwn(customThemes, formattedName)) {
 			throw new Error('CUSTOM_THEME_EXISTS');
 		}
 
-		await chrome.storage.sync.set({
-			[formattedName]: { colors: themeColors },
+		await customThemesStorage.setValue({
+			...customThemes,
+			[formattedName]: {
+				name: formattedName,
+				colors: themeColors,
+			},
 		});
 	};
 
@@ -90,45 +142,41 @@ export const useExtensionTheme = ({ key, defaultValue = 'light' }: UseExtensionT
 		oldName: string,
 		themeColors: CustomThemeColors,
 	) => {
-		const formattedName = `created-theme-${name
-			.match(/[A-Z]{2,}(?=[A-Z][a-z]+[0-9]*|\b)|[A-Z]?[a-z]+[0-9]*|[A-Z]|[0-9]+/g)!
-			.map((x) => x.toLowerCase())
-			.join('-')}`;
+		const formattedName = formatCustomThemeName(name);
+		const customThemes = await customThemesStorage.getValue();
 
-		const isExistingTheme = await chrome.storage.sync.get(formattedName);
-		if (Object.values(isExistingTheme).length > 0 && formattedName !== oldName) {
+		if (Object.hasOwn(customThemes, formattedName) && formattedName !== oldName) {
 			throw new Error('CUSTOM_THEME_EXISTS');
 		}
 
-		// creating or updating theme by passed named
-		await chrome.storage.sync.set({
-			[formattedName]: { colors: themeColors },
-		});
+		const updatedCustomThemes: CustomThemesByName = {
+			...removeCustomThemeFromRecord(customThemes, oldName),
+			[formattedName]: {
+				name: formattedName,
+				colors: themeColors,
+			},
+		};
 
-		// when edited theme was updated under a different name then we delete the old one from the storage
-		if (formattedName !== oldName) {
-			await chrome.storage.sync.remove(oldName);
+		await customThemesStorage.setValue(updatedCustomThemes);
 
-			// if current set theme is saved under a different one then we make sure that it's now set under the new name
-			if (oldName === localTheme) {
-				await chrome.storage.sync.set({ [key]: formattedName });
-			}
+		if (formattedName !== oldName && oldName === localTheme) {
+			await simpleStartThemeStorage.setValue(formattedName);
 		}
 	};
 
 	const removeCustomTheme = async (name: string) => {
 		try {
-			// removing selected theme for local (state) and from the extension storage
-			const newCustomThemes = localCustomThemes.filter((theme) => theme.name !== name);
-			setLocalCustomThemes(newCustomThemes);
+			const customThemes = await customThemesStorage.getValue();
+			const updatedCustomThemes = removeCustomThemeFromRecord(customThemes, name);
 
-			await chrome.storage.sync.remove(name);
+			setLocalCustomThemes(Object.values(updatedCustomThemes));
 
-			// when selected theme is removed and is currently set active then the extension theme is reset to "light" version
+			await customThemesStorage.setValue(updatedCustomThemes);
+
 			if (localTheme === name) {
 				setLocalStorageValue('light');
 			}
-		} catch (error) {
+		} catch (_error) {
 			throw new Error('SOMETHING_WENT_WRONG');
 		}
 	};

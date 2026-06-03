@@ -1,135 +1,200 @@
-import { useEffect, useState } from 'react';
-import BookmarkTreeNode = chrome.bookmarks.BookmarkTreeNode;
-import BookmarkChangeInfo = chrome.bookmarks.BookmarkChangeInfo;
-import BookmarkRemoveInfo = chrome.bookmarks.BookmarkRemoveInfo;
-import { useExtensionRoot } from '@hooks/useExtensionRoot';
-import { isChrome } from '../utils/isChrome';
+import { useCallback, useEffect, useState } from 'react';
+import { browser } from 'wxt/browser';
 
-// TODO: It starts to get really messy here, should be refactored a little bit - maybe even categories and bookmarks should be under one file?
-export const useExtensionBookmarks = ({ categoryId }: { categoryId?: string | null }) => {
+import { isChrome } from '../utils/isChrome';
+import { useExtensionRoot } from './useExtensionRoot';
+import {
+	findExtensionRoot,
+	getExtensionRootId as resolveExtensionRootId,
+} from '@/utils/extensionRoot';
+import {
+	type BookmarkChangeInfo,
+	type BookmarkMoveInfo,
+	type BookmarkRemoveInfo,
+	type BookmarkTreeNode,
+} from '@/types/browserExtend';
+
+type UseExtensionBookmarksProps = {
+	categoryId?: string | null;
+};
+
+type CreateBookmarkValues = {
+	name: string;
+	url: string;
+	bookmarkCategoryId?: string;
+};
+
+type EditBookmarkValues = {
+	id: string;
+	bookmarkName: string;
+	bookmarkUrl: string;
+	bookmarkCategoryId?: string;
+};
+
+export const useExtensionBookmarks = ({ categoryId }: UseExtensionBookmarksProps) => {
 	const [bookmarks, setBookmarks] = useState<BookmarkTreeNode[]>([]);
 	const [uncategorizedBookmarks, setUncategorizedBookmarks] = useState<BookmarkTreeNode[]>([]);
 	const { getExtensionTree, setExtensionTree, extensionRoot } = useExtensionRoot();
 
-	const retrieveCategoryBookmarks = async (category: string) => {
-		const categoryBookmarks = await chrome.bookmarks.getChildren(category);
+	const retrieveCategoryBookmarks = useCallback(async (category: string) => {
+		const categoryBookmarks = await browser.bookmarks.getChildren(category);
 		setBookmarks(categoryBookmarks);
-	};
+	}, []);
 
-	const retrieveExtensionRoot = async () => {
-		const extensionRoot = await chrome.bookmarks.search({ title: 'simplestart' });
-
-		if (extensionRoot?.length && extensionRoot?.length > 0) {
-			const extensionRootContent = await chrome.bookmarks.getChildren(extensionRoot[0].id);
-
-			setUncategorizedBookmarks(
-				extensionRootContent.filter((content) => content?.url !== undefined),
-			);
+	const retrieveExtensionRoot = useCallback(async () => {
+		const extensionRootFolder = await findExtensionRoot();
+		if (extensionRootFolder === null) {
+			setUncategorizedBookmarks([]);
+			return;
 		}
-	};
+
+		const extensionRootContent = await browser.bookmarks.getChildren(extensionRootFolder.id);
+
+		setUncategorizedBookmarks(
+			extensionRootContent.filter((content) => content.url !== undefined),
+		);
+	}, []);
+
+	const getExtensionRootId = useCallback(async () => {
+		return resolveExtensionRootId();
+	}, []);
 
 	useEffect(() => {
+		// Sync the local bookmark state with browser bookmarks when the hook mounts.
+		// eslint-disable-next-line react-hooks/set-state-in-effect
 		void retrieveExtensionRoot();
 	}, []);
 
 	useEffect(() => {
 		if (categoryId) {
+			// Sync the local bookmark state when the selected category changes.
+			// eslint-disable-next-line react-hooks/set-state-in-effect
 			void retrieveCategoryBookmarks(categoryId);
-		} else {
-			setBookmarks([]);
-		}
-	}, [categoryId]);
-
-	// making sure that edition of a bookmark is synced between tabs and views
-	const syncBookmarkChanges = async (id: string, changeInfo: BookmarkChangeInfo) => {
-		if (changeInfo?.url !== undefined) {
-			const updatedBookmarks = bookmarks.map((bookmark) =>
-				bookmark.id === id ? { ...bookmark, ...changeInfo } : bookmark,
-			);
-			const updatedUncategorizedBookmarks = uncategorizedBookmarks.map((bookmark) =>
-				bookmark.id === id ? { ...bookmark, ...changeInfo } : bookmark,
-			);
-
-			setBookmarks(updatedBookmarks);
-			setUncategorizedBookmarks(updatedUncategorizedBookmarks);
-			await getExtensionTree();
-		}
-	};
-
-	// making sure that deletion of a bookmark is synced between tabs and views
-	const syncBookmarkDeletion = async (id: string, removeInfo: BookmarkRemoveInfo) => {
-		if (removeInfo.node.url !== undefined) {
-			const cleanedBookmarks = bookmarks.filter((bookmark) => bookmark.id !== id);
-			const cleanedUncategorizedBookmarks = uncategorizedBookmarks.filter(
-				(uncategorizedBookmark) => uncategorizedBookmark.id !== id,
-			);
-
-			setBookmarks(cleanedBookmarks);
-			setUncategorizedBookmarks(cleanedUncategorizedBookmarks);
-			await getExtensionTree();
-		}
-	};
-
-	const syncBookmarkCreation = async (_id: string, bookmark: BookmarkTreeNode) => {
-		if (bookmark?.url !== undefined) {
-			const extensionRoot = (await chrome.bookmarks.search({ title: 'simplestart' }))?.[0];
-			if (extensionRoot?.id === bookmark.parentId) {
-				const updatedUncategorizedBookmarks = [...uncategorizedBookmarks, bookmark];
-				setUncategorizedBookmarks(updatedUncategorizedBookmarks);
-			} else {
-				const updatedBookmarks = [...bookmarks, bookmark];
-				setBookmarks(updatedBookmarks);
-			}
-
-			await getExtensionTree();
-		}
-	};
-
-	const syncBookmarkMove = async (id: string, moveInfo: chrome.bookmarks.BookmarkMoveInfo) => {
-		const item = await chrome.bookmarks.get(id);
-		if (!item?.[0]?.url) {
 			return;
 		}
 
-		if (extensionRoot?.id === moveInfo.parentId) {
-			await retrieveExtensionRoot();
-		} else {
-			await retrieveCategoryBookmarks(moveInfo.parentId);
-		}
+		setBookmarks([]);
+	}, [categoryId]);
 
-		await getExtensionTree();
-	};
+	const syncBookmarkChanges = useCallback(
+		async (id: string, changeInfo: BookmarkChangeInfo) => {
+			if (changeInfo.url === undefined) {
+				return;
+			}
+
+			setBookmarks((prevBookmarks) =>
+				prevBookmarks.map((bookmark) =>
+					bookmark.id === id ? { ...bookmark, ...changeInfo } : bookmark,
+				),
+			);
+
+			setUncategorizedBookmarks((prevUncategorizedBookmarks) =>
+				prevUncategorizedBookmarks.map((bookmark) =>
+					bookmark.id === id ? { ...bookmark, ...changeInfo } : bookmark,
+				),
+			);
+
+			await getExtensionTree();
+		},
+		[getExtensionTree],
+	);
+
+	const syncBookmarkDeletion = useCallback(
+		async (id: string, removeInfo: BookmarkRemoveInfo) => {
+			if (removeInfo.node.url === undefined) {
+				return;
+			}
+
+			setBookmarks((prevBookmarks) => prevBookmarks.filter((bookmark) => bookmark.id !== id));
+
+			setUncategorizedBookmarks((prevUncategorizedBookmarks) =>
+				prevUncategorizedBookmarks.filter((bookmark) => bookmark.id !== id),
+			);
+
+			await getExtensionTree();
+		},
+		[getExtensionTree],
+	);
+
+	const syncBookmarkCreation = useCallback(
+		async (_id: string, bookmark: BookmarkTreeNode) => {
+			if (bookmark.url === undefined) {
+				return;
+			}
+
+			const root = await findExtensionRoot();
+			const rootId = root === null ? null : root.id;
+
+			if (rootId === bookmark.parentId) {
+				setUncategorizedBookmarks((prevUncategorizedBookmarks) => [
+					...prevUncategorizedBookmarks,
+					bookmark,
+				]);
+			} else {
+				setBookmarks((prevBookmarks) => [...prevBookmarks, bookmark]);
+			}
+
+			await getExtensionTree();
+		},
+		[getExtensionTree],
+	);
+
+	const syncBookmarkMove = useCallback(
+		async (id: string, moveInfo: BookmarkMoveInfo) => {
+			const item = await browser.bookmarks.get(id);
+
+			if (!item[0]?.url) {
+				return;
+			}
+
+			if (extensionRoot?.id === moveInfo.parentId) {
+				await retrieveExtensionRoot();
+			} else {
+				await retrieveCategoryBookmarks(moveInfo.parentId);
+			}
+
+			await getExtensionTree();
+		},
+		[extensionRoot?.id, getExtensionTree, retrieveCategoryBookmarks, retrieveExtensionRoot],
+	);
 
 	useEffect(() => {
-		if (bookmarks?.length > 0 || uncategorizedBookmarks?.length > 0) {
-			chrome.bookmarks.onChanged.addListener(syncBookmarkChanges);
-			chrome.bookmarks.onCreated.addListener(syncBookmarkCreation);
-			chrome.bookmarks.onRemoved.addListener(syncBookmarkDeletion);
-			chrome.bookmarks.onMoved.addListener(syncBookmarkMove);
-			return () => {
-				chrome.bookmarks.onChanged.removeListener(syncBookmarkChanges);
-				chrome.bookmarks.onCreated.removeListener(syncBookmarkCreation);
-				chrome.bookmarks.onRemoved.removeListener(syncBookmarkDeletion);
-				chrome.bookmarks.onMoved.removeListener(syncBookmarkMove);
-			};
-		}
-	}, [bookmarks, uncategorizedBookmarks]);
+		const handleBookmarkChanges = (id: string, changeInfo: BookmarkChangeInfo) => {
+			void syncBookmarkChanges(id, changeInfo);
+		};
 
-	const createBookmark = async ({
-		name,
-		url,
-		bookmarkCategoryId,
-	}: {
-		name: string;
-		url: string;
-		bookmarkCategoryId?: string;
-	}) => {
-		const extensionRootFolder = await chrome.bookmarks.search({ title: 'simplestart' });
+		const handleBookmarkCreation = (id: string, bookmark: BookmarkTreeNode) => {
+			void syncBookmarkCreation(id, bookmark);
+		};
 
-		await chrome.bookmarks.create({
-			parentId: bookmarkCategoryId ? bookmarkCategoryId : extensionRootFolder[0].id,
+		const handleBookmarkDeletion = (id: string, removeInfo: BookmarkRemoveInfo) => {
+			void syncBookmarkDeletion(id, removeInfo);
+		};
+
+		const handleBookmarkMove = (id: string, moveInfo: BookmarkMoveInfo) => {
+			void syncBookmarkMove(id, moveInfo);
+		};
+
+		browser.bookmarks.onChanged.addListener(handleBookmarkChanges);
+		browser.bookmarks.onCreated.addListener(handleBookmarkCreation);
+		browser.bookmarks.onRemoved.addListener(handleBookmarkDeletion);
+		browser.bookmarks.onMoved.addListener(handleBookmarkMove);
+
+		return () => {
+			browser.bookmarks.onChanged.removeListener(handleBookmarkChanges);
+			browser.bookmarks.onCreated.removeListener(handleBookmarkCreation);
+			browser.bookmarks.onRemoved.removeListener(handleBookmarkDeletion);
+			browser.bookmarks.onMoved.removeListener(handleBookmarkMove);
+		};
+	}, [bookmarks.length, uncategorizedBookmarks.length]);
+
+	const createBookmark = async ({ name, url, bookmarkCategoryId }: CreateBookmarkValues) => {
+		const extensionRootId = await getExtensionRootId();
+
+		await browser.bookmarks.create({
+			parentId: bookmarkCategoryId ?? extensionRootId,
 			title: name,
-			url: url,
+			url,
 		});
 
 		if (categoryId) {
@@ -144,35 +209,32 @@ export const useExtensionBookmarks = ({ categoryId }: { categoryId?: string | nu
 		bookmarkName,
 		bookmarkUrl,
 		bookmarkCategoryId,
-	}: {
-		id: string;
-		bookmarkName: string;
-		bookmarkUrl: string;
-		bookmarkCategoryId?: string;
-	}) => {
-		await chrome.bookmarks.update(id, {
+	}: EditBookmarkValues) => {
+		await browser.bookmarks.update(id, {
 			title: bookmarkName,
 			url: bookmarkUrl,
 		});
 
 		if (bookmarkCategoryId) {
-			await chrome.bookmarks.move(id, {
+			await browser.bookmarks.move(id, {
 				parentId: bookmarkCategoryId,
 			});
-		} else {
-			const extensionRootFolder = await chrome.bookmarks.search({ title: 'simplestart' });
-			await chrome.bookmarks.move(id, {
-				parentId: extensionRootFolder[0]?.id,
-			});
+			return;
 		}
+
+		const extensionRootId = await getExtensionRootId();
+		await browser.bookmarks.move(id, {
+			parentId: extensionRootId,
+		});
 	};
 
 	const removeBookmark = async ({ id }: { id: string }) => {
-		const bookmarkDetails = await chrome.bookmarks.get(id);
+		const bookmarkDetails = await browser.bookmarks.get(id);
+		await browser.bookmarks.removeTree(id);
+		const parentId = bookmarkDetails[0]?.parentId;
 
-		await chrome.bookmarks.removeTree(id);
-		if (bookmarkDetails[0]?.parentId) {
-			await retrieveCategoryBookmarks(bookmarkDetails[0]?.parentId);
+		if (parentId) {
+			await retrieveCategoryBookmarks(parentId);
 		}
 	};
 
@@ -182,44 +244,55 @@ export const useExtensionBookmarks = ({ categoryId }: { categoryId?: string | nu
 		toIndex?: number,
 		isUncategorized?: boolean,
 	) => {
-		if (toIndex === undefined || toIndex === null || fromIndex === toIndex) {
+		if (toIndex === undefined || toIndex < 0 || fromIndex === toIndex) {
 			return;
 		}
 
-		// This is used so the changes are instantly visible in the UI - probably can be improved a little bit
+		// Update UI immediately, then persist the new order in browser bookmarks.
 		if (isUncategorized) {
 			setUncategorizedBookmarks((prevUncategorizedBookmarks) => {
-				if (prevUncategorizedBookmarks) {
-					const newUncategorizedBookmarks = [...prevUncategorizedBookmarks];
-					const movedBookmark = newUncategorizedBookmarks.splice(fromIndex, 1)[0];
-					newUncategorizedBookmarks.splice(toIndex, 0, movedBookmark);
-					return newUncategorizedBookmarks;
+				if (fromIndex < 0 || fromIndex >= prevUncategorizedBookmarks.length) {
+					return prevUncategorizedBookmarks;
 				}
-				return null;
+
+				const newUncategorizedBookmarks = [...prevUncategorizedBookmarks];
+				const [movedBookmark] = newUncategorizedBookmarks.splice(fromIndex, 1);
+
+				newUncategorizedBookmarks.splice(toIndex, 0, movedBookmark);
+				return newUncategorizedBookmarks;
 			});
 		} else {
 			setExtensionTree((prevExtensionTree) => {
-				if (prevExtensionTree) {
-					const newExtensionTree = [...prevExtensionTree];
-					const category = newExtensionTree.find((category) =>
-						category.bookmarks.some((bookmark) => bookmark.id === id),
-					);
-					if (category) {
-						const movedBookmark = category.bookmarks.splice(fromIndex, 1)[0];
-						category.bookmarks.splice(toIndex, 0, movedBookmark);
-					}
-					return newExtensionTree;
+				if (!prevExtensionTree) {
+					return null;
 				}
-				return null;
+
+				return prevExtensionTree.map((category) => {
+					if (!category.bookmarks.some((bookmark) => bookmark.id === id)) {
+						return category;
+					}
+
+					if (fromIndex < 0 || fromIndex >= category.bookmarks.length) {
+						return category;
+					}
+
+					const bookmarks = [...category.bookmarks];
+					const [movedBookmark] = bookmarks.splice(fromIndex, 1);
+
+					bookmarks.splice(toIndex, 0, movedBookmark);
+
+					return {
+						...category,
+						bookmarks,
+					};
+				});
 			});
 		}
 
-		if (fromIndex < toIndex && isChrome()) {
-			toIndex++;
-		}
+		const browserBookmarkIndex = fromIndex < toIndex && isChrome() ? toIndex + 1 : toIndex;
 
-		await chrome.bookmarks.move(id, {
-			index: toIndex,
+		await browser.bookmarks.move(id, {
+			index: browserBookmarkIndex,
 		});
 	};
 

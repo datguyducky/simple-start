@@ -25,3 +25,5 @@ export interface CustomTheme {
 	name: string;
 	colors: CustomThemeColors;
 }
+
+export type CustomThemesByName = Record<string, CustomTheme>;

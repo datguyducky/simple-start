@@ -1,4 +1,4 @@
-import React from 'react';
+import { type MouseEvent } from 'react';
 import { ActionIcon, Box, Stack, Text } from '@mantine/core';
 import { IconEdit, IconTrash } from '@tabler/icons-react';
 
@@ -35,7 +35,7 @@ export const CustomThemeBox = ({
 				<Stack className={classes.absoluteWrapper} spacing={2}>
 					<ActionIcon
 						color="red"
-						onClick={(event: React.MouseEvent<HTMLSpanElement, MouseEvent>) => {
+						onClick={(event: MouseEvent<HTMLSpanElement>) => {
 							event.stopPropagation();
 							onRemove();
 						}}
@@ -48,7 +48,7 @@ export const CustomThemeBox = ({
 					</ActionIcon>
 
 					<ActionIcon
-						onClick={(event: React.MouseEvent<HTMLSpanElement, MouseEvent>) => {
+						onClick={(event: MouseEvent<HTMLSpanElement>) => {
 							event.stopPropagation();
 							onEdit();
 						}}

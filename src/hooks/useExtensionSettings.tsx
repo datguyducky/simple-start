@@ -1,146 +1,172 @@
-import { useContext, useEffect, useLayoutEffect, useState } from 'react';
-import StorageChange = chrome.storage.StorageChange;
+import { useCallback, useContext, useEffect, useLayoutEffect, useState } from 'react';
+import { browser } from 'wxt/browser';
 
-import { constants, defaultCapsuleSettings, defaultListSettings } from '@common/constants';
-import { AllExtensionSettings, CapsuleSettings } from '@extensionTypes/settingsValues';
+import { constants, defaultCapsuleSettings, defaultListSettings } from '@/common/constants';
+import {
+	type AllExtensionSettings,
+	type CapsuleSettings,
+	type ListSettings,
+} from '@/types/settingsValues';
 
-import { ExtensionSettingsContext } from '../context/extensionSettings';
+import { ExtensionSettingsContext } from '@/context/ExtensionSettingsContext';
+import { extensionSettingsStorage } from '@/storage/extensionStorage';
+
+const isBookmarkNotFoundError = (error: unknown) => {
+	return error instanceof Error && error.message === "Can't find bookmark for id.";
+};
+
+const getCapsuleSettings = (settings: AllExtensionSettings): CapsuleSettings => ({
+	capsuleSpacing: settings.capsuleSpacing,
+	capsuleSize: settings.capsuleSize,
+	capsuleIconSize: settings.capsuleIconSize,
+	capsuleLabelSize: settings.capsuleLabelSize,
+	capsuleLabelItalic: settings.capsuleLabelItalic,
+	capsuleLabelBold: settings.capsuleLabelBold,
+	capsuleLabelColor: settings.capsuleLabelColor,
+	capsuleHiddenName: settings.capsuleHiddenName,
+});
+
+const getListSettings = (settings: AllExtensionSettings): ListSettings => ({
+	listHiddenName: settings.listHiddenName,
+	listHiddenUrl: settings.listHiddenUrl,
+	listNameItalic: settings.listNameItalic,
+	listNameBold: settings.listNameBold,
+	listUrlItalic: settings.listUrlItalic,
+	listUrlBold: settings.listUrlBold,
+	listUrlColor: settings.listUrlColor,
+	listNameColor: settings.listNameColor,
+	listVerticalPadding: settings.listVerticalPadding,
+	listHorizontalPadding: settings.listHorizontalPadding,
+	listSpacing: settings.listSpacing,
+	listIconSize: settings.listIconSize,
+	listNameSize: settings.listNameSize,
+	listUrlSize: settings.listUrlSize,
+	listUseStrippedRows: settings.listUseStrippedRows,
+});
+
+const hasCapsuleSettingsChangedFromDefault = (settings: CapsuleSettings) => {
+	return (
+		settings.capsuleSpacing !== defaultCapsuleSettings.capsuleSpacing ||
+		settings.capsuleSize !== defaultCapsuleSettings.capsuleSize ||
+		settings.capsuleIconSize !== defaultCapsuleSettings.capsuleIconSize ||
+		settings.capsuleLabelSize !== defaultCapsuleSettings.capsuleLabelSize ||
+		settings.capsuleLabelItalic !== defaultCapsuleSettings.capsuleLabelItalic ||
+		settings.capsuleLabelBold !== defaultCapsuleSettings.capsuleLabelBold ||
+		settings.capsuleLabelColor !== defaultCapsuleSettings.capsuleLabelColor ||
+		settings.capsuleHiddenName !== defaultCapsuleSettings.capsuleHiddenName
+	);
+};
+
+const hasListSettingsChangedFromDefault = (settings: ListSettings) => {
+	return (
+		settings.listHiddenName !== defaultListSettings.listHiddenName ||
+		settings.listHiddenUrl !== defaultListSettings.listHiddenUrl ||
+		settings.listNameItalic !== defaultListSettings.listNameItalic ||
+		settings.listNameBold !== defaultListSettings.listNameBold ||
+		settings.listUrlItalic !== defaultListSettings.listUrlItalic ||
+		settings.listUrlBold !== defaultListSettings.listUrlBold ||
+		settings.listUrlColor !== defaultListSettings.listUrlColor ||
+		settings.listNameColor !== defaultListSettings.listNameColor ||
+		settings.listVerticalPadding !== defaultListSettings.listVerticalPadding ||
+		settings.listHorizontalPadding !== defaultListSettings.listHorizontalPadding ||
+		settings.listSpacing !== defaultListSettings.listSpacing ||
+		settings.listIconSize !== defaultListSettings.listIconSize ||
+		settings.listNameSize !== defaultListSettings.listNameSize ||
+		settings.listUrlSize !== defaultListSettings.listUrlSize ||
+		settings.listUseStrippedRows !== defaultListSettings.listUseStrippedRows
+	);
+};
 
 export const useExtensionSettings = () => {
 	const { currentSettings, setCurrentSettings } = useContext(ExtensionSettingsContext);
 	const [viewLoading, setViewLoading] = useState<boolean>(true);
 
+	const saveExtensionSettings = useCallback(
+		async (newValues: Partial<AllExtensionSettings>) => {
+			const nextSettings = {
+				...currentSettings,
+				...newValues,
+			};
+
+			await extensionSettingsStorage.setValue(nextSettings);
+			setCurrentSettings(nextSettings);
+		},
+		[currentSettings],
+	);
+
 	useLayoutEffect(() => {
 		const getExtensionSettings = async () => {
-			const storage = await chrome.storage.sync.get('extensionSettings');
-			if (storage?.extensionSettings) {
-				// This resets default category if for some reason the the extension root folder was removed somehow and the selected category doesn't really belong to Simple Start anymore
-				if (storage.extensionSettings?.defaultCategory !== '') {
-					const extensionRootId = (
-						await chrome.bookmarks.search({ title: 'simplestart' })
-					)?.[0]?.id;
+			const storedSettings = await extensionSettingsStorage.getValue();
+			const defaultCategory = storedSettings.defaultCategory;
 
-					try {
-						const categoryDetails = (
-							await chrome.bookmarks.get(storage.extensionSettings.defaultCategory)
-						)?.[0];
+			if (typeof defaultCategory === 'string' && defaultCategory.length > 0) {
+				const extensionRootId = (
+					await browser.bookmarks.search({ title: 'simplestart' })
+				)[0]?.id;
 
-						if (categoryDetails?.parentId !== extensionRootId) {
-							await saveExtensionSettings({ defaultCategory: '' });
-							setViewLoading(false);
-							return;
-						}
-					} catch (e: any) {
-						if (e?.message === "Can't find bookmark for id.") {
-							await saveExtensionSettings({ defaultCategory: '' });
-							setViewLoading(false);
-							return;
-						}
+				try {
+					const categoryDetails = (await browser.bookmarks.get(defaultCategory))[0];
+
+					if (categoryDetails.parentId !== extensionRootId) {
+						await saveExtensionSettings({ defaultCategory: '' });
+						setViewLoading(false);
+						return;
 					}
-				}
+				} catch (error: unknown) {
+					if (isBookmarkNotFoundError(error)) {
+						await saveExtensionSettings({ defaultCategory: '' });
+						setViewLoading(false);
+						return;
+					}
 
-				setCurrentSettings({ ...currentSettings, ...storage.extensionSettings });
+					throw error;
+				}
 			}
+
+			setCurrentSettings(storedSettings);
 			setViewLoading(false);
 		};
 
+		// Sync extension settings from storage on initial load.
 		void getExtensionSettings();
 	}, []);
 
-	const handleSettingsChanged = (changes: { [key: string]: StorageChange }) => {
-		if (changes?.extensionSettings) {
-			setCurrentSettings(changes.extensionSettings.newValue);
-		}
-	};
-
 	useEffect(() => {
-		chrome.storage.onChanged.addListener(handleSettingsChanged);
-		return () => chrome.storage.onChanged.removeListener(handleSettingsChanged);
+		const unwatchSettings = extensionSettingsStorage.watch((newSettings) => {
+			setCurrentSettings(newSettings);
+		});
+
+		return () => {
+			unwatchSettings();
+		};
 	}, []);
 
 	const handleNextView = async () => {
 		const currentViewIndex = constants.availableViews.findIndex(
-			(view) => view.id === currentSettings?.currentView,
+			(view) => view.id === currentSettings.currentView,
 		);
 
-		// when switching from last view to another one - switch to the first view in an array
-		if (currentViewIndex === constants.availableViews.length - 1) {
-			await chrome.storage.sync.set({
-				extensionSettings: {
-					...currentSettings,
-					currentView: constants.availableViews[0].id,
-				},
-			});
+		const nextView =
+			currentViewIndex === constants.availableViews.length - 1
+				? constants.availableViews[0]
+				: constants.availableViews[currentViewIndex + 1];
 
-			setCurrentSettings((prevSettings) => ({
-				...prevSettings,
-				currentView: constants.availableViews[0].id,
-			}));
-		}
-		// next view in an array
-		else {
-			await chrome.storage.sync.set({
-				extensionSettings: {
-					...currentSettings,
-					currentView: constants.availableViews[currentViewIndex + 1].id,
-				},
-			});
-
-			setCurrentSettings((prevSettings) => ({
-				...prevSettings,
-				currentView: constants.availableViews[currentViewIndex + 1].id,
-			}));
-		}
-	};
-
-	// this is used to save settings for the extension, except the "currentView" one as that requires some extra logic to properly change it
-	const saveExtensionSettings = async (newValues: Partial<AllExtensionSettings>) => {
-		await chrome.storage.sync.set({
-			extensionSettings: {
-				...currentSettings,
-				...newValues,
-			},
+		await saveExtensionSettings({
+			currentView: nextView.id,
 		});
-
-		setCurrentSettings((prevSettings) => ({
-			...prevSettings,
-			...newValues,
-		}));
-	};
-
-	const hasSettingsChangedFromDefault = (
-		values: Record<string, unknown>,
-		type: 'list' | 'capsule',
-	) => {
-		const settings = type === 'list' ? defaultListSettings : defaultCapsuleSettings;
-
-		for (let key in values) {
-			if (values.hasOwnProperty(key) && values[key] !== settings[key]) {
-				return true;
-			}
-		}
-		return false;
 	};
 
 	const hasCapsuleSettingsChanged = () => {
-		const capsuleSettings = Object.fromEntries(
-			Object.entries(currentSettings).filter(([key]) => key.includes('capsule')),
-		) as CapsuleSettings;
-
-		return hasSettingsChangedFromDefault(capsuleSettings, 'capsule');
+		return hasCapsuleSettingsChangedFromDefault(getCapsuleSettings(currentSettings));
 	};
 
 	const hasListSettingsChanged = () => {
-		const listSettings = Object.fromEntries(
-			Object.entries(currentSettings).filter(([key]) => key.includes('list')),
-		) as CapsuleSettings;
-
-		return hasSettingsChangedFromDefault(listSettings, 'list');
+		return hasListSettingsChangedFromDefault(getListSettings(currentSettings));
 	};
 
 	return {
 		extensionSettings: currentSettings,
-		currentView: currentSettings?.currentView,
+		currentView: currentSettings.currentView,
 		handleNextView,
 		viewLoading,
 		saveExtensionSettings,

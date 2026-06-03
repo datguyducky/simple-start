@@ -11,15 +11,17 @@ import {
 	Box,
 } from '@mantine/core';
 import { useForm, zodResolver } from '@mantine/form';
-
-import { constants } from '@common/constants';
-import { CapsuleSettings } from '@extensionTypes/settingsValues';
-
-import { useExtensionSettings } from '@hooks/useExtensionSettings';
-
-import { BookmarkCapsule } from '@components/BookmarkCapsule';
 import { showNotification } from '@mantine/notifications';
-import { capsulesSettingsSchema } from '@validation/capsulesSettingsSchema';
+
+import { constants } from '@/common/constants';
+import { type CapsuleSettings } from '@/types/settingsValues';
+
+import { useExtensionSettings } from '@/hooks/useExtensionSettings';
+import { handleAsyncAction } from '@/utils/handleAsyncAction';
+import { wait } from '@/utils/wait';
+
+import { BookmarkCapsule } from '@/components/BookmarkCapsule';
+import { capsulesSettingsSchema } from '@/validation/capsulesSettingsSchema';
 
 type CapsulesSettingsFormProps = {
 	openResetModal: () => void;
@@ -36,7 +38,7 @@ export const CapsulesSettingsForm = ({ openResetModal }: CapsulesSettingsFormPro
 		});
 
 	useEffect(() => {
-		if (extensionSettings) {
+		if (Object.keys(extensionSettings).length) {
 			const capsuleSettings = Object.fromEntries(
 				Object.entries(extensionSettings).filter(([key]) => key.includes('capsule')),
 			) as CapsuleSettings;
@@ -53,29 +55,28 @@ export const CapsulesSettingsForm = ({ openResetModal }: CapsulesSettingsFormPro
 		}
 	}, [extensionSettings]);
 
-	const handleSaveExtensionSettings = async (formValues: typeof values) => {
-		if (isDirty()) {
-			setTimeout(async () => {
-				try {
-					await saveExtensionSettings(formValues);
-
-					showNotification({
-						color: 'dark',
-						message: 'Settings for capsule view were successfully saved!',
-						autoClose: 3000,
-					});
-				} catch (error) {
-					showNotification({
-						color: 'red',
-						title: 'Settings could not be saved!',
-						message: 'Sorry, but something went wrong, please try again.',
-						autoClose: 5000,
-					});
-				}
-			}, 600);
-
-			resetDirty();
+	const handleSaveExtensionSettings = (formValues: typeof values) => {
+		if (!isDirty()) {
+			return;
 		}
+
+		handleAsyncAction(
+			async () => {
+				await wait(600);
+				await saveExtensionSettings(formValues);
+
+				showNotification({
+					color: 'dark',
+					message: 'Settings for capsule view were successfully saved!',
+					autoClose: 3000,
+				});
+			},
+			{
+				errorTitle: 'Settings could not be saved!',
+			},
+		);
+
+		resetDirty();
 	};
 
 	return (
@@ -131,7 +132,7 @@ export const CapsulesSettingsForm = ({ openResetModal }: CapsulesSettingsFormPro
 							<BookmarkCapsule
 								key={bookmark.id}
 								title={bookmark.name}
-								url={bookmark?.url}
+								url={bookmark.url}
 								settings={values}
 							/>
 						))}

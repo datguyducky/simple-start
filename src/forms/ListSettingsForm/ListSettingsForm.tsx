@@ -12,15 +12,17 @@ import {
 	Divider,
 } from '@mantine/core';
 import { useForm, zodResolver } from '@mantine/form';
-
-import { ListSettings } from '@extensionTypes/settingsValues';
-
-import { useExtensionSettings } from '@hooks/useExtensionSettings';
-
 import { showNotification } from '@mantine/notifications';
-import { constants } from '@common/constants';
-import { BookmarkListRow } from '@components/BookmarkListRow';
-import { listSettingsSchema } from '@validation/ListSettingsSchema';
+
+import { type ListSettings } from '@/types/settingsValues';
+
+import { useExtensionSettings } from '@/hooks/useExtensionSettings';
+import { handleAsyncAction } from '@/utils/handleAsyncAction';
+import { wait } from '@/utils/wait';
+
+import { constants } from '@/common/constants';
+import { BookmarkListRow } from '@/components/BookmarkListRow';
+import { listSettingsSchema } from '@/validation/ListSettingsSchema';
 
 type ListSettingsFormProps = {
 	openResetModal: () => void;
@@ -37,7 +39,7 @@ export const ListSettingsForm = ({ openResetModal }: ListSettingsFormProps) => {
 		});
 
 	useEffect(() => {
-		if (extensionSettings) {
+		if (Object.keys(extensionSettings).length) {
 			const listSettings = Object.fromEntries(
 				Object.entries(extensionSettings).filter(([key]) => key.includes('list')),
 			) as ListSettings;
@@ -52,29 +54,28 @@ export const ListSettingsForm = ({ openResetModal }: ListSettingsFormProps) => {
 		}
 	}, [extensionSettings]);
 
-	const handleSaveExtensionSettings = async (formValues: typeof values) => {
-		if (isDirty()) {
-			setTimeout(async () => {
-				try {
-					await saveExtensionSettings(formValues);
-
-					showNotification({
-						color: 'dark',
-						message: 'Settings for list view were successfully saved!',
-						autoClose: 3000,
-					});
-				} catch (error) {
-					showNotification({
-						color: 'red',
-						title: 'Settings could not be saved!',
-						message: 'Sorry, but something went wrong, please try again.',
-						autoClose: 5000,
-					});
-				}
-			}, 600);
-
-			resetDirty();
+	const handleSaveExtensionSettings = (formValues: typeof values) => {
+		if (!isDirty()) {
+			return;
 		}
+
+		handleAsyncAction(
+			async () => {
+				await wait(600);
+				await saveExtensionSettings(formValues);
+
+				showNotification({
+					color: 'dark',
+					message: 'Settings for list view were successfully saved!',
+					autoClose: 3000,
+				});
+			},
+			{
+				errorTitle: 'Settings could not be saved!',
+			},
+		);
+
+		resetDirty();
 	};
 
 	return (

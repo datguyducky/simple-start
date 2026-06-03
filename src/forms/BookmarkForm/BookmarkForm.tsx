@@ -2,9 +2,11 @@ import { Button, Group, Select, Text, TextInput } from '@mantine/core';
 import { useForm, zodResolver } from '@mantine/form';
 import { showNotification } from '@mantine/notifications';
 
-import { useExtensionCategories } from '@hooks/useExtensionCategories';
+import { useExtensionCategories } from '@/hooks/useExtensionCategories';
 
-import { bookmarkSchema } from '@validation/bookmarkSchema';
+import { bookmarkSchema } from '@/validation/bookmarkSchema';
+import { handleAsyncAction } from '@/utils/handleAsyncAction';
+import { wait } from '@/utils/wait';
 
 export type BookmarkValues = {
 	id: string;
@@ -12,6 +14,8 @@ export type BookmarkValues = {
 	bookmarkUrl: string;
 	bookmarkCategoryId?: string;
 };
+
+type BookmarkFormValues = Omit<BookmarkValues, 'id'>;
 
 type BookmarkFormProps = {
 	onClose: () => void;
@@ -43,7 +47,7 @@ export const BookmarkForm = ({
 	onEditBookmark,
 	initialValues,
 }: BookmarkFormProps) => {
-	const { values, onSubmit, getInputProps, isValid, isDirty } = useForm({
+	const { onSubmit, getInputProps, isValid, isDirty } = useForm<BookmarkFormValues>({
 		initialValues: initialValues ?? {
 			bookmarkName: '',
 			bookmarkUrl: '',
@@ -54,74 +58,74 @@ export const BookmarkForm = ({
 
 	const { categories } = useExtensionCategories();
 
-	const handleCreateNewBookmark = (formValues: typeof values) => {
-		if (createNewBookmark) {
-			const categoryName = categories.find(
-				(category) => category.id === formValues.bookmarkCategoryId,
-			)?.title;
-
-			setTimeout(async () => {
-				try {
-					await createNewBookmark({
-						name: formValues.bookmarkName,
-						url: formValues.bookmarkUrl,
-						bookmarkCategoryId: categoryName
-							? formValues.bookmarkCategoryId
-							: undefined,
-					});
-
-					showNotification({
-						color: 'dark',
-						title: categoryName
-							? 'Bookmark was successfully added!'
-							: `The ${formValues.bookmarkName} bookmark was successfully added!`,
-						message: categoryName
-							? `The ${formValues.bookmarkName} bookmark was added to the ${categoryName} category.`
-							: undefined,
-						autoClose: 3000,
-					});
-				} catch (error) {
-					showNotification({
-						color: 'red',
-						title: 'A new bookmark could not be created!',
-						message: 'Sorry, but something went wrong, please try again.',
-						autoClose: 5000,
-					});
-				}
-			}, 600);
-			onClose(); // close modal with the form
+	const handleCreateNewBookmark = (formValues: BookmarkFormValues) => {
+		if (!createNewBookmark) {
+			return;
 		}
+
+		const categoryName = categories.find(
+			(category) => category.id === formValues.bookmarkCategoryId,
+		)?.title;
+
+		onClose();
+
+		handleAsyncAction(
+			async () => {
+				await wait(600);
+				await createNewBookmark({
+					name: formValues.bookmarkName,
+					url: formValues.bookmarkUrl,
+					bookmarkCategoryId: categoryName ? formValues.bookmarkCategoryId : undefined,
+				});
+
+				showNotification({
+					color: 'dark',
+					title: categoryName
+						? 'Bookmark was successfully added!'
+						: `The ${formValues.bookmarkName} bookmark was successfully added!`,
+					message: categoryName
+						? `The ${formValues.bookmarkName} bookmark was added to the ${categoryName} category.`
+						: undefined,
+					autoClose: 3000,
+				});
+			},
+			{
+				errorTitle: 'A new bookmark could not be created!',
+				errorMessage: 'Sorry, but something went wrong, please try again.',
+			},
+		);
 	};
 
-	const handleEditBookmark = (formValues: typeof values) => {
-		if (editBookmark && initialValues) {
-			setTimeout(async () => {
-				try {
-					await editBookmark({
-						id: initialValues.id,
-						bookmarkName: formValues.bookmarkName,
-						bookmarkUrl: formValues.bookmarkUrl,
-						bookmarkCategoryId: formValues?.bookmarkCategoryId,
-					});
-
-					onEditBookmark && onEditBookmark();
-
-					showNotification({
-						color: 'dark',
-						message: `The ${formValues.bookmarkName} bookmark was successfully edited!`,
-						autoClose: 3000,
-					});
-				} catch (error) {
-					showNotification({
-						color: 'red',
-						title: 'This bookmark can not be edited!',
-						message: 'Sorry, but something went wrong, please try again.',
-						autoClose: 5000,
-					});
-				}
-			}, 500);
-			onClose(); // hide modal
+	const handleEditBookmark = (formValues: BookmarkFormValues) => {
+		if (!editBookmark || !initialValues) {
+			return;
 		}
+
+		onClose();
+
+		handleAsyncAction(
+			async () => {
+				await wait(500);
+				await editBookmark({
+					id: initialValues.id,
+					bookmarkName: formValues.bookmarkName,
+					bookmarkUrl: formValues.bookmarkUrl,
+					bookmarkCategoryId: formValues.bookmarkCategoryId,
+				});
+
+				onEditBookmark?.();
+
+				showNotification({
+					color: 'dark',
+					message: `The ${formValues.bookmarkName} bookmark was successfully edited!`,
+					autoClose: 3000,
+				});
+			},
+			{
+				errorTitle: 'This bookmark could not be edited!',
+				errorMessage: 'Sorry, but something went wrong, please try again.',
+			},
+		);
 	};
 
 	return (

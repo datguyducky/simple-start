@@ -3,17 +3,17 @@
  * - "background":
  * 		[0] - main background color
  * 		[1] - color for bookmarks cards (list and capsules), also used for accordion (opened title, closed)
- * 		[2] - hover, select and borders
- * 		[3] - another borders (mostly accordion) and also hover on ActionIcons
+ * 		[2] - hover, select, and borders
+ * 		[3] - other borders (mostly accordion) and also hover on ActionIcons
  * 		[4] - inputs border color
  * 		[5] - "nothing found" for the Select and input placeholders
  * 		[6] - "dimmed" text color, and Select chevron color
  * 		[7] - color for up and down icon on the Select component
- * 		[8] - looks like is not used for now
- * 		[9] - looks like is not used for now
+ * 		[8] - it looks like it is not used for now
+ * 		[9] - it looks like it is not used for now
  *
- * 	- "primary" - 10 shades of a color, used for buttons, checkboxes, highlights etc.,
- * 	basically as name suggests a primary color of the extension.
+ * 	- "primary" - 10 shades of a color, used for buttons, checkboxes, highlights, etc.,
+ * 	basically as the name suggests a primary color of the extension.
  * 	NOT used for pre-defined "light" and "dark" themes (there we use Mantine's built-in blue color)
  *
  * - "text" - main text color

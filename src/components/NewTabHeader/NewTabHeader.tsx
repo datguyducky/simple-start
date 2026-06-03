@@ -1,11 +1,12 @@
 import { Button, Grid, Group, Menu, Title, Text } from '@mantine/core';
 import { IconPlus, IconBookmark, IconBoxMultiple, IconSettings } from '@tabler/icons-react';
+import { browser } from 'wxt/browser';
 
-import { constants } from '@common/constants';
-
-import { useExtensionSettings } from '@hooks/useExtensionSettings';
+import { constants } from '@/common/constants';
 
 import { useNewTabHeaderStyles } from './NewTabHeader.styles';
+import { useExtensionSettings } from '@/hooks/useExtensionSettings';
+import { handleAsyncAction } from '@/utils/handleAsyncAction';
 
 type NewTabHeaderProps = {
 	onNewBookmarkClick: () => void;
@@ -20,6 +21,18 @@ export const NewTabHeader = ({ onNewBookmarkClick, onNewCategoryClick }: NewTabH
 	const currentViewIndex = constants.availableViews.findIndex((view) => view.id === currentView);
 	const nextView =
 		constants.availableViews[(currentViewIndex + 1) % constants.availableViews.length];
+
+	const handleNextViewClick = () => {
+		handleAsyncAction(handleNextView, {
+			errorTitle: 'View could not be changed',
+		});
+	};
+
+	const handleSettingsClick = () => {
+		handleAsyncAction(browser.runtime.openOptionsPage, {
+			errorTitle: 'Settings could not be opened',
+		});
+	};
 
 	return (
 		<Grid columns={3} style={{ marginBottom: 32 }}>
@@ -73,13 +86,13 @@ export const NewTabHeader = ({ onNewBookmarkClick, onNewCategoryClick }: NewTabH
 
 						<Button
 							variant="subtle"
-							leftIcon={nextView?.icon}
+							leftIcon={nextView.icon}
 							compact
 							color="dark"
 							className={classes.headerButton}
-							onClick={handleNextView}
+							onClick={handleNextViewClick}
 						>
-							<Text inline size="sm">{`${nextView?.title} view`}</Text>
+							<Text inline size="sm">{`${nextView.title} view`}</Text>
 						</Button>
 
 						<Button
@@ -88,7 +101,7 @@ export const NewTabHeader = ({ onNewBookmarkClick, onNewCategoryClick }: NewTabH
 							compact
 							color="dark"
 							className={classes.headerButton}
-							onClick={async () => await chrome.runtime.openOptionsPage()}
+							onClick={handleSettingsClick}
 						>
 							<Text inline size="sm">
 								Settings
