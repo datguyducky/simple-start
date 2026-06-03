@@ -1,12 +1,10 @@
 import { Stack, Group } from '@mantine/core';
-import BookmarkTreeNode = chrome.bookmarks.BookmarkTreeNode;
 
-import { constants } from '@common/constants';
-
-import { useExtensionSettings } from '@hooks/useExtensionSettings';
-
-import { BookmarkCapsule } from '../BookmarkCapsule';
-import { BookmarkListRow } from '../BookmarkListRow';
+import { constants } from '@/common/constants';
+import { BookmarkCapsule } from '@/components/BookmarkCapsule';
+import { BookmarkListRow } from '@/components/BookmarkListRow';
+import { useExtensionSettings } from '@/hooks/useExtensionSettings';
+import { BookmarkTreeNode } from '@/types/browserExtend';
 
 import { useBookmarksStyles } from './Bookmarks.styles';
 
@@ -30,7 +28,7 @@ export const Bookmarks = ({ bookmarks }: BookmarksProps) => {
 					<BookmarkCapsule
 						key={bookmark.id}
 						title={bookmark.title}
-						url={bookmark?.url}
+						url={bookmark.url}
 						settings={extensionSettings}
 					/>
 				))}

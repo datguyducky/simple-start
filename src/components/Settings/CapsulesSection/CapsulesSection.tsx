@@ -1,45 +1,35 @@
 import { Button, Text, Group, Modal, SimpleGrid, Box } from '@mantine/core';
-
-import { constants } from '@common/constants';
-
-import { useExtensionSettings } from '@hooks/useExtensionSettings';
-import { useModal } from '@hooks/useModal';
-
 import { showNotification } from '@mantine/notifications';
-import { CapsulesSettingsForm } from '@forms/CapsulesSettingsForm';
+
+import { defaultCapsuleSettings } from '@/common/constants';
+import { CapsulesSettingsForm } from '@/forms/CapsulesSettingsForm';
+import { useExtensionSettings } from '@/hooks/useExtensionSettings';
+import { useModal } from '@/hooks/useModal';
+import { handleAsyncAction } from '@/utils/handleAsyncAction';
+import { wait } from '@/utils/wait';
 
 export const CapsulesSection = () => {
 	const { saveExtensionSettings } = useExtensionSettings();
-
 	const resetCapsuleSettingsModal = useModal();
 
-	const handleResetSettings = async () => {
-		const defaultValues = Object.fromEntries(
-			Object.entries(constants.defaultExtensionSettings).filter(([key]) =>
-				key.includes('capsule'),
-			),
-		);
+	const handleResetSettings = () => {
+		resetCapsuleSettingsModal.close();
 
-		setTimeout(async () => {
-			try {
-				await saveExtensionSettings(defaultValues);
+		handleAsyncAction(
+			async () => {
+				await wait(600);
+				await saveExtensionSettings(defaultCapsuleSettings);
 
 				showNotification({
 					color: 'dark',
 					message: 'Capsule view settings have been reset to their default values!',
 					autoClose: 3000,
 				});
-			} catch (error) {
-				showNotification({
-					color: 'red',
-					title: 'Settings could not be reset!',
-					message: 'Sorry, but something went wrong, please try again.',
-					autoClose: 5000,
-				});
-			}
-		}, 600);
-
-		resetCapsuleSettingsModal.close(); // hide modal
+			},
+			{
+				errorTitle: 'Settings could not be reset!',
+			},
+		);
 	};
 
 	return (
@@ -61,7 +51,7 @@ export const CapsulesSection = () => {
 				size="lg"
 			>
 				<Text mb={16}>
-					Are you sure you want to reset settings for the capsule view? This action can't
+					Are you sure you want to reset settings for the capsule view? This action cannot
 					be undone and all your custom settings will be replaced by the default values!
 				</Text>
 
@@ -69,7 +59,9 @@ export const CapsulesSection = () => {
 					<Button
 						variant="outline"
 						color="gray"
-						onClick={() => resetCapsuleSettingsModal.close()}
+						onClick={() => {
+							resetCapsuleSettingsModal.close();
+						}}
 					>
 						Cancel
 					</Button>

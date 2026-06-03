@@ -1,4 +1,4 @@
-import React from 'react';
+import { type MouseEvent } from 'react';
 import { ActionIcon, Group, Text } from '@mantine/core';
 import { IconGripVertical, IconEdit, IconTrash } from '@tabler/icons-react';
 
@@ -38,7 +38,7 @@ export const CategoryRow = ({
 				{onRemoveAction && (
 					<ActionIcon
 						color="red"
-						onClick={(event: React.MouseEvent<HTMLSpanElement, MouseEvent>) => {
+						onClick={(event: MouseEvent<HTMLSpanElement>) => {
 							event.stopPropagation();
 							onRemoveAction();
 						}}
@@ -49,7 +49,7 @@ export const CategoryRow = ({
 				)}
 				{onEditAction && (
 					<ActionIcon
-						onClick={(event: React.MouseEvent<HTMLSpanElement, MouseEvent>) => {
+						onClick={(event: MouseEvent<HTMLSpanElement>) => {
 							event.stopPropagation();
 							onEditAction();
 						}}

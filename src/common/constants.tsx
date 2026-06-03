@@ -1,6 +1,30 @@
 import { IconCapsuleHorizontal, IconMenu2 } from '@tabler/icons-react';
 
-export const constants = {
+import {
+	type AllExtensionSettings,
+	type CapsuleSettings,
+	type ListSettings,
+} from '@/types/settingsValues';
+
+type AvailableView = {
+	id: number;
+	icon: JSX.Element;
+	title: 'Capsules' | 'List';
+};
+
+type ExampleBookmark = {
+	id: number;
+	name: string;
+	url: string;
+};
+
+type Constants = {
+	availableViews: AvailableView[];
+	defaultExtensionSettings: AllExtensionSettings;
+	exampleBookmarks: ExampleBookmark[];
+};
+
+export const constants: Constants = {
 	availableViews: [
 		{
 			id: 1,
@@ -50,16 +74,31 @@ export const constants = {
 	],
 };
 
-export const defaultListSettings = Object.keys(constants.defaultExtensionSettings)
-	.filter((key) => key.startsWith('list'))
-	.reduce((obj, key) => {
-		obj[key] = constants.defaultExtensionSettings[key];
-		return obj;
-	}, {});
+export const defaultListSettings: ListSettings = {
+	listHiddenName: constants.defaultExtensionSettings.listHiddenName,
+	listHiddenUrl: constants.defaultExtensionSettings.listHiddenUrl,
+	listNameItalic: constants.defaultExtensionSettings.listNameItalic,
+	listNameBold: constants.defaultExtensionSettings.listNameBold,
+	listUrlItalic: constants.defaultExtensionSettings.listUrlItalic,
+	listUrlBold: constants.defaultExtensionSettings.listUrlBold,
+	listUrlColor: constants.defaultExtensionSettings.listUrlColor,
+	listNameColor: constants.defaultExtensionSettings.listNameColor,
+	listVerticalPadding: constants.defaultExtensionSettings.listVerticalPadding,
+	listHorizontalPadding: constants.defaultExtensionSettings.listHorizontalPadding,
+	listSpacing: constants.defaultExtensionSettings.listSpacing,
+	listIconSize: constants.defaultExtensionSettings.listIconSize,
+	listNameSize: constants.defaultExtensionSettings.listNameSize,
+	listUrlSize: constants.defaultExtensionSettings.listUrlSize,
+	listUseStrippedRows: constants.defaultExtensionSettings.listUseStrippedRows,
+};
 
-export const defaultCapsuleSettings = Object.keys(constants.defaultExtensionSettings)
-	.filter((key) => key.startsWith('capsule'))
-	.reduce((obj, key) => {
-		obj[key] = constants.defaultExtensionSettings[key];
-		return obj;
-	}, {});
+export const defaultCapsuleSettings: CapsuleSettings = {
+	capsuleSpacing: constants.defaultExtensionSettings.capsuleSpacing,
+	capsuleSize: constants.defaultExtensionSettings.capsuleSize,
+	capsuleIconSize: constants.defaultExtensionSettings.capsuleIconSize,
+	capsuleLabelSize: constants.defaultExtensionSettings.capsuleLabelSize,
+	capsuleLabelItalic: constants.defaultExtensionSettings.capsuleLabelItalic,
+	capsuleLabelBold: constants.defaultExtensionSettings.capsuleLabelBold,
+	capsuleLabelColor: constants.defaultExtensionSettings.capsuleLabelColor,
+	capsuleHiddenName: constants.defaultExtensionSettings.capsuleHiddenName,
+};

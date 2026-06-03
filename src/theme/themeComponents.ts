@@ -9,8 +9,8 @@ export const themeComponents: MantineThemeOverride = {
 				},
 
 				// fix for Select component of having a horizontal scroll after upgrading to v5
-				// + normal styling for selected and hovered component, and a little bit hacky way
-				// to style selected components that's also hovered
+				// + normal styling for selected and hovered components, and a little bit hacky way
+				// to style selected components that are also hovered
 				item: {
 					borderRadius: 0,
 					color: theme.colors.text,
@@ -78,7 +78,7 @@ export const themeComponents: MantineThemeOverride = {
 			}),
 		},
 		Input: {
-			styles: (theme, params) => ({
+			styles: (theme, params: Record<string, unknown>) => ({
 				input: {
 					backgroundColor:
 						params.variant === 'unstyled' ? 'transparent' : theme.colors.background[0],
@@ -100,7 +100,7 @@ export const themeComponents: MantineThemeOverride = {
 			}),
 		},
 		NumberInput: {
-			styles: (theme, params) => ({
+			styles: (theme, params: Record<string, unknown>) => ({
 				control: {
 					borderColor:
 						params.variant === 'unstyled' ? 'transparent' : theme.colors.background[4],
@@ -145,7 +145,7 @@ export const themeComponents: MantineThemeOverride = {
 			}),
 		},
 		Text: {
-			styles: (theme, params) => ({
+			styles: (theme, params?: Record<string, unknown>) => ({
 				root: {
 					color:
 						params?.color === 'dimmed' ? theme.colors.background[6] : theme.colors.text,

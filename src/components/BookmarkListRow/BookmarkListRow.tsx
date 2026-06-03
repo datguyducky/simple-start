@@ -1,6 +1,6 @@
 import { Box, Text, Group } from '@mantine/core';
 
-import { ListSettings } from '@extensionTypes/settingsValues';
+import { ListSettings } from '@/types/settingsValues';
 
 import { useBookmarkListRowStyles } from './BookmarkListRow.styles';
 
@@ -19,18 +19,16 @@ export const BookmarkListRow = ({ title, url, isOdd, settings }: BookmarkListRow
 		useStrippedRows: settings.listUseStrippedRows,
 	});
 
-	const urlObject = new URL(url || '');
-	const cleanedUrl = urlObject.hostname;
-	const perfectIconSize = Math.max(settings.listIconSize, 8);
+	const cleanedUrl = url ? new URL(url).hostname : '';
+	const perfectIconSize = Math.max(settings.listIconSize, 8).toString();
+	const maxIconSize = (settings.listIconSize + 40).toString();
 
 	return (
 		<Box className={classes.bookmarkListRowWrap} component="a" href={url}>
 			<Group spacing={24} position="apart" grow sx={{ width: '100%' }}>
 				<Box className={classes.faviconWrap}>
 					<img
-						src={`https://simple-start-api.fly.dev/icon?url=${cleanedUrl}&size=8..${perfectIconSize}..${
-							settings.listIconSize + 40
-						}`}
+						src={`https://simple-start-api.fly.dev/icon?url=${cleanedUrl}&size=8..${perfectIconSize}..${maxIconSize}`}
 						height={settings.listIconSize}
 						width={settings.listIconSize}
 						style={{ marginRight: 8 }}

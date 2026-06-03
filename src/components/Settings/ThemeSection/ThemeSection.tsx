@@ -1,21 +1,18 @@
 import { Box, Group, Stack, Text } from '@mantine/core';
 import { IconPlus } from '@tabler/icons-react';
 
-import { useExtensionTheme } from '@hooks/useExtensionTheme';
-
-import { ModalCustomTheme } from '@modals/ModalCustomTheme';
-import { ModalRemoveCustomTheme } from '@modals/ModalRemoveCustomTheme';
-import { useModal } from '@hooks/useModal';
-import { CustomTheme } from '@extensionTypes/customTheme';
-import { CustomThemeBox } from '@components/CustomThemeBox';
-
 import { useThemeSectionStyles } from './ThemeSection.styles';
+import { useExtensionTheme } from '@/hooks/useExtensionTheme';
+import { useModal } from '@/hooks/useModal';
+import { CustomThemeBox } from '@/components/CustomThemeBox';
+import { ModalCustomTheme } from '@/modals/ModalCustomTheme';
+import { type CustomTheme } from '@/types/customTheme';
+import { ModalRemoveCustomTheme } from '@/modals/ModalRemoveCustomTheme';
 
 export const ThemeSection = () => {
 	const { classes, cx } = useThemeSectionStyles();
 	const { theme, setTheme, customThemes, saveCustomTheme, editCustomTheme, removeCustomTheme } =
 		useExtensionTheme({
-			key: 'simpleStartTheme',
 			defaultValue: 'light',
 		});
 
@@ -26,7 +23,13 @@ export const ThemeSection = () => {
 		<>
 			<Box mb={32}>
 				<Group spacing={16} sx={{ alignItems: 'flex-start' }}>
-					<Stack align="center" sx={{ width: 80 }} onClick={() => setTheme('light')}>
+					<Stack
+						align="center"
+						sx={{ width: 80 }}
+						onClick={() => {
+							setTheme('light');
+						}}
+					>
 						<Box
 							className={cx(classes.colorBox, classes.light, {
 								[classes.active]: theme === 'light',
@@ -38,7 +41,13 @@ export const ThemeSection = () => {
 						</Text>
 					</Stack>
 
-					<Stack align="center" sx={{ width: 80 }} onClick={() => setTheme('dark')}>
+					<Stack
+						align="center"
+						sx={{ width: 80 }}
+						onClick={() => {
+							setTheme('dark');
+						}}
+					>
 						<Box
 							className={cx(classes.colorBox, classes.dark, {
 								[classes.active]: theme === 'dark',
@@ -50,44 +59,46 @@ export const ThemeSection = () => {
 						</Text>
 					</Stack>
 
-					{customThemes &&
-						customThemes.map((customThemeData) => {
-							const customThemeName = customThemeData.name
-								.replace('created-theme-', '')
-								.replace(/-/g, ' ');
-							const customThemeBackground = customThemeData.colors.background[0];
-							const customThemeBorder = customThemeData.colors.background[2];
+					{customThemes.map((customThemeData) => {
+						const customThemeName = customThemeData.name
+							.replace('created-theme-', '')
+							.replace(/-/g, ' ');
+						const customThemeBackground = customThemeData.colors.background[0];
+						const customThemeBorder = customThemeData.colors.background[2];
 
-							return (
-								<CustomThemeBox
-									onEdit={() =>
-										customThemeModal.open({
-											mode: 'edit',
-											data: customThemeData,
-										})
-									}
-									setActive={() => setTheme(customThemeData.name)}
-									customThemeName={customThemeName}
-									backgroundColor={customThemeBackground}
-									borderColor={customThemeBorder}
-									isActive={theme === customThemeData.name}
-									onRemove={() =>
-										removeCustomThemeModal.open({
-											name: customThemeData.name,
-										})
-									}
-								/>
-							);
-						})}
+						return (
+							<CustomThemeBox
+								key={customThemeData.name}
+								onEdit={() => {
+									customThemeModal.open({
+										mode: 'edit',
+										data: customThemeData,
+									});
+								}}
+								setActive={() => {
+									setTheme(customThemeData.name);
+								}}
+								customThemeName={customThemeName}
+								backgroundColor={customThemeBackground}
+								borderColor={customThemeBorder}
+								isActive={theme === customThemeData.name}
+								onRemove={() => {
+									removeCustomThemeModal.open({
+										name: customThemeData.name,
+									});
+								}}
+							/>
+						);
+					})}
 
 					<Stack
 						align="center"
 						sx={{ width: 80 }}
-						onClick={() =>
+						onClick={() => {
 							customThemeModal.open({
 								mode: 'create',
-							})
-						}
+							});
+						}}
 					>
 						<Box className={cx(classes.colorBox, classes.customAdd)}>
 							<IconPlus size={32} />
@@ -105,16 +116,20 @@ export const ThemeSection = () => {
 				onClose={customThemeModal.close}
 				title="Add new custom theme"
 				saveCustomTheme={saveCustomTheme}
-				mode={customThemeModal?.args?.mode as 'edit' | 'create'}
-				initialValues={customThemeModal?.args?.data as CustomTheme}
+				mode={customThemeModal.args?.mode as 'edit' | 'create'}
+				initialValues={customThemeModal.args?.data as CustomTheme}
 				editCustomTheme={editCustomTheme}
 			/>
 
 			<ModalRemoveCustomTheme
 				isOpen={removeCustomThemeModal.isOpen}
 				onClose={removeCustomThemeModal.close}
-				name={removeCustomThemeModal.args?.name as string}
-				removeTheme={() => removeCustomTheme(removeCustomThemeModal?.args?.name as string)}
+				name={
+					typeof removeCustomThemeModal.args?.name === 'string'
+						? removeCustomThemeModal.args.name
+						: undefined
+				}
+				removeTheme={removeCustomTheme}
 			/>
 		</>
 	);

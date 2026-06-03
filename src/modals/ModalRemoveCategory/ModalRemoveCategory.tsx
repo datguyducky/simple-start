@@ -1,6 +1,9 @@
 import { Button, Group, Modal, Text } from '@mantine/core';
 import { showNotification } from '@mantine/notifications';
 
+import { handleAsyncAction } from '@/utils/handleAsyncAction';
+import { wait } from '@/utils/wait';
+
 type ModalRemoveCategoryProps = {
 	id: string;
 	opened: boolean;
@@ -16,26 +19,27 @@ export const ModalRemoveCategory = ({
 	onClose,
 	removeCategory,
 }: ModalRemoveCategoryProps) => {
+	const categoryName = name ?? 'selected';
+
 	const handleRemoveCategory = () => {
-		setTimeout(async () => {
-			try {
-				await removeCategory({ id: id });
+		handleAsyncAction(
+			async () => {
+				await wait(500);
+				await removeCategory({ id });
 
 				showNotification({
 					color: 'dark',
-					message: `The ${name} category was successfully deleted!`,
+					message: `The ${categoryName} category was successfully deleted!`,
 					autoClose: 3000,
 				});
-			} catch (error) {
-				showNotification({
-					color: 'red',
-					title: `Something went wrong when trying to remove the ${name} category!`,
-					message: 'Sorry, but something went wrong, please try again.',
-					autoClose: 5000,
-				});
-			}
-		}, 500);
-		onClose(); // hide modal
+			},
+			{
+				errorTitle: `Something went wrong when trying to remove the ${categoryName} category!`,
+				errorMessage: 'Sorry, but something went wrong, please try again.',
+			},
+		);
+
+		onClose();
 	};
 
 	return (
@@ -43,7 +47,7 @@ export const ModalRemoveCategory = ({
 			<Text mb={16}>
 				{'Are you sure you want to remove the '}
 				<Text weight={600} inline sx={{ display: 'inline' }}>
-					{name}
+					{categoryName}
 				</Text>
 				{' category?'}
 

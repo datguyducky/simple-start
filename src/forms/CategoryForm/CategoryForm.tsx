@@ -2,13 +2,17 @@ import { Button, Checkbox, Group, TextInput } from '@mantine/core';
 import { useForm, zodResolver } from '@mantine/form';
 import { showNotification } from '@mantine/notifications';
 
-import { categorySchema } from '@validation/categorySchema';
+import { handleAsyncAction } from '@/utils/handleAsyncAction';
+import { wait } from '@/utils/wait';
+import { categorySchema } from '@/validation/categorySchema';
 
 export type CategoryValues = {
 	id: string;
 	categoryName: string;
 	defaultCategory?: boolean;
 };
+
+type CategoryFormValues = Omit<CategoryValues, 'id'>;
 
 type CategoryFormProps = {
 	onClose: () => void;
@@ -31,7 +35,7 @@ export const CategoryForm = ({
 	editCategory,
 	initialValues,
 }: CategoryFormProps) => {
-	const { values, onSubmit, getInputProps, isValid, isDirty } = useForm({
+	const { onSubmit, getInputProps, isValid, isDirty } = useForm<CategoryFormValues>({
 		initialValues: initialValues ?? {
 			categoryName: '',
 			defaultCategory: false,
@@ -39,59 +43,59 @@ export const CategoryForm = ({
 		validate: zodResolver(categorySchema),
 	});
 
-	const handleCreateCategory = (formValues: typeof values) => {
-		if (createNewCategory) {
-			setTimeout(async () => {
-				try {
-					await createNewCategory({
-						name: formValues.categoryName,
-						setAsDefault: formValues.defaultCategory,
-					});
-
-					showNotification({
-						color: 'dark',
-						message: `The ${formValues.categoryName} category was successfully created!`,
-						autoClose: 3000,
-					});
-				} catch (error) {
-					showNotification({
-						color: 'red',
-						title: 'A new category can not be created!',
-						message: 'Sorry, but something went wrong, please try again.',
-						autoClose: 5000,
-					});
-				}
-			}, 500);
-			onClose(); // hide modal
+	const handleCreateCategory = (formValues: CategoryFormValues) => {
+		if (!createNewCategory) {
+			return;
 		}
+
+		onClose();
+
+		handleAsyncAction(
+			async () => {
+				await wait(500);
+				await createNewCategory({
+					name: formValues.categoryName,
+					setAsDefault: formValues.defaultCategory,
+				});
+
+				showNotification({
+					color: 'dark',
+					message: `The ${formValues.categoryName} category was successfully created!`,
+					autoClose: 3000,
+				});
+			},
+			{
+				errorTitle: 'A new category can not be created!',
+			},
+		);
 	};
 
-	const handleEditCategory = (formValues: typeof values) => {
-		if (editCategory && initialValues) {
-			setTimeout(async () => {
-				try {
-					await editCategory({
-						id: initialValues.id,
-						categoryName: formValues.categoryName,
-						defaultCategory: formValues.defaultCategory,
-					});
-
-					showNotification({
-						color: 'dark',
-						message: `The ${formValues.categoryName} category was successfully edited!`,
-						autoClose: 3000,
-					});
-				} catch (error) {
-					showNotification({
-						color: 'red',
-						title: 'This category can not be edited!',
-						message: 'Sorry, but something went wrong, please try again.',
-						autoClose: 5000,
-					});
-				}
-			}, 500);
-			onClose(); // hide modal
+	const handleEditCategory = (formValues: CategoryFormValues) => {
+		if (!editCategory || !initialValues) {
+			return;
 		}
+
+		onClose();
+
+		handleAsyncAction(
+			async () => {
+				await wait(500);
+				await editCategory({
+					id: initialValues.id,
+					categoryName: formValues.categoryName,
+					defaultCategory: formValues.defaultCategory,
+				});
+
+				showNotification({
+					color: 'dark',
+					message: `The ${formValues.categoryName} category was successfully edited!`,
+					autoClose: 3000,
+				});
+			},
+			{
+				errorTitle: 'This category can not be edited!',
+			},
+		);
 	};
 
 	return (

@@ -1,6 +1,6 @@
 import { Box, Text } from '@mantine/core';
 
-import { CapsuleSettings } from '@extensionTypes//settingsValues';
+import { type CapsuleSettings } from '@/types/settingsValues';
 
 import { useBookmarkCapsuleStyles } from './BookmarkCapsule.styles';
 
@@ -16,17 +16,15 @@ export const BookmarkCapsule = ({ title, url, settings }: BookmarkCapsuleProps) 
 		labelColor: settings.capsuleLabelColor,
 	});
 
-	const urlObject = new URL(url || '');
-	const cleanedUrl = urlObject.hostname;
-	const perfectIconSize = Math.max(settings.capsuleIconSize, 8);
+	const cleanedUrl = url ? new URL(url).hostname : '';
+	const perfectIconSize = Math.max(settings.capsuleIconSize, 8).toString();
+	const maxIconSize = (settings.capsuleIconSize + 40).toString();
 
 	return (
 		<Box className={classes.bookmarkCapsuleWrap} component="a" href={url}>
 			<Box className={classes.faviconWrap}>
 				<img
-					src={`https://simple-start-api.fly.dev/icon?url=${cleanedUrl}&size=8..${perfectIconSize}..${
-						settings.capsuleIconSize + 40
-					}`}
+					src={`https://simple-start-api.fly.dev/icon?url=${cleanedUrl}&size=8..${perfectIconSize}..${maxIconSize}`}
 					height={settings.capsuleIconSize}
 					width={settings.capsuleIconSize}
 					alt=""

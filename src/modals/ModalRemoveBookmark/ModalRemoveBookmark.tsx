@@ -1,6 +1,9 @@
 import { Button, Group, Modal, Text } from '@mantine/core';
 import { showNotification } from '@mantine/notifications';
 
+import { handleAsyncAction } from '@/utils/handleAsyncAction';
+import { wait } from '@/utils/wait';
+
 type ModalRemoveBookmarkProps = {
 	id: string;
 	opened: boolean;
@@ -16,25 +19,24 @@ export const ModalRemoveBookmark = ({
 	removeBookmark,
 	onClose,
 }: ModalRemoveBookmarkProps) => {
+	const bookmarkName = name ?? 'selected';
 	const handleRemoveCategory = () => {
-		setTimeout(async () => {
-			try {
-				await removeBookmark({ id: id });
+		handleAsyncAction(
+			async () => {
+				await wait(500);
+				await removeBookmark({ id });
 
 				showNotification({
 					color: 'dark',
-					message: `The ${name} bookmark was successfully deleted!`,
+					message: `The ${bookmarkName} bookmark was successfully deleted!`,
 					autoClose: 3000,
 				});
-			} catch (error) {
-				showNotification({
-					color: 'red',
-					title: `Something went wrong when trying to remove the ${name} bookmark!`,
-					message: 'Sorry, but something went wrong, please try again.',
-					autoClose: 5000,
-				});
-			}
-		}, 500);
+			},
+			{
+				errorTitle: `Something went wrong when trying to remove the ${bookmarkName} bookmark!`,
+				errorMessage: 'Sorry, but something went wrong, please try again.',
+			},
+		);
 
 		onClose();
 	};
@@ -44,7 +46,7 @@ export const ModalRemoveBookmark = ({
 			<Text mb={16}>
 				{'Are you sure you want to remove the '}
 				<Text weight={600} inline sx={{ display: 'inline' }}>
-					{name}
+					{bookmarkName}
 				</Text>
 				{' bookmark?'}
 

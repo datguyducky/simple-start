@@ -1,45 +1,35 @@
 import { Button, Group, Text, Modal } from '@mantine/core';
 import { showNotification } from '@mantine/notifications';
 
-import { constants } from '@common/constants';
-
-import { useExtensionSettings } from '@hooks/useExtensionSettings';
-import { useModal } from '@hooks/useModal';
-
-import { ListSettingsForm } from '@forms/ListSettingsForm';
+import { defaultListSettings } from '@/common/constants';
+import { useExtensionSettings } from '@/hooks/useExtensionSettings';
+import { useModal } from '@/hooks/useModal';
+import { ListSettingsForm } from '@/forms/ListSettingsForm';
+import { handleAsyncAction } from '@/utils/handleAsyncAction';
+import { wait } from '@/utils/wait';
 
 export const ListSection = () => {
 	const { saveExtensionSettings } = useExtensionSettings();
-
 	const resetListSettingsModal = useModal();
 
-	const handleResetSettings = async () => {
-		const defaultValues = Object.fromEntries(
-			Object.entries(constants.defaultExtensionSettings).filter(([key]) =>
-				key.includes('list'),
-			),
-		);
+	const handleResetSettings = () => {
+		resetListSettingsModal.close();
 
-		setTimeout(async () => {
-			try {
-				await saveExtensionSettings(defaultValues);
+		handleAsyncAction(
+			async () => {
+				await wait(600);
+				await saveExtensionSettings(defaultListSettings);
 
 				showNotification({
 					color: 'dark',
 					message: 'List view settings have been reset to their default values!',
 					autoClose: 3000,
 				});
-			} catch (error) {
-				showNotification({
-					color: 'red',
-					title: 'Settings could not be reset!',
-					message: 'Sorry, but something went wrong, please try again.',
-					autoClose: 5000,
-				});
-			}
-		}, 600);
-
-		resetListSettingsModal.close(); // hide modal
+			},
+			{
+				errorTitle: 'Settings could not be reset!',
+			},
+		);
 	};
 
 	return (
@@ -54,7 +44,7 @@ export const ListSection = () => {
 				size="lg"
 			>
 				<Text mb={16}>
-					Are you sure you want to reset settings for the list view? This action can't be
+					Are you sure you want to reset settings for the list view? This action cannot be
 					undone and all your custom settings will be replaced by the default values!
 				</Text>
 
@@ -62,7 +52,9 @@ export const ListSection = () => {
 					<Button
 						variant="outline"
 						color="gray"
-						onClick={() => resetListSettingsModal.close()}
+						onClick={() => {
+							resetListSettingsModal.close();
+						}}
 					>
 						Cancel
 					</Button>

@@ -1,11 +1,14 @@
 import { Button, Group, Modal, Text } from '@mantine/core';
 import { showNotification } from '@mantine/notifications';
 
+import { handleAsyncAction } from '@/utils/handleAsyncAction';
+import { wait } from '@/utils/wait';
+
 type ModalRemoveCustomThemeProps = {
 	isOpen: boolean;
 	onClose: () => void;
-	name: string;
-	removeTheme: (name: string) => void;
+	name?: string;
+	removeTheme: (name: string) => Promise<void>;
 };
 
 export const ModalRemoveCustomTheme = ({
@@ -14,15 +17,20 @@ export const ModalRemoveCustomTheme = ({
 	onClose,
 	removeTheme,
 }: ModalRemoveCustomThemeProps) => {
-	const formattedName =
-		name
-			?.replace('created-theme-', '')
-			.replace(/-/g, ' ')
-			.replace(/(^\w|\s\w)/g, (m) => m.toUpperCase()) || '';
+	const formattedName = name
+		?.replace('created-theme-', '')
+		.replace(/-/g, ' ')
+		.replace(/(^\w|\s\w)/g, (m) => m.toUpperCase());
 
-	const handleRemoveCategory = () => {
-		setTimeout(async () => {
-			try {
+	const handleRemoveTheme = () => {
+		if (name === undefined || formattedName === undefined) {
+			onClose();
+			return;
+		}
+
+		handleAsyncAction(
+			async () => {
+				await wait(500);
 				await removeTheme(name);
 
 				showNotification({
@@ -30,15 +38,12 @@ export const ModalRemoveCustomTheme = ({
 					message: `The ${formattedName} theme was successfully deleted!`,
 					autoClose: 3000,
 				});
-			} catch (error) {
-				showNotification({
-					color: 'red',
-					title: `Something went wrong when trying to remove the ${formattedName} theme!`,
-					message: 'Sorry, but something went wrong, please try again.',
-					autoClose: 5000,
-				});
-			}
-		}, 500);
+			},
+			{
+				errorTitle: `Something went wrong when trying to remove the ${formattedName} theme!`,
+				errorMessage: 'Sorry, but something went wrong, please try again.',
+			},
+		);
 
 		onClose();
 	};
@@ -57,7 +62,7 @@ export const ModalRemoveCustomTheme = ({
 				<Button variant="outline" color="gray" onClick={onClose}>
 					Cancel
 				</Button>
-				<Button color="red" onClick={handleRemoveCategory}>
+				<Button color="red" onClick={handleRemoveTheme}>
 					Remove
 				</Button>
 			</Group>

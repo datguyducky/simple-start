@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import {
 	ColorInput,
 	Modal,
@@ -14,15 +14,16 @@ import {
 } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { showNotification } from '@mantine/notifications';
-import {
-	ColorsArray,
-	CustomTheme,
-	CustomThemeColors,
-	CustomThemeFormColors,
-} from '@extensionTypes/customTheme';
-import { ModalCustomThemeValues } from '@extensionTypes/formValues';
 
-import { themeValidation } from '../../utils/themeValidation';
+import {
+	type ColorsArray,
+	type CustomTheme,
+	type CustomThemeColors,
+	type CustomThemeFormColors,
+} from '@/types/customTheme';
+import { type ModalCustomThemeValues } from '@/types/formValues';
+
+import { themeValidation } from '@/utils/themeValidation';
 
 type ModalCustomThemeProps = {
 	opened: boolean;
@@ -35,7 +36,69 @@ type ModalCustomThemeProps = {
 		themeColors: CustomThemeColors,
 	) => Promise<void>;
 	mode: 'edit' | 'create';
-	initialValues: CustomTheme;
+	initialValues?: CustomTheme;
+};
+
+const getCustomThemeErrorMessage = (error: unknown) => {
+	if (error instanceof Error && error.message === 'CUSTOM_THEME_EXISTS') {
+		return 'Theme under this name already exists, please try again with a different one.';
+	}
+
+	return 'Sorry, but something went wrong, please try again.';
+};
+
+const getEditThemeValues = (theme: CustomTheme): Partial<ModalCustomThemeValues> => {
+	const backgroundColors = Object.fromEntries(
+		theme.colors.background.map((value, index) => [`background${String(index)}`, value]),
+	);
+
+	const primaryColors = Object.fromEntries(
+		theme.colors['custom-primary'].map((value, index) => [`primary${String(index)}`, value]),
+	);
+
+	return {
+		customThemeName: theme.name.replace('created-theme-', '').replace(/-/g, ' '),
+		...backgroundColors,
+		...primaryColors,
+		text: theme.colors.text,
+		oldCustomThemeName: theme.name,
+	};
+};
+
+const getThemeColorValues = (values: ModalCustomThemeValues): CustomThemeFormColors => {
+	const backgroundArray: string[] = [];
+	const primaryArray: string[] = [];
+	const backgroundLocalArray: string[] = [];
+
+	for (const [key, color] of Object.entries(values).sort()) {
+		if (key.startsWith('background')) {
+			if (key !== 'background8' && key !== 'background9') {
+				backgroundLocalArray.push(color);
+			}
+
+			backgroundArray.push(color);
+			continue;
+		}
+
+		if (key.startsWith('primary')) {
+			primaryArray.push(color);
+		}
+	}
+
+	return {
+		'background-local': backgroundLocalArray as ColorsArray,
+		background: backgroundArray as ColorsArray,
+		'custom-primary': primaryArray as ColorsArray,
+		text: values.text ?? '',
+	};
+};
+
+const getThemeColorsForSave = (themeColors: CustomThemeFormColors): CustomThemeColors => {
+	return {
+		background: themeColors.background,
+		'custom-primary': themeColors['custom-primary'],
+		text: themeColors.text,
+	};
 };
 
 export const ModalCustomTheme = ({
@@ -47,7 +110,6 @@ export const ModalCustomTheme = ({
 	initialValues,
 	editCustomTheme,
 }: ModalCustomThemeProps) => {
-	const [themeColors, setThemeColors] = useState<CustomThemeFormColors>();
 	const [activeStep, setActive] = useState(0);
 
 	const { values, getInputProps, onSubmit, validate, setValues, reset, isValid } =
@@ -58,140 +120,101 @@ export const ModalCustomTheme = ({
 				background9: '#ff00ff',
 				customThemeName: '',
 			},
-			validate: (values) => themeValidation(activeStep, values),
+			validate: (formValues) => themeValidation(activeStep, formValues),
 		});
 
+	const themeColors = useMemo(() => {
+		if (activeStep !== 3) {
+			return undefined;
+		}
+
+		return getThemeColorValues(values);
+	}, [activeStep, values]);
+
 	useEffect(() => {
-		if (mode === 'edit') {
-			const { name, colors } = initialValues;
-
-			const backgroundColors = Object.assign(
-				{},
-				...Object.entries({ ...colors.background }).map(([index, value]) => ({
-					[`background${index}`]: value,
-				})),
-			);
-
-			const primaryColors = Object.assign(
-				{},
-				...Object.entries({ ...colors['custom-primary'] }).map(([index, value]) => ({
-					[`primary${index}`]: value,
-				})),
-			);
-
-			setValues({
-				customThemeName: name.replace('created-theme-', '').replace(/-/g, ' '),
-				...backgroundColors,
-				...primaryColors,
-				text: colors.text,
-				oldCustomThemeName: name,
-			});
+		if (mode === 'edit' && initialValues) {
+			setValues(getEditThemeValues(initialValues));
 		} else {
 			// making sure that the custom theme form is empty when going from the "edit" mode to the "create"
 			reset();
 		}
+
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [mode, initialValues]);
 
-	const nextStep = () =>
+	const nextStep = () => {
 		setActive((current) => {
 			if (validate().hasErrors) {
 				return current;
 			}
+
 			return current < 3 ? current + 1 : current;
 		});
+	};
 
-	const prevStep = () => setActive((current) => (current > 0 ? current - 1 : current));
+	const prevStep = () => {
+		setActive((current) => (current > 0 ? current - 1 : current));
+	};
 
-	useEffect(() => {
-		if (activeStep === 3) {
-			const backgroundArray: string[] = [];
-			const primaryArray: string[] = [];
-			const backgroundLocalArray: string[] = []; // background colors but without last two shades as we don't want to display them to user
-			let text = '';
+	const handleCreateTheme = async (colors: CustomThemeColors) => {
+		try {
+			await saveCustomTheme(values.customThemeName, colors);
+			setActive(0);
+			onClose();
 
-			Object.entries(values)
-				.sort()
-				.map(([key, color]) => {
-					if (key === 'text') {
-						text = color;
-					}
-
-					if (key.startsWith('background')) {
-						if (key !== 'background8' && key !== 'background9') {
-							backgroundLocalArray.push(color);
-						}
-
-						backgroundArray.push(color);
-					} else if (key.startsWith('primary')) {
-						primaryArray.push(color);
-					}
-				});
-
-			setThemeColors({
-				'background-local': backgroundLocalArray as ColorsArray,
-				background: backgroundArray as ColorsArray,
-				'custom-primary': primaryArray as ColorsArray,
-				text,
+			showNotification({
+				color: 'dark',
+				message: `The ${values.customThemeName} theme was successfully created!`,
+				autoClose: 3000,
+			});
+		} catch (error: unknown) {
+			showNotification({
+				color: 'red',
+				title: 'A new theme can not be created!',
+				message: getCustomThemeErrorMessage(error),
+				autoClose: 5000,
 			});
 		}
-	}, [activeStep]);
+	};
 
-	const handleSubmit = async () => {
-		const { 'background-local': _bgLocal, ...colors } = themeColors as CustomThemeFormColors;
+	const handleEditTheme = async (colors: CustomThemeColors) => {
+		if (!values.oldCustomThemeName) {
+			return;
+		}
+
+		try {
+			await editCustomTheme(values.customThemeName, values.oldCustomThemeName, colors);
+			setActive(0);
+			onClose();
+
+			showNotification({
+				color: 'dark',
+				message: `The ${values.customThemeName} theme was successfully edited!`,
+				autoClose: 3000,
+			});
+		} catch (error: unknown) {
+			showNotification({
+				color: 'red',
+				title: 'A theme can not be edited!',
+				message: getCustomThemeErrorMessage(error),
+				autoClose: 5000,
+			});
+		}
+	};
+
+	const handleSubmit = () => {
+		if (!themeColors) {
+			return;
+		}
+
+		const colors = getThemeColorsForSave(themeColors);
 
 		if (mode === 'create') {
-			try {
-				await saveCustomTheme(values.customThemeName, colors);
-				setActive(0);
-				onClose();
-
-				showNotification({
-					color: 'dark',
-					message: `The ${values.customThemeName} theme was successfully created!`,
-					autoClose: 3000,
-				});
-			} catch (e: any) {
-				const errorMessage =
-					e.message === 'CUSTOM_THEME_EXISTS'
-						? 'Theme under this name already exists, please try again with a different one.'
-						: 'Sorry, but something went wrong, please try again.';
-
-				showNotification({
-					color: 'red',
-					title: 'A new theme can not be created!',
-					message: errorMessage,
-					autoClose: 5000,
-				});
-			}
-		} else if (mode === 'edit') {
-			try {
-				await editCustomTheme(
-					values.customThemeName,
-					values.oldCustomThemeName as string,
-					colors,
-				);
-				setActive(0);
-				onClose();
-
-				showNotification({
-					color: 'dark',
-					message: `The ${values.customThemeName} theme was successfully edited!`,
-					autoClose: 3000,
-				});
-			} catch (e: any) {
-				const errorMessage =
-					e.message === 'CUSTOM_THEME_EXISTS'
-						? 'Theme under this name already exists, please try again with a different one.'
-						: 'Sorry, but something went wrong, please try again.';
-
-				showNotification({
-					color: 'red',
-					title: 'A theme can not be edited!',
-					message: errorMessage,
-					autoClose: 5000,
-				});
-			}
+			void handleCreateTheme(colors);
+			return;
 		}
+
+		void handleEditTheme(colors);
 	};
 
 	return (
@@ -222,8 +245,8 @@ export const ModalCustomTheme = ({
 							couple of shades per color.
 							<br />
 							<br />
-							Although I won't list any tools for that, you may easily find "shade
-							generators" on the internet, so when needed please use that and remember
+							Although I will not list any tools for that, you may easily find shade
+							generators on the internet, so when needed please use that and remember
 							that you can tweak every color separately for your needs.
 						</Text>
 
@@ -296,14 +319,14 @@ export const ModalCustomTheme = ({
 						<Divider my={16} />
 
 						<Text size="sm" mb={12}>
-							The "primary" color of your custom theme sets color for every button and
-							other "actionable" elements in the extension. Also keep in mind that the
-							"Primary 7" color is the main shade that you will see the most often
-							across the extension.
+							The primary color of your custom theme sets color for every button and
+							other actionable elements in the extension. Also keep in mind that
+							Primary 7 is the main shade that you will see the most often across the
+							extension.
 							<br />
 							<br />
-							As you can see in the build-in themes the "primary" color is set as a
-							blue color.
+							As you can see in the built-in themes the primary color is set as a blue
+							color.
 						</Text>
 
 						<Divider my={16} />
@@ -403,6 +426,7 @@ export const ModalCustomTheme = ({
 										<Group spacing={2}>
 											{themeColors?.['background-local'].map((color) => (
 												<Box
+													key={color}
 													sx={{
 														backgroundColor: color,
 														width: 24,
@@ -416,6 +440,7 @@ export const ModalCustomTheme = ({
 										<Group spacing={2}>
 											{themeColors?.['custom-primary'].map((color) => (
 												<Box
+													key={color}
 													sx={{
 														backgroundColor: color,
 														width: 24,
@@ -463,7 +488,7 @@ export const ModalCustomTheme = ({
 									placeholder="e.g. Custom Theme 1"
 									styles={{
 										input: {
-											textTransform: 'capitalize', // is this a good idea?
+											textTransform: 'capitalize',
 										},
 									}}
 								/>
@@ -477,9 +502,17 @@ export const ModalCustomTheme = ({
 						Back
 					</Button>
 
-					{activeStep < 3 && <Button onClick={nextStep} disabled={!isValid()}>Next Step</Button>}
+					{activeStep < 3 && (
+						<Button onClick={nextStep} disabled={!isValid()}>
+							Next Step
+						</Button>
+					)}
 
-					{activeStep === 3 && <Button type="submit" disabled={!isValid()}>Save</Button>}
+					{activeStep === 3 && (
+						<Button type="submit" disabled={!isValid()}>
+							Save
+						</Button>
+					)}
 				</Group>
 			</form>
 		</Modal>
