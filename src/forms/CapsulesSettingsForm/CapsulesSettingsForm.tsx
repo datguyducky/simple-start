@@ -80,7 +80,7 @@ export const CapsulesSettingsForm = ({ openResetModal }: CapsulesSettingsFormPro
 	};
 
 	return (
-		<Box onSubmit={onSubmit(handleSaveExtensionSettings)} noValidate mb={32} component="form">
+		<Box onSubmit={onSubmit(handleSaveExtensionSettings)} noValidate component="form">
 			<SimpleGrid cols={2} spacing={16} mb={24}>
 				<Stack gap={12} align="flex-start">
 					<NumberInput label="Capsule size" {...getInputProps('capsuleSize')} />
@@ -140,7 +140,7 @@ export const CapsulesSettingsForm = ({ openResetModal }: CapsulesSettingsFormPro
 				</Group>
 			</SimpleGrid>
 
-			<Group justify="center" w="100%" ml={-28} mt={0}>
+			<Group justify="center" w="100%" ml={-24} mt={0}>
 				<Button
 					variant="outline"
 					onClick={openResetModal}

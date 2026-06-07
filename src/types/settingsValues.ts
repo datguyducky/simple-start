@@ -1,6 +1,12 @@
-export interface AllExtensionSettings extends CapsuleSettings, ListSettings {
+export interface AllExtensionSettings extends CapsuleSettings, ListSettings, GeneralSettings {
 	currentView: number;
 	defaultCategory?: string | null;
+}
+
+export interface GeneralSettings {
+	oneView: boolean;
+	oneViewHeadingGap: number;
+	oneViewCategoriesGap: number;
 }
 
 export interface CapsuleSettings {

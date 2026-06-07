@@ -210,7 +210,7 @@ export const ListSettingsForm = ({ openResetModal }: ListSettingsFormProps) => {
 					</Stack>
 				</SimpleGrid>
 
-				<Group justify="center" w="100%" ml={-28} mt={0}>
+				<Group justify="center" w="100%" ml={-24} mt={0}>
 					<Button
 						variant="outline"
 						onClick={openResetModal}
