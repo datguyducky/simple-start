@@ -1,5 +1,5 @@
 import { Button, Group, Text, Modal } from '@mantine/core';
-import { showNotification } from '@mantine/notifications';
+import { notifications } from '@mantine/notifications';
 
 import { defaultListSettings } from '@/common/constants';
 import { useExtensionSettings } from '@/hooks/useExtensionSettings';
@@ -20,7 +20,7 @@ export const ListSection = () => {
 				await wait(600);
 				await saveExtensionSettings(defaultListSettings);
 
-				showNotification({
+				notifications.show({
 					color: 'dark',
 					message: 'List view settings have been reset to their default values!',
 					autoClose: 3000,
@@ -48,7 +48,7 @@ export const ListSection = () => {
 					undone and all your custom settings will be replaced by the default values!
 				</Text>
 
-				<Group position="right">
+				<Group justify="flex-end">
 					<Button
 						variant="outline"
 						color="gray"
@@ -58,9 +58,7 @@ export const ListSection = () => {
 					>
 						Cancel
 					</Button>
-					<Button color="primary" onClick={handleResetSettings}>
-						Reset
-					</Button>
+					<Button onClick={handleResetSettings}>Reset</Button>
 				</Group>
 			</Modal>
 		</>

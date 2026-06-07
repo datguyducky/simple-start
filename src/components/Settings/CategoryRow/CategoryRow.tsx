@@ -1,5 +1,5 @@
 import { type MouseEvent } from 'react';
-import { ActionIcon, Group, Text } from '@mantine/core';
+import { ActionIcon, Box, Group, Text } from '@mantine/core';
 import { IconGripVertical, IconEdit, IconTrash } from '@tabler/icons-react';
 
 type CategoryRowProps = {
@@ -16,25 +16,26 @@ export const CategoryRow = ({
 	...otherProps
 }: CategoryRowProps) => {
 	return (
-		<Group position="apart" spacing={0} {...otherProps}>
+		<Group justify="space-between" gap={0} {...otherProps}>
 			<Group>
-				<div {...otherProps}>
+				<Box {...otherProps} mt={4}>
 					<IconGripVertical size={16} />
-				</div>
+				</Box>
 
 				<Text
-					sx={{
-						maxWidth: '90%',
+					maw="90%"
+					style={{
 						textOverflow: 'ellipsis',
 						overflow: 'hidden',
 						whiteSpace: 'nowrap',
 					}}
+					lh="normal"
 				>
 					{name}
 				</Text>
 			</Group>
 
-			<Group spacing={8}>
+			<Group gap={8}>
 				{onRemoveAction && (
 					<ActionIcon
 						color="red"
@@ -43,6 +44,7 @@ export const CategoryRow = ({
 							onRemoveAction();
 						}}
 						component="span"
+						variant="transparent"
 					>
 						<IconTrash size={16} />
 					</ActionIcon>
@@ -54,7 +56,8 @@ export const CategoryRow = ({
 							onEditAction();
 						}}
 						component="span"
-						sx={(theme) => ({ color: theme.colors.text })}
+						c="var(--mantine-color-text)"
+						variant="transparent"
 					>
 						<IconEdit size={16} />
 					</ActionIcon>

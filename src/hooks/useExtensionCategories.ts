@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
-import { showNotification } from '@mantine/notifications';
+import { notifications } from '@mantine/notifications';
 import { browser } from 'wxt/browser';
 
 import {
@@ -36,7 +36,7 @@ export const useExtensionCategories = () => {
 			const extensionCategories = await browser.bookmarks.getChildren(rootId);
 			setCategories(extensionCategories.filter((content) => content.url === undefined));
 		} catch (_error) {
-			showNotification({
+			notifications.show({
 				color: 'red',
 				title: 'Categories cannot be found!',
 				message: 'Sorry, but something went wrong, please try again.',

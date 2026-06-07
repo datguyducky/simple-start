@@ -1,0 +1,34 @@
+.bookmarkListRowWrap {
+	display: flex;
+	align-items: center;
+	padding: calc(var(--settings-vertical-padding) * 1px) calc(var(--settings-horizontal-padding) * 1px);
+	cursor: pointer;
+	text-decoration: none;
+	color: inherit;
+	background-color: var(--mantine-color-background-1);
+
+	&[data-use-stripped-rows][data-is-odd] {
+		background-color: var(--mantine-color-background-1);
+	}
+
+	&[data-use-stripped-rows]:not([data-is-odd]) {
+		background-color: var(--mantine-color-background-0);
+	}
+
+	&:hover,
+	&[data-use-stripped-rows][data-is-odd]:hover,
+	&[data-use-stripped-rows]:not([data-is-odd]):hover {
+		background-color: var(--mantine-color-background-2);
+	}
+}
+
+.faviconWrap {
+	display: flex;
+	align-items: center;
+	min-width: 0;
+}
+
+.faviconWrap img {
+	display: block;
+	flex-shrink: 0;
+}

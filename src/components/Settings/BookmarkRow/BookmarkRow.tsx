@@ -19,17 +19,17 @@ export const BookmarkRow = ({
 
 	return (
 		<Group
-			position="apart"
-			spacing={0}
+			justify="space-between"
+			gap={0}
 			ref={ref}
-			sx={(theme) => ({
+			style={{
 				padding: '8px 16px',
 				backgroundColor:
-					hovered || isBeingMoved ? theme.colors.background[2] : 'transparent',
-			})}
+					hovered || isBeingMoved ? 'var(--mantine-color-background-2)' : 'transparent',
+			}}
 		>
 			<Text
-				sx={{
+				style={{
 					maxWidth: '90%',
 					textOverflow: 'ellipsis',
 					overflow: 'hidden',
@@ -39,9 +39,14 @@ export const BookmarkRow = ({
 				{name}
 			</Text>
 
-			<Group spacing={8}>
+			<Group gap={8}>
 				{onRemoveAction && (
-					<ActionIcon color="red" onClick={onRemoveAction} component="span">
+					<ActionIcon
+						color="red"
+						onClick={onRemoveAction}
+						component="span"
+						variant="transparent"
+					>
 						<IconTrash size={14} />
 					</ActionIcon>
 				)}
@@ -49,9 +54,8 @@ export const BookmarkRow = ({
 					<ActionIcon
 						onClick={onEditAction}
 						component="span"
-						sx={(theme) => ({
-							color: theme.colors.text,
-						})}
+						c="var(--mantine-color-text)"
+						variant="transparent"
 					>
 						<IconEdit size={14} />
 					</ActionIcon>

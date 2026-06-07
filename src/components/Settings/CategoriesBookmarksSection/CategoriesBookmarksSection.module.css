@@ -1,0 +1,19 @@
+.categoriesAccordionItem {
+	background-color: transparent;
+}
+
+.categoriesAccordionControl {
+	padding: 8px 16px;
+}
+
+.categoriesAccordionContent {
+	padding: 0;
+}
+
+.categoriesAccordionChevron {
+	margin-left: 8px;
+}
+
+.categoriesAccordionLabel {
+	padding: 0;
+}

@@ -12,7 +12,7 @@ export default defineConfig({
 				id: '{6938c509-173c-416e-b440-69a7218af76f}',
 				strict_min_version: '55.0',
 				data_collection_permissions: {
-					required: ['bookmarks'],
+					required: ['none'],
 				},
 			},
 		},

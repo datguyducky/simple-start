@@ -10,8 +10,8 @@ import {
 	Divider,
 	Box,
 } from '@mantine/core';
-import { useForm, zodResolver } from '@mantine/form';
-import { showNotification } from '@mantine/notifications';
+import { useForm, schemaResolver } from '@mantine/form';
+import { notifications } from '@mantine/notifications';
 
 import { constants } from '@/common/constants';
 import { type CapsuleSettings } from '@/types/settingsValues';
@@ -33,7 +33,7 @@ export const CapsulesSettingsForm = ({ openResetModal }: CapsulesSettingsFormPro
 
 	const { getInputProps, setValues, onSubmit, values, resetDirty, isDirty, isValid } =
 		useForm<CapsuleSettings>({
-			validate: zodResolver(capsulesSettingsSchema),
+			validate: schemaResolver(capsulesSettingsSchema),
 			validateInputOnChange: true,
 		});
 
@@ -65,7 +65,7 @@ export const CapsulesSettingsForm = ({ openResetModal }: CapsulesSettingsFormPro
 				await wait(600);
 				await saveExtensionSettings(formValues);
 
-				showNotification({
+				notifications.show({
 					color: 'dark',
 					message: 'Settings for capsule view were successfully saved!',
 					autoClose: 3000,
@@ -82,7 +82,7 @@ export const CapsulesSettingsForm = ({ openResetModal }: CapsulesSettingsFormPro
 	return (
 		<Box onSubmit={onSubmit(handleSaveExtensionSettings)} noValidate mb={32} component="form">
 			<SimpleGrid cols={2} spacing={16} mb={24}>
-				<Stack spacing={12} align="flex-start">
+				<Stack gap={12} align="flex-start">
 					<NumberInput label="Capsule size" {...getInputProps('capsuleSize')} />
 
 					<NumberInput
@@ -124,10 +124,10 @@ export const CapsulesSettingsForm = ({ openResetModal }: CapsulesSettingsFormPro
 					/>
 				</Stack>
 
-				<Group spacing={0}>
+				<Group gap={0}>
 					<Divider orientation="vertical" mr={16} />
 
-					<Group spacing={values.capsuleSpacing} mx="auto">
+					<Group gap={values.capsuleSpacing} mx="auto">
 						{constants.exampleBookmarks.map((bookmark) => (
 							<BookmarkCapsule
 								key={bookmark.id}
@@ -140,7 +140,7 @@ export const CapsulesSettingsForm = ({ openResetModal }: CapsulesSettingsFormPro
 				</Group>
 			</SimpleGrid>
 
-			<Group position="center" sx={{ width: '100%', marginLeft: '-28px' }} mt={0}>
+			<Group justify="center" w="100%" ml={-28} mt={0}>
 				<Button
 					variant="outline"
 					onClick={openResetModal}

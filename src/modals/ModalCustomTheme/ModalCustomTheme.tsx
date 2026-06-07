@@ -13,30 +13,34 @@ import {
 	TextInput,
 } from '@mantine/core';
 import { useForm } from '@mantine/form';
-import { showNotification } from '@mantine/notifications';
+import { notifications } from '@mantine/notifications';
 
 import {
-	type ColorsArray,
 	type CustomTheme,
 	type CustomThemeColors,
-	type CustomThemeFormColors,
+	type CustomThemeSaveValues,
 } from '@/types/customTheme';
 import { type ModalCustomThemeValues } from '@/types/formValues';
 
 import { themeValidation } from '@/utils/themeValidation';
+import { useMediaQuery } from '@mantine/hooks';
 
 type ModalCustomThemeProps = {
 	opened: boolean;
 	onClose: () => void;
 	title: string;
-	saveCustomTheme: (name: string, themeColors: CustomThemeColors) => Promise<void>;
+	saveCustomTheme: (name: string, themeColors: CustomThemeSaveValues) => Promise<void>;
 	editCustomTheme: (
 		name: string,
 		oldName: string,
-		themeColors: CustomThemeColors,
+		themeColors: CustomThemeSaveValues,
 	) => Promise<void>;
 	mode: 'edit' | 'create';
 	initialValues?: CustomTheme;
+};
+
+type CustomThemeFormColors = CustomThemeSaveValues & {
+	'background-local': CustomThemeColors['background'];
 };
 
 const getCustomThemeErrorMessage = (error: unknown) => {
@@ -60,40 +64,31 @@ const getEditThemeValues = (theme: CustomTheme): Partial<ModalCustomThemeValues>
 		customThemeName: theme.name.replace('created-theme-', '').replace(/-/g, ' '),
 		...backgroundColors,
 		...primaryColors,
-		text: theme.colors.text,
+		text: theme.other.text,
 		oldCustomThemeName: theme.name,
 	};
 };
 
 const getThemeColorValues = (values: ModalCustomThemeValues): CustomThemeFormColors => {
-	const backgroundArray: string[] = [];
-	const primaryArray: string[] = [];
-	const backgroundLocalArray: string[] = [];
+	const backgroundArray = Array.from(
+		{ length: 10 },
+		(_, index) => values[`background${index}` as keyof ModalCustomThemeValues] ?? '',
+	);
 
-	for (const [key, color] of Object.entries(values).sort()) {
-		if (key.startsWith('background')) {
-			if (key !== 'background8' && key !== 'background9') {
-				backgroundLocalArray.push(color);
-			}
-
-			backgroundArray.push(color);
-			continue;
-		}
-
-		if (key.startsWith('primary')) {
-			primaryArray.push(color);
-		}
-	}
+	const primaryArray = Array.from(
+		{ length: 10 },
+		(_, index) => values[`primary${index}` as keyof ModalCustomThemeValues] ?? '',
+	);
 
 	return {
-		'background-local': backgroundLocalArray as ColorsArray,
-		background: backgroundArray as ColorsArray,
-		'custom-primary': primaryArray as ColorsArray,
+		'background-local': backgroundArray.slice(0, 8) as CustomThemeColors['background'],
+		background: backgroundArray as CustomThemeColors['background'],
+		'custom-primary': primaryArray as CustomThemeColors['custom-primary'],
 		text: values.text ?? '',
 	};
 };
 
-const getThemeColorsForSave = (themeColors: CustomThemeFormColors): CustomThemeColors => {
+const getThemeColorsForSave = (themeColors: CustomThemeFormColors): CustomThemeSaveValues => {
 	return {
 		background: themeColors.background,
 		'custom-primary': themeColors['custom-primary'],
@@ -111,6 +106,7 @@ export const ModalCustomTheme = ({
 	editCustomTheme,
 }: ModalCustomThemeProps) => {
 	const [activeStep, setActive] = useState(0);
+	const isSmall = useMediaQuery('(max-width: 48em)');
 
 	const { values, getInputProps, onSubmit, validate, setValues, reset, isValid } =
 		useForm<ModalCustomThemeValues>({
@@ -156,19 +152,19 @@ export const ModalCustomTheme = ({
 		setActive((current) => (current > 0 ? current - 1 : current));
 	};
 
-	const handleCreateTheme = async (colors: CustomThemeColors) => {
+	const handleCreateTheme = async (colors: CustomThemeSaveValues) => {
 		try {
 			await saveCustomTheme(values.customThemeName, colors);
 			setActive(0);
 			onClose();
 
-			showNotification({
+			notifications.show({
 				color: 'dark',
 				message: `The ${values.customThemeName} theme was successfully created!`,
 				autoClose: 3000,
 			});
 		} catch (error: unknown) {
-			showNotification({
+			notifications.show({
 				color: 'red',
 				title: 'A new theme can not be created!',
 				message: getCustomThemeErrorMessage(error),
@@ -177,7 +173,7 @@ export const ModalCustomTheme = ({
 		}
 	};
 
-	const handleEditTheme = async (colors: CustomThemeColors) => {
+	const handleEditTheme = async (colors: CustomThemeSaveValues) => {
 		if (!values.oldCustomThemeName) {
 			return;
 		}
@@ -187,13 +183,13 @@ export const ModalCustomTheme = ({
 			setActive(0);
 			onClose();
 
-			showNotification({
+			notifications.show({
 				color: 'dark',
 				message: `The ${values.customThemeName} theme was successfully edited!`,
 				autoClose: 3000,
 			});
 		} catch (error: unknown) {
-			showNotification({
+			notifications.show({
 				color: 'red',
 				title: 'A theme can not be edited!',
 				message: getCustomThemeErrorMessage(error),
@@ -223,7 +219,7 @@ export const ModalCustomTheme = ({
 				<Stepper
 					active={activeStep}
 					onStepClick={setActive}
-					breakpoint="sm"
+					orientation={isSmall ? 'vertical' : 'horizontal'}
 					size="md"
 					mt={32}
 					styles={{
@@ -250,14 +246,14 @@ export const ModalCustomTheme = ({
 							that you can tweak every color separately for your needs.
 						</Text>
 
-						<Text size="sm" weight={700}>
+						<Text size="sm" fw={700}>
 							Shade for this should look like this: Background 1(lightest) -
 							Background 8(darkest)
 						</Text>
 
 						<Divider my={16} />
 
-						<SimpleGrid cols={3} spacing={24} sx={{ alignItems: 'flex-start' }}>
+						<SimpleGrid cols={3} spacing={24} style={{ alignItems: 'flex-start' }}>
 							<ColorInput
 								{...getInputProps('background0')}
 								format="hex"
@@ -334,7 +330,7 @@ export const ModalCustomTheme = ({
 						<SimpleGrid
 							cols={3}
 							spacing={24}
-							sx={{ alignItems: 'flex-start', rowGap: 16 }}
+							style={{ alignItems: 'flex-start', rowGap: 16 }}
 						>
 							<ColorInput
 								{...getInputProps('primary0')}
@@ -416,18 +412,18 @@ export const ModalCustomTheme = ({
 					<Stepper.Completed>
 						<Divider my={16} />
 
-						<Group grow spacing={32} sx={{ alignItems: 'flex-start' }}>
+						<Group grow gap={32} justify="flex-start">
 							<Stack>
 								<Text>Preview of all selected colors:</Text>
 
-								<Group spacing={24}>
+								<Group gap={24}>
 									<div>
 										<Text size="sm">Background colors:</Text>
-										<Group spacing={2}>
+										<Group gap={2}>
 											{themeColors?.['background-local'].map((color) => (
 												<Box
 													key={color}
-													sx={{
+													style={{
 														backgroundColor: color,
 														width: 24,
 														height: 24,
@@ -437,11 +433,11 @@ export const ModalCustomTheme = ({
 										</Group>
 
 										<Text size="sm">Primary colors:</Text>
-										<Group spacing={2}>
+										<Group gap={2}>
 											{themeColors?.['custom-primary'].map((color) => (
 												<Box
 													key={color}
-													sx={{
+													style={{
 														backgroundColor: color,
 														width: 24,
 														height: 24,
@@ -454,20 +450,20 @@ export const ModalCustomTheme = ({
 									<div>
 										<Text size="sm">Text color:</Text>
 										<Box
-											sx={{
+											style={{
+												backgroundColor:
+													themeColors?.['background-local'][0],
 												width: 68,
 												height: 68,
 												justifyContent: 'center',
 												alignItems: 'center',
 												display: 'flex',
-												backgroundColor:
-													themeColors?.['background-local'][0],
 											}}
 										>
 											<Text
-												weight="bold"
+												fw="bold"
 												size="lg"
-												sx={{
+												style={{
 													color: themeColors?.text,
 												}}
 											>
@@ -497,7 +493,7 @@ export const ModalCustomTheme = ({
 					</Stepper.Completed>
 				</Stepper>
 
-				<Group position="right" mt="xl">
+				<Group justify="flex-end" mt="xl">
 					<Button variant="default" onClick={prevStep}>
 						Back
 					</Button>

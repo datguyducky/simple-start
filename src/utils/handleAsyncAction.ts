@@ -1,4 +1,4 @@
-import { showNotification } from '@mantine/notifications';
+import { notifications } from '@mantine/notifications';
 
 type HandleAsyncActionOptions = {
 	errorTitle: string;
@@ -19,7 +19,7 @@ export const handleAsyncAction = (
 			console.error(errorTitle, error);
 		}
 
-		showNotification({
+		notifications.show({
 			color: 'red',
 			title: errorTitle,
 			message: errorMessage,

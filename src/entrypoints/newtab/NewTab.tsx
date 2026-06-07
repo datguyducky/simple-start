@@ -10,7 +10,7 @@ import { useExtensionCategories } from '@/hooks/useExtensionCategories';
 import { useExtensionSettings } from '@/hooks/useExtensionSettings';
 import { useModal } from '@/hooks/useModal';
 
-import { useNewTabStyles } from './NewTab.styles';
+import classes from './NewTab.module.css';
 
 export const NewTab = () => {
 	const newBookmarkModal = useModal();
@@ -24,16 +24,12 @@ export const NewTab = () => {
 	});
 
 	// todo: this is still far from being perfect, so it would be a good idea to find even better approach for this
-	const customWidth =
+	const categoryLength =
 		categories.find((category) => category.id === activeCategory)?.title.replace(' ', '')
 			.length || 11;
-
-	const { classes } = useNewTabStyles({
-		width: customWidth > 40 ? customWidth * 7.5 : customWidth * 8 + 64,
-	});
+	const customWidth = categoryLength > 40 ? categoryLength * 7.5 : categoryLength * 8 + 64;
 
 	const { extensionSettings } = useExtensionSettings();
-
 	useEffect(() => {
 		if (extensionSettings.defaultCategory && activeCategory === undefined) {
 			setActiveCategory(extensionSettings.defaultCategory);
@@ -49,33 +45,39 @@ export const NewTab = () => {
 				/>
 
 				{categories.length <= 0 && uncategorizedBookmarks.length <= 0 && (
-					<Text color="dimmed">
+					<Text c="dimmed">
 						{'Click "add" button to add your first bookmark and category to this view.'}
 					</Text>
 				)}
 
 				{categories.length > 0 && (
-					<Select
-						data={categories.map((category) => ({
-							value: category.id,
-							label: category.title,
-						}))}
-						rightSection={<IconChevronDown size={18} />}
-						variant="unstyled"
-						classNames={{
-							root: classes.selectRoot,
-							wrapper: classes.selectInputWrapper,
-							dropdown: classes.selectDropdown,
-							item: classes.selectItem,
-							input: classes.selectInput,
-							rightSection: classes.selectInputRightSection,
-						}}
-						allowDeselect
-						withinPortal={false}
-						value={activeCategory}
-						onChange={setActiveCategory}
-						placeholder="No category"
-					/>
+					<Box pos="relative" component="span" mb={32}>
+						<Select
+							data={categories.map((category) => ({
+								value: category.id,
+								label: category.title,
+							}))}
+							rightSection={<IconChevronDown size={18} />}
+							variant="unstyled"
+							classNames={{
+								wrapper: classes.selectInputWrapper,
+								dropdown: classes.selectDropdown,
+								option: classes.selectItem,
+								input: classes.selectInput,
+							}}
+							styles={{
+								root: {
+									width: customWidth,
+								},
+							}}
+							allowDeselect
+							comboboxProps={{ withinPortal: false }}
+							value={activeCategory}
+							onChange={setActiveCategory}
+							placeholder="No category"
+							pos="relative"
+						/>
+					</Box>
 				)}
 
 				{(activeCategory && bookmarks.length > 0) ||

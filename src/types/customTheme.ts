@@ -1,29 +1,20 @@
-export type ColorsArray = [
-	string,
-	string,
-	string,
-	string,
-	string,
-	string,
-	string,
-	string,
-	string,
-	string,
-];
-
-export interface CustomThemeColors {
-	background: ColorsArray;
-	'custom-primary': ColorsArray;
-	text: string;
-}
-
-export interface CustomThemeFormColors extends CustomThemeColors {
-	'background-local': ColorsArray;
-}
+import type { MantineColorsTuple } from '@mantine/core';
 
 export interface CustomTheme {
 	name: string;
-	colors: CustomThemeColors;
+	colors: {
+		background: MantineColorsTuple;
+		'custom-primary': MantineColorsTuple;
+	};
+	other: {
+		text: string;
+	};
 }
+
+export type CustomThemeColors = CustomTheme['colors'];
+
+export type CustomThemeSaveValues = CustomThemeColors & {
+	text: string;
+};
 
 export type CustomThemesByName = Record<string, CustomTheme>;

@@ -41,22 +41,22 @@ export const CategoryAccordionItem = ({
 				{(provided, snapshot) => (
 					<Box
 						ref={provided.innerRef}
-						sx={(theme) => ({
+						style={{
 							borderColor: snapshot.isDragging
-								? `${theme.colors.background[3]} !important`
+								? 'var(--mantine-color-background-3) !important'
 								: undefined,
 							borderStyle: 'solid',
 							borderWidth: snapshot.isDragging ? 1 : 0,
-						})}
+						}}
 						{...provided.draggableProps}
 					>
 						<Accordion.Control
-							sx={(theme) => ({
+							style={{
 								padding: '8px 16px',
 								backgroundColor: snapshot.isDragging
-									? `${theme.colors.background[2]} !important`
+									? 'var(--mantine-color-background-2) !important'
 									: undefined,
-							})}
+							}}
 						>
 							<CategoryRow
 								name={category.title}

@@ -1,0 +1,160 @@
+.modalContent {
+	background-color: var(--mantine-color-background-0);
+}
+
+.modalHeader {
+	background-color: var(--mantine-color-background-0);
+}
+
+.modalTitle {
+	font-size: var(--mantine-h3-font-size);
+	font-weight: 700;
+	color: var(--mantine-color-text);
+}
+
+.modalClose {
+	color: var(--mantine-color-red-6);
+	@mixin hover {
+		background-color: var(--mantine-color-background-2);
+	}
+}
+
+.input[data-variant='unstyled'] {
+	background-color: transparent;
+	border-color: transparent;
+}
+
+.input {
+	background-color: var(--mantine-color-background-0);
+	border-color: var(--mantine-color-background-4);
+	color: var(--mantine-color-text);
+	
+	::placeholder {
+		color: var(--mantine-color-background-5);
+	}
+}
+
+.inputSection {
+	color: var(--mantine-color-background-6);
+	
+	& > svg {
+		color: inherit !important;
+	}
+}
+
+.numberInputControl {
+	border-color: var(--mantine-color-background-4);
+	color: var(--mantine-color-text);
+	
+	&:hover {
+		background-color: var(--mantine-color-background-4) !important;
+	}
+	
+	& > svg {
+		color: inherit !important;
+	}
+}
+
+.numberInputControl[data-variant='unstyled'] {
+	background-color: transparent;
+}
+
+.checkboxInput {
+	background-color: var(--mantine-color-background-0);
+	border-color: var(--mantine-color-background-4);
+}
+
+.checkboxLabel {
+	color: var(--mantine-color-text);
+}
+
+.accordionChevron {
+	color: var(--mantine-color-text)
+}
+
+.accordionRoot {
+	--accordion-border-color: var(--mantine-color-background-3);
+}
+
+.accordionControl {
+	background-color: var(--mantine-color-background-1);
+	
+	&:hover {
+		background-color: var(--mantine-color-background-2);
+	}
+}
+
+.accordionItem {
+	background-color: var(--mantine-color-background-1);
+}
+
+.accordionItem[data-active] {
+	border-color: var(--mantine-color-background-3) !important;
+	background-color: var(--mantine-color-background-1) !important;
+}
+
+.accordionItem[data-active] .accordionControl {
+	border-bottom: 1px solid var(--mantine-color-background-3);
+}
+
+
+.accordionItem [data-mantine-accordion-control][data-active] {
+	border-bottom: 1px solid var(--mantine-color-background-3);
+	background-color: var(--mantine-color-background-1);
+	
+	&:hover {
+		background-color: var(--mantine-color-background-2);
+	}
+}
+
+.accordionPanel,
+.accordionPanel > div {
+	background-color: var(--mantine-color-background-0);
+}
+
+.accordionLabel {
+	color: var(--mantine-color-text);
+}
+
+.actionIconRoot {
+	&:hover {
+		background-color: var(--mantine-color-background-3);
+	}
+}
+
+.colorInputDropdown {
+	background-color: var(--mantine-color-background-0);
+	border-color: var(--mantine-color-background-2);
+}
+
+.selectOption {
+	color: var(--mantine-color-text);
+
+	&:hover,
+	&[data-selected],
+	&[data-combobox-selected] {
+		background-color: var(--mantine-color-background-2) !important;
+		color: var(--mantine-color-text);
+	}
+
+	&[data-selected]:hover,
+	&[data-combobox-selected]:hover {
+		background-color: var(--mantine-color-background-2) !important;
+		color: var(--mantine-color-text);
+	}
+}
+
+.selectDropdown {
+	background-color: var(--mantine-color-background-0);
+	border-color: var(--mantine-color-background-2);
+}
+
+.selectEmpty {
+	color: var(--mantine-color-background-5);
+}
+
+.selectSection {
+	& > button {
+		color: var(--mantine-color-background-7);
+	}
+}

@@ -1,0 +1,25 @@
+.menuItem {
+	color: var(--mantine-color-text);
+
+	&:hover,
+	&:focus {
+		background-color: var(--mantine-color-background-2);
+		color: var(--mantine-color-text);
+	}
+}
+
+.menuDropdown {
+	border-color: var(--mantine-color-background-2) !important;
+	font-weight: 600;
+	background:var(--mantine-color-background-0) !important;
+}
+
+.menuArrow {
+	border-color: var(--mantine-color-background-2) !important;
+}
+
+.headerButton {
+	&:hover {
+		background-color: var(--mantine-color-background-2) !important;
+	}
+}

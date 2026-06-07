@@ -23,7 +23,7 @@ export const UncategorizedBookmarksAccordionItem = ({
 	return (
 		<Accordion.Item value="category__uncategorized__">
 			<Accordion.Control>
-				<Text sx={{ height: 28 }}>Uncategorized bookmarks</Text>
+				<Text style={{ height: 28 }}>Uncategorized bookmarks</Text>
 			</Accordion.Control>
 
 			<Accordion.Panel>

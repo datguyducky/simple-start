@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Accordion, Box, Modal } from '@mantine/core';
 import { DragDropContext, Droppable, type DropResult } from '@hello-pangea/dnd';
 
-import { useCategoriesBookmarksSectionStyles } from './CategoriesBookmarksSection.styles';
+import classes from './CategoriesBookmarksSection.module.css';
 import { CategoryAccordionItem } from './CategoryAccordionItem';
 import { UncategorizedBookmarksAccordionItem } from './UncategorizedBookmarksAccordionItem';
 
@@ -23,8 +23,6 @@ type CategoriesAccordion = {
 };
 
 export const CategoriesBookmarksSection = () => {
-	const { classes } = useCategoriesBookmarksSectionStyles();
-
 	const editCategoryModal = useModal();
 	const removeCategoryModal = useModal();
 
@@ -105,6 +103,7 @@ export const CategoriesBookmarksSection = () => {
 							control: classes.categoriesAccordionControl,
 							content: classes.categoriesAccordionContent,
 							chevron: classes.categoriesAccordionChevron,
+							label: classes.categoriesAccordionLabel,
 						}}
 					>
 						<Droppable droppableId="droppable" type="category">

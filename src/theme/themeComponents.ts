@@ -1,212 +1,96 @@
-import { MantineThemeOverride } from '@mantine/core';
+import {
+	Accordion,
+	ActionIcon,
+	Checkbox,
+	ColorInput,
+	Input,
+	InputWrapper,
+	Menu,
+	Modal,
+	NumberInput,
+	Overlay,
+	Select,
+} from '@mantine/core';
 
-export const themeComponents: MantineThemeOverride = {
-	components: {
-		Select: {
-			styles: (theme) => ({
-				hovered: {
-					backgroundColor: theme.colors.background[2],
-				},
+import classes from './theme.module.css';
 
-				// fix for Select component of having a horizontal scroll after upgrading to v5
-				// + normal styling for selected and hovered components, and a little bit hacky way
-				// to style selected components that are also hovered
-				item: {
-					borderRadius: 0,
-					color: theme.colors.text,
-
-					'&[data-selected]': {
-						backgroundColor: theme.colors.background[2],
-						color: theme.colors.text,
-
-						'&[data-hovered]': {
-							backgroundColor: theme.colors.background[2],
-							color: theme.colors.text,
-						},
-					},
-					'&[data-hovered]': {
-						backgroundColor: theme.colors.background[2],
-						color: theme.colors.text,
-					},
-				},
-
-				// fix for Select component of having a horizontal scroll after upgrading to v5
-				dropdown: {
-					backgroundColor: theme.colors.background[0],
-					borderColor: theme.colors.background[2],
-
-					'& > div > div > div > div > div': {
-						padding: '0px !important',
-					},
-				},
-
-				nothingFound: {
-					color: theme.colors.background[5],
-				},
-
-				rightSection: {
-					'& > button': {
-						color: theme.colors.background[7],
-					},
-				},
-			}),
+export const componentsOverrides = {
+	Select: Select.extend({
+		classNames: {
+			option: classes.selectOption,
+			dropdown: classes.selectDropdown,
+			empty: classes.selectEmpty,
+			section: classes.selectSection,
 		},
-		Modal: {
-			styles: (theme) => ({
-				modal: {
-					backgroundColor: theme.colors.background[0],
-				},
-				title: {
-					fontSize: theme.headings.sizes.h3.fontSize,
-					color: theme.colors.text,
-					fontWeight: 'bold',
-				},
-				close: {
-					color: theme.colors.red[6],
-
-					'&[data-hovered]': {
-						backgroundColor: theme.colors.background[2],
-					},
-				},
-			}),
+		defaultProps: {
+			withCheckIcon: false,
 		},
-		Title: {
-			styles: (theme) => ({
-				root: {
-					color: theme.colors.text,
-				},
-			}),
+	}),
+	Modal: Modal.extend({
+		classNames: {
+			close: classes.modalClose,
+			content: classes.modalContent,
+			header: classes.modalHeader,
+			title: classes.modalTitle,
 		},
-		Input: {
-			styles: (theme, params: Record<string, unknown>) => ({
-				input: {
-					backgroundColor:
-						params.variant === 'unstyled' ? 'transparent' : theme.colors.background[0],
-					borderColor:
-						params.variant === 'unstyled' ? 'transparent' : theme.colors.background[4],
-
-					'&::placeholder': {
-						color: theme.colors.background[5],
-					},
-					color: theme.colors.text,
-				},
-				rightSection: {
-					color: theme.colors.background[6],
-
-					'& > svg': {
-						color: 'inherit !important',
-					},
-				},
-			}),
+	}),
+	Input: Input.extend({
+		classNames: {
+			input: classes.input,
+			section: classes.inputSection,
 		},
-		NumberInput: {
-			styles: (theme, params: Record<string, unknown>) => ({
-				control: {
-					borderColor:
-						params.variant === 'unstyled' ? 'transparent' : theme.colors.background[4],
-					color: theme.colors.text,
-
-					'&:hover': {
-						backgroundColor: `${theme.colors.background[4]} !important`,
-					},
-
-					'& > svg': {
-						color: 'inherit !important',
-					},
-				},
-			}),
+	}),
+	NumberInput: NumberInput.extend({
+		classNames: {
+			control: classes.numberInputControl,
 		},
-		InputWrapper: {
-			styles: (theme) => ({
-				label: {
-					color: theme.colors.text,
-				},
-			}),
+	}),
+	InputWrapper: InputWrapper.extend({
+		styles: {
+			label: {
+				color: 'var(--mantine-color-text)',
+			},
 		},
-		Checkbox: {
-			styles: (theme) => ({
-				input: {
-					backgroundColor: theme.colors.background[0],
-					borderColor: theme.colors.background[4],
-				},
-				label: {
-					color: theme.colors.text,
-				},
-			}),
+	}),
+	Checkbox: Checkbox.extend({
+		classNames: {
+			input: classes.checkboxInput,
+			label: classes.checkboxLabel,
 		},
-		Menu: {
-			styles: (theme) => ({
-				itemLabel: {
-					color: theme.colors.text,
-				},
-				itemIcon: {
-					color: theme.colors.text,
-				},
-			}),
+	}),
+	Menu: Menu.extend({
+		styles: {
+			itemLabel: {
+				color: 'var(--mantine-color-text)',
+			},
+			item: {
+				color: 'var(--mantine-color-text)',
+			},
 		},
-		Text: {
-			styles: (theme, params?: Record<string, unknown>) => ({
-				root: {
-					color:
-						params?.color === 'dimmed' ? theme.colors.background[6] : theme.colors.text,
-				},
-			}),
+	}),
+	Accordion: Accordion.extend({
+		classNames: {
+			root: classes.accordionRoot,
+			chevron: classes.accordionChevron,
+			control: classes.accordionControl,
+			item: classes.accordionItem,
+			panel: classes.accordionPanel,
+			label: classes.accordionLabel,
 		},
-		Accordion: {
-			styles: (theme) => ({
-				chevron: {
-					color: theme.colors.text,
-				},
-				control: {
-					backgroundColor: theme.colors.background[1],
-
-					'&:hover': {
-						backgroundColor: theme.colors.background[2],
-					},
-				},
-				item: {
-					backgroundColor: theme.colors.background[1],
-					'&[data-active]': { borderColor: theme.colors.background[3] },
-					'&[data-active] .mantine-Accordion-control': {
-						backgroundColor: theme.colors.background[1],
-						borderBottom: `1px solid ${theme.colors.background[3]}`,
-
-						'&:hover': {
-							backgroundColor: theme.colors.background[2],
-						},
-					},
-				},
-				panel: {
-					backgroundColor: theme.colors.background[0],
-				},
-				label: {
-					color: theme.colors.text,
-				},
-			}),
+	}),
+	ActionIcon: ActionIcon.extend({
+		classNames: {
+			root: classes.actionIconRoot,
 		},
-		ActionIcon: {
-			styles: (theme) => ({
-				root: {
-					'&:hover': {
-						backgroundColor: theme.colors.background[3],
-					},
-				},
-			}),
+	}),
+	Overlay: Overlay.extend({
+		defaultProps: {
+			opacity: 0.6,
 		},
-		Overlay: {
-			styles: () => ({
-				root: {
-					opacity: '0.6 !important',
-				},
-			}),
+	}),
+	ColorInput: ColorInput.extend({
+		classNames: {
+			dropdown: classes.colorInputDropdown,
 		},
-		ColorInput: {
-			styles: (theme) => ({
-				dropdown: {
-					backgroundColor: theme.colors.background[0],
-					borderColor: theme.colors.background[2],
-				},
-			}),
-		},
-	},
+	}),
 };

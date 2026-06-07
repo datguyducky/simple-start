@@ -1,5 +1,5 @@
 import { Button, Group, Modal, Text } from '@mantine/core';
-import { showNotification } from '@mantine/notifications';
+import { notifications } from '@mantine/notifications';
 
 import { handleAsyncAction } from '@/utils/handleAsyncAction';
 import { wait } from '@/utils/wait';
@@ -33,7 +33,7 @@ export const ModalRemoveCustomTheme = ({
 				await wait(500);
 				await removeTheme(name);
 
-				showNotification({
+				notifications.show({
 					color: 'dark',
 					message: `The ${formattedName} theme was successfully deleted!`,
 					autoClose: 3000,
@@ -52,13 +52,13 @@ export const ModalRemoveCustomTheme = ({
 		<Modal opened={isOpen} onClose={onClose} centered title="Remove custom theme" size="lg">
 			<Text mb={16}>
 				{'Are you sure you want to remove the '}
-				<Text weight={600} inline sx={{ display: 'inline' }}>
+				<Text fw={600} inline component="span">
 					{formattedName}
 				</Text>
 				{' theme?'}
 			</Text>
 
-			<Group position="right">
+			<Group justify="flex-end">
 				<Button variant="outline" color="gray" onClick={onClose}>
 					Cancel
 				</Button>

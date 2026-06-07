@@ -1,6 +1,6 @@
 import { Button, Checkbox, Group, TextInput } from '@mantine/core';
-import { useForm, zodResolver } from '@mantine/form';
-import { showNotification } from '@mantine/notifications';
+import { useForm, schemaResolver } from '@mantine/form';
+import { notifications } from '@mantine/notifications';
 
 import { handleAsyncAction } from '@/utils/handleAsyncAction';
 import { wait } from '@/utils/wait';
@@ -40,7 +40,7 @@ export const CategoryForm = ({
 			categoryName: '',
 			defaultCategory: false,
 		},
-		validate: zodResolver(categorySchema),
+		validate: schemaResolver(categorySchema),
 	});
 
 	const handleCreateCategory = (formValues: CategoryFormValues) => {
@@ -58,7 +58,7 @@ export const CategoryForm = ({
 					setAsDefault: formValues.defaultCategory,
 				});
 
-				showNotification({
+				notifications.show({
 					color: 'dark',
 					message: `The ${formValues.categoryName} category was successfully created!`,
 					autoClose: 3000,
@@ -86,7 +86,7 @@ export const CategoryForm = ({
 					defaultCategory: formValues.defaultCategory,
 				});
 
-				showNotification({
+				notifications.show({
 					color: 'dark',
 					message: `The ${formValues.categoryName} category was successfully edited!`,
 					autoClose: 3000,
@@ -117,7 +117,7 @@ export const CategoryForm = ({
 				{...getInputProps('defaultCategory', { type: 'checkbox' })}
 			/>
 
-			<Group position="right">
+			<Group justify="flex-end">
 				<Button type="submit" disabled={!isValid() || !isDirty()}>
 					{mode === 'create' ? 'Create new category' : 'Save changes'}
 				</Button>

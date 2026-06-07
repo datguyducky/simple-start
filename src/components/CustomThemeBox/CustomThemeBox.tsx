@@ -1,8 +1,9 @@
 import { type MouseEvent } from 'react';
 import { ActionIcon, Box, Stack, Text } from '@mantine/core';
 import { IconEdit, IconTrash } from '@tabler/icons-react';
+import clsx from 'clsx';
 
-import { useCustomThemeBoxStyles } from './CustomThemeBox.styles';
+import classes from './CustomThemeBox.module.css';
 
 type CustomThemeBoxProps = {
 	setActive: () => void;
@@ -23,16 +24,18 @@ export const CustomThemeBox = ({
 	borderColor,
 	isActive,
 }: CustomThemeBoxProps) => {
-	const { classes, cx } = useCustomThemeBoxStyles({ backgroundColor, borderColor });
-
 	return (
-		<Stack align="center" sx={{ width: 80 }} onClick={setActive}>
+		<Stack align="center" w={80} onClick={setActive}>
 			<Box
-				className={cx(classes.customThemeBox, {
+				className={clsx(classes.customThemeBox, {
 					[classes.active]: isActive,
 				})}
+				style={{
+					'--settings-bg-color': backgroundColor,
+					'--settings-border-color': borderColor,
+				}}
 			>
-				<Stack className={classes.absoluteWrapper} spacing={2}>
+				<Stack className={classes.absoluteWrapper} gap={2}>
 					<ActionIcon
 						color="red"
 						onClick={(event: MouseEvent<HTMLSpanElement>) => {
@@ -65,9 +68,9 @@ export const CustomThemeBox = ({
 
 			<Text
 				size="sm"
-				transform="capitalize"
-				align="center"
-				sx={{ overflow: 'hidden', textOverflow: 'ellipsis', maxWidth: '100%' }}
+				tt="capitalize"
+				ta="center"
+				style={{ overflow: 'hidden', textOverflow: 'ellipsis', maxWidth: '100%' }}
 			>
 				{customThemeName}
 			</Text>
