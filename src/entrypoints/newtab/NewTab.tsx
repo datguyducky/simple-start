@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { Text, Modal, Box, Select } from '@mantine/core';
+import { Text, Modal, Box, Select, Title } from '@mantine/core';
 import { IconChevronDown } from '@tabler/icons-react';
 import { Bookmarks } from '@/components/Bookmarks';
 import { NewTabHeader } from '@/components/NewTabHeader';
@@ -8,6 +8,7 @@ import { CategoryForm } from '@/forms/CategoryForm';
 import { useExtensionBookmarks } from '@/hooks/useExtensionBookmarks';
 import { useExtensionCategories } from '@/hooks/useExtensionCategories';
 import { useExtensionSettings } from '@/hooks/useExtensionSettings';
+import { useExtensionRoot } from '@/hooks/useExtensionRoot';
 import { useModal } from '@/hooks/useModal';
 
 import classes from './NewTab.module.css';
@@ -23,13 +24,15 @@ export const NewTab = () => {
 		categoryId: activeCategory,
 	});
 
+	const { extensionTree } = useExtensionRoot();
+	const { extensionSettings } = useExtensionSettings();
+
 	// todo: this is still far from being perfect, so it would be a good idea to find even better approach for this
 	const categoryLength =
 		categories.find((category) => category.id === activeCategory)?.title.replace(' ', '')
 			.length || 11;
 	const customWidth = categoryLength > 40 ? categoryLength * 7.5 : categoryLength * 8 + 64;
 
-	const { extensionSettings } = useExtensionSettings();
 	useEffect(() => {
 		if (extensionSettings.defaultCategory && activeCategory === undefined) {
 			setActiveCategory(extensionSettings.defaultCategory);
@@ -50,7 +53,7 @@ export const NewTab = () => {
 					</Text>
 				)}
 
-				{categories.length > 0 && (
+				{!extensionSettings.oneView && categories.length > 0 && (
 					<Box pos="relative" component="span" mb={32}>
 						<Select
 							data={categories.map((category) => ({
@@ -80,8 +83,41 @@ export const NewTab = () => {
 					</Box>
 				)}
 
-				{(activeCategory && bookmarks.length > 0) ||
-				(!activeCategory && uncategorizedBookmarks.length > 0) ? (
+				{extensionSettings.oneView ? (
+					<>
+						{extensionTree
+							?.filter((category) => category.bookmarks.length > 0)
+							.map((category) => (
+								<Box key={category.id} mb={extensionSettings.oneViewCategoriesGap}>
+									<Box
+										className={classes.oneViewCategoryHeadingContainer}
+										mb={extensionSettings.oneViewHeadingGap}
+									>
+										<Title order={4} className={classes.oneViewCategoryHeading}>
+											{category.title}
+										</Title>
+										<Box className={classes.oneViewCategoryHeadingLine} />
+									</Box>
+									<Bookmarks bookmarks={category.bookmarks} />
+								</Box>
+							))}
+						{uncategorizedBookmarks.length > 0 && (
+							<Box mb={extensionSettings.oneViewCategoriesGap}>
+								<Box
+									className={classes.oneViewCategoryHeadingContainer}
+									mb={extensionSettings.oneViewHeadingGap}
+								>
+									<Title order={4} className={classes.oneViewCategoryHeading}>
+										Uncategorized
+									</Title>
+									<Box className={classes.oneViewCategoryHeadingLine} />
+								</Box>
+								<Bookmarks bookmarks={uncategorizedBookmarks} />
+							</Box>
+						)}
+					</>
+				) : (activeCategory && bookmarks.length > 0) ||
+				  (!activeCategory && uncategorizedBookmarks.length > 0) ? (
 					<Bookmarks bookmarks={activeCategory ? bookmarks : uncategorizedBookmarks} />
 				) : categories.length > 0 ? (
 					<Text>

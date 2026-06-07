@@ -1,11 +1,17 @@
 import { useCallback, useContext, useEffect, useLayoutEffect, useState } from 'react';
 import { browser } from 'wxt/browser';
 
-import { constants, defaultCapsuleSettings, defaultListSettings } from '@/common/constants';
+import {
+	constants,
+	defaultCapsuleSettings,
+	defaultListSettings,
+	defaultGeneralSettings,
+} from '@/common/constants';
 import {
 	type AllExtensionSettings,
 	type CapsuleSettings,
 	type ListSettings,
+	type GeneralSettings,
 } from '@/types/settingsValues';
 
 import { ExtensionSettingsContext } from '@/context/ExtensionSettingsContext';
@@ -44,6 +50,12 @@ const getListSettings = (settings: AllExtensionSettings): ListSettings => ({
 	listUseStrippedRows: settings.listUseStrippedRows,
 });
 
+const getGeneralSettings = (settings: AllExtensionSettings): GeneralSettings => ({
+	oneView: settings.oneView,
+	oneViewHeadingGap: settings.oneViewHeadingGap,
+	oneViewCategoriesGap: settings.oneViewCategoriesGap,
+});
+
 const hasCapsuleSettingsChangedFromDefault = (settings: CapsuleSettings) => {
 	return (
 		settings.capsuleSpacing !== defaultCapsuleSettings.capsuleSpacing ||
@@ -74,6 +86,14 @@ const hasListSettingsChangedFromDefault = (settings: ListSettings) => {
 		settings.listNameSize !== defaultListSettings.listNameSize ||
 		settings.listUrlSize !== defaultListSettings.listUrlSize ||
 		settings.listUseStrippedRows !== defaultListSettings.listUseStrippedRows
+	);
+};
+
+const hasGeneralSettingsChangedFromDefault = (settings: GeneralSettings) => {
+	return (
+		settings.oneView !== defaultGeneralSettings.oneView ||
+		settings.oneViewHeadingGap !== defaultGeneralSettings.oneViewHeadingGap ||
+		settings.oneViewCategoriesGap !== defaultGeneralSettings.oneViewCategoriesGap
 	);
 };
 
@@ -164,6 +184,10 @@ export const useExtensionSettings = () => {
 		return hasListSettingsChangedFromDefault(getListSettings(currentSettings));
 	};
 
+	const hasGeneralSettingsChanged = () => {
+		return hasGeneralSettingsChangedFromDefault(getGeneralSettings(currentSettings));
+	};
+
 	return {
 		extensionSettings: currentSettings,
 		currentView: currentSettings.currentView,
@@ -172,5 +196,6 @@ export const useExtensionSettings = () => {
 		saveExtensionSettings,
 		hasCapsuleSettingsChanged,
 		hasListSettingsChanged,
+		hasGeneralSettingsChanged,
 	};
 };

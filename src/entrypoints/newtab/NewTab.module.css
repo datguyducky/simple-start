@@ -55,3 +55,26 @@
 	}
 }
 
+.oneViewCategoryHeadingContainer {
+	display: flex;
+	align-items: center;
+	gap: 16px;
+}
+
+.oneViewCategoryHeadingLine {
+	flex: 1;
+	height: 1px;
+	background-color: var(--mantine-color-background-2);
+	min-width: 32px;
+}
+
+.oneViewCategoryHeading {
+	margin-bottom: 0 !important;
+	letter-spacing: 0.5px;
+	white-space: nowrap;
+	font-weight: 700;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	max-width: 400px;
+}
+

@@ -1,4 +1,4 @@
-import { createTheme, MantineProvider, v8CssVariablesResolver } from '@mantine/core';
+import { createTheme, MantineProvider } from '@mantine/core';
 import { Notifications } from '@mantine/notifications';
 import { type ReactNode } from 'react';
 
@@ -64,28 +64,6 @@ export const AppProviders = ({ children }: { children: ReactNode }) => {
 					},
 				};
 			}}
-			// cssVariablesResolver={(theme) => {
-			// 	const base = v8CssVariablesResolver(theme);
-			// 	const textColor = theme.other.text as string;
-			//
-			// 	return {
-			// 		variables: {
-			// 			...base.variables,
-			// 			'--mantine-color-text': textColor,
-			// 			'--mantine-color-dimmed': theme.colors.background[6],
-			// 		},
-			// 		light: {
-			// 			...base.light,
-			// 			'--mantine-color-text': textColor,
-			// 			'--mantine-color-dimmed': theme.colors.background[6],
-			// 		},
-			// 		dark: {
-			// 			...base.dark,
-			// 			'--mantine-color-text': textColor,
-			// 			'--mantine-color-dimmed': theme.colors.background[6],
-			// 		},
-			// 	};
-			// }}
 		>
 			<Notifications position="top-center" />
 			<ExtensionSettingsProvider>

@@ -21,7 +21,7 @@ export const ThemeSection = () => {
 
 	return (
 		<>
-			<Box mb={32}>
+			<Box>
 				<Group gap={16} align="flex-start">
 					<Stack
 						align="center"

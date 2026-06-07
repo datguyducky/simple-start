@@ -4,6 +4,7 @@ import {
 	type AllExtensionSettings,
 	type CapsuleSettings,
 	type ListSettings,
+	type GeneralSettings,
 } from '@/types/settingsValues';
 
 type AvailableView = {
@@ -41,6 +42,9 @@ export const constants: Constants = {
 		// just extension settings
 		currentView: 1,
 		defaultCategory: null,
+		oneView: false,
+		oneViewHeadingGap: 8,
+		oneViewCategoriesGap: 32,
 		// settings for the capsule view
 		capsuleSpacing: 24,
 		capsuleSize: 64,
@@ -90,6 +94,12 @@ export const defaultListSettings: ListSettings = {
 	listNameSize: constants.defaultExtensionSettings.listNameSize,
 	listUrlSize: constants.defaultExtensionSettings.listUrlSize,
 	listUseStrippedRows: constants.defaultExtensionSettings.listUseStrippedRows,
+};
+
+export const defaultGeneralSettings: GeneralSettings = {
+	oneView: constants.defaultExtensionSettings.oneView,
+	oneViewHeadingGap: constants.defaultExtensionSettings.oneViewHeadingGap,
+	oneViewCategoriesGap: constants.defaultExtensionSettings.oneViewCategoriesGap,
 };
 
 export const defaultCapsuleSettings: CapsuleSettings = {

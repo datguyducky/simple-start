@@ -2,6 +2,7 @@ import { Box, Title, Text } from '@mantine/core';
 
 import classes from './Settings.module.css';
 import { ThemeSection } from '@/components/Settings/ThemeSection';
+import { GeneralSection } from '@/components/Settings/GeneralSection';
 import { CapsulesSection } from '@/components/Settings/CapsulesSection';
 import { ListSection } from '@/components/Settings/ListSection';
 import { CategoriesBookmarksSection } from '@/components/Settings/CategoriesBookmarksSection';
@@ -11,7 +12,7 @@ export const Settings = () => {
 		<Box className={classes.settingsLayout}>
 			<Title mb={32}>Simple Start - Settings</Title>
 
-			<Box>
+			<Box mb={32}>
 				<Title order={3} mb={0}>
 					Theme
 				</Title>
@@ -23,7 +24,18 @@ export const Settings = () => {
 				<ThemeSection />
 			</Box>
 
-			<Box>
+			<Box mb={32}>
+				<Title order={3} mb={0}>
+					General
+				</Title>
+				<Text mb={16} c="dimmed">
+					General settings for the extension.
+				</Text>
+
+				<GeneralSection />
+			</Box>
+
+			<Box mb={32}>
 				<Title order={3} mb={0}>
 					Capsule View
 				</Title>
@@ -34,8 +46,8 @@ export const Settings = () => {
 				<CapsulesSection />
 			</Box>
 
-			<Box>
-				<Title order={3} mb={8}>
+			<Box mb={32}>
+				<Title order={3} mb={0}>
 					List View
 				</Title>
 				<Text mb={16} c="dimmed">
