@@ -3,10 +3,10 @@ import { IconPlus, IconBookmark, IconBoxMultiple, IconSettings } from '@tabler/i
 import { browser } from 'wxt/browser';
 
 import { constants } from '@/common/constants';
-
-import { useNewTabHeaderStyles } from './NewTabHeader.styles';
 import { useExtensionSettings } from '@/hooks/useExtensionSettings';
 import { handleAsyncAction } from '@/utils/handleAsyncAction';
+
+import classes from './NewTabHeader.module.css';
 
 type NewTabHeaderProps = {
 	onNewBookmarkClick: () => void;
@@ -14,8 +14,6 @@ type NewTabHeaderProps = {
 };
 
 export const NewTabHeader = ({ onNewBookmarkClick, onNewCategoryClick }: NewTabHeaderProps) => {
-	const { classes } = useNewTabHeaderStyles();
-
 	const { currentView, handleNextView, viewLoading } = useExtensionSettings();
 
 	const currentViewIndex = constants.availableViews.findIndex((view) => view.id === currentView);
@@ -37,12 +35,12 @@ export const NewTabHeader = ({ onNewBookmarkClick, onNewCategoryClick }: NewTabH
 	return (
 		<Grid columns={3} style={{ marginBottom: 32 }}>
 			<Grid.Col span={1}>
-				<Title color="dark">Simple Start</Title>
+				<Title>Simple Start</Title>
 			</Grid.Col>
 
 			{!viewLoading && (
 				<Grid.Col span={2}>
-					<Group position="right" spacing="xs">
+					<Group justify="flex-end" gap="xs">
 						<Menu
 							withArrow
 							position="top-start"
@@ -50,16 +48,18 @@ export const NewTabHeader = ({ onNewBookmarkClick, onNewCategoryClick }: NewTabH
 							classNames={{
 								dropdown: classes.menuDropdown,
 								arrow: classes.menuArrow,
+								item: classes.menuItem,
 							}}
 						>
 							<Menu.Target>
 								<Button
 									variant="subtle"
-									leftIcon={<IconPlus size={18} />}
-									compact
+									color="var(--mantine-color-text)"
+									size="compact-md"
+									leftSection={<IconPlus size={18} />}
 									className={classes.headerButton}
 								>
-									<Text size="sm" inline>
+									<Text size="sm" fw={600} inline>
 										Add
 									</Text>
 								</Button>
@@ -67,16 +67,14 @@ export const NewTabHeader = ({ onNewBookmarkClick, onNewCategoryClick }: NewTabH
 
 							<Menu.Dropdown>
 								<Menu.Item
-									icon={<IconBookmark size={14} />}
-									className={classes.headerButton}
+									leftSection={<IconBookmark size={14} />}
 									onClick={onNewBookmarkClick}
 								>
 									New Bookmark
 								</Menu.Item>
 
 								<Menu.Item
-									icon={<IconBoxMultiple size={14} />}
-									className={classes.headerButton}
+									leftSection={<IconBoxMultiple size={14} />}
 									onClick={onNewCategoryClick}
 								>
 									New Category
@@ -86,24 +84,24 @@ export const NewTabHeader = ({ onNewBookmarkClick, onNewCategoryClick }: NewTabH
 
 						<Button
 							variant="subtle"
-							leftIcon={nextView.icon}
-							compact
-							color="dark"
-							className={classes.headerButton}
+							color="text"
+							size="compact-md"
+							leftSection={nextView.icon}
 							onClick={handleNextViewClick}
+							className={classes.headerButton}
 						>
-							<Text inline size="sm">{`${nextView.title} view`}</Text>
+							<Text inline size="sm" fw={600}>{`${nextView.title} view`}</Text>
 						</Button>
 
 						<Button
 							variant="subtle"
-							leftIcon={<IconSettings size={18} />}
-							compact
-							color="dark"
-							className={classes.headerButton}
+							color="text"
+							size="compact-md"
+							leftSection={<IconSettings size={18} />}
 							onClick={handleSettingsClick}
+							className={classes.headerButton}
 						>
-							<Text inline size="sm">
+							<Text inline size="sm" fw={600}>
 								Settings
 							</Text>
 						</Button>

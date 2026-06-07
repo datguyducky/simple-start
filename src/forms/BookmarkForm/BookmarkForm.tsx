@@ -1,6 +1,6 @@
 import { Button, Group, Select, Text, TextInput } from '@mantine/core';
-import { useForm, zodResolver } from '@mantine/form';
-import { showNotification } from '@mantine/notifications';
+import { useForm, schemaResolver } from '@mantine/form';
+import { notifications } from '@mantine/notifications';
 
 import { useExtensionCategories } from '@/hooks/useExtensionCategories';
 
@@ -53,7 +53,7 @@ export const BookmarkForm = ({
 			bookmarkUrl: '',
 			bookmarkCategoryId: '',
 		},
-		validate: zodResolver(bookmarkSchema),
+		validate: schemaResolver(bookmarkSchema),
 	});
 
 	const { categories } = useExtensionCategories();
@@ -78,7 +78,7 @@ export const BookmarkForm = ({
 					bookmarkCategoryId: categoryName ? formValues.bookmarkCategoryId : undefined,
 				});
 
-				showNotification({
+				notifications.show({
 					color: 'dark',
 					title: categoryName
 						? 'Bookmark was successfully added!'
@@ -115,7 +115,7 @@ export const BookmarkForm = ({
 
 				onEditBookmark?.();
 
-				showNotification({
+				notifications.show({
 					color: 'dark',
 					message: `The ${formValues.bookmarkName} bookmark was successfully edited!`,
 					autoClose: 3000,
@@ -156,7 +156,7 @@ export const BookmarkForm = ({
 						label: category.title,
 					}))}
 					searchable
-					nothingFound="Category not found"
+					nothingFoundMessage="Category not found"
 					clearable
 					mb="xl"
 					{...getInputProps('bookmarkCategoryId')}
@@ -164,13 +164,13 @@ export const BookmarkForm = ({
 			) : (
 				<>
 					<Text size="sm">Select bookmark category</Text>
-					<Text size="xs" color="dimmed" weight={600} mb="xl">
+					<Text size="xs" c="dimmed" fw={600} mb="xl">
 						To select category you first need to create it in the New Category modal
 					</Text>
 				</>
 			)}
 
-			<Group position="right">
+			<Group justify="flex-end">
 				<Button type="submit" disabled={!isValid() || !isDirty()}>
 					{mode === 'create' ? 'Create new bookmark' : 'Save changes'}
 				</Button>

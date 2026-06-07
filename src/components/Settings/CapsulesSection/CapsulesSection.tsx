@@ -1,5 +1,5 @@
 import { Button, Text, Group, Modal, SimpleGrid, Box } from '@mantine/core';
-import { showNotification } from '@mantine/notifications';
+import { notifications } from '@mantine/notifications';
 
 import { defaultCapsuleSettings } from '@/common/constants';
 import { CapsulesSettingsForm } from '@/forms/CapsulesSettingsForm';
@@ -20,7 +20,7 @@ export const CapsulesSection = () => {
 				await wait(600);
 				await saveExtensionSettings(defaultCapsuleSettings);
 
-				showNotification({
+				notifications.show({
 					color: 'dark',
 					message: 'Capsule view settings have been reset to their default values!',
 					autoClose: 3000,
@@ -36,8 +36,8 @@ export const CapsulesSection = () => {
 		<>
 			<Box>
 				<SimpleGrid cols={2} spacing={32} mb={8}>
-					<Text weight={700}>Customize:</Text>
-					<Text weight={700}>Preview:</Text>
+					<Text fw={700}>Customize:</Text>
+					<Text fw={700}>Preview:</Text>
 				</SimpleGrid>
 
 				<CapsulesSettingsForm openResetModal={resetCapsuleSettingsModal.open} />
@@ -55,7 +55,7 @@ export const CapsulesSection = () => {
 					be undone and all your custom settings will be replaced by the default values!
 				</Text>
 
-				<Group position="right">
+				<Group align="flex-end">
 					<Button
 						variant="outline"
 						color="gray"

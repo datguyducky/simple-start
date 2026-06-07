@@ -1,7 +1,8 @@
 import { Box, Group, Stack, Text } from '@mantine/core';
 import { IconPlus } from '@tabler/icons-react';
+import clsx from 'clsx';
 
-import { useThemeSectionStyles } from './ThemeSection.styles';
+import classes from './ThemeSection.module.css';
 import { useExtensionTheme } from '@/hooks/useExtensionTheme';
 import { useModal } from '@/hooks/useModal';
 import { CustomThemeBox } from '@/components/CustomThemeBox';
@@ -10,7 +11,6 @@ import { type CustomTheme } from '@/types/customTheme';
 import { ModalRemoveCustomTheme } from '@/modals/ModalRemoveCustomTheme';
 
 export const ThemeSection = () => {
-	const { classes, cx } = useThemeSectionStyles();
 	const { theme, setTheme, customThemes, saveCustomTheme, editCustomTheme, removeCustomTheme } =
 		useExtensionTheme({
 			defaultValue: 'light',
@@ -22,18 +22,20 @@ export const ThemeSection = () => {
 	return (
 		<>
 			<Box mb={32}>
-				<Group spacing={16} sx={{ alignItems: 'flex-start' }}>
+				<Group gap={16} align="flex-start">
 					<Stack
 						align="center"
-						sx={{ width: 80 }}
+						w={80}
 						onClick={() => {
 							setTheme('light');
 						}}
 					>
 						<Box
-							className={cx(classes.colorBox, classes.light, {
-								[classes.active]: theme === 'light',
-							})}
+							className={clsx(
+								classes.colorBox,
+								classes.light,
+								theme === 'light' && classes.active,
+							)}
 						/>
 
 						<Text size="sm" align="center">
@@ -43,15 +45,17 @@ export const ThemeSection = () => {
 
 					<Stack
 						align="center"
-						sx={{ width: 80 }}
+						w={80}
 						onClick={() => {
 							setTheme('dark');
 						}}
 					>
 						<Box
-							className={cx(classes.colorBox, classes.dark, {
-								[classes.active]: theme === 'dark',
-							})}
+							className={clsx(
+								classes.colorBox,
+								classes.dark,
+								theme === 'dark' && classes.active,
+							)}
 						/>
 
 						<Text size="sm" align="center">
@@ -93,14 +97,14 @@ export const ThemeSection = () => {
 
 					<Stack
 						align="center"
-						sx={{ width: 80 }}
+						w={80}
 						onClick={() => {
 							customThemeModal.open({
 								mode: 'create',
 							});
 						}}
 					>
-						<Box className={cx(classes.colorBox, classes.customAdd)}>
+						<Box className={clsx(classes.colorBox, classes.customAdd)}>
 							<IconPlus size={32} />
 						</Box>
 

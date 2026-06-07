@@ -1,4 +1,4 @@
-import { type SafeParseReturnType } from 'zod';
+import { z, ZodSafeParseResult } from 'zod';
 
 import { backgroundColorSchema } from '@/validation/backgroundColorSchema';
 import { primaryColorSchema } from '@/validation/primaryColorSchema';
@@ -8,10 +8,17 @@ import { themeErrorMap } from '@/validation/themeErrorMap';
 
 type ThemeValidationErrors = Record<string, string>;
 
+const completeCustomThemeFormSchema = z
+	.object({})
+	.extend(backgroundColorSchema.shape)
+	.extend(primaryColorSchema.shape)
+	.extend(textColorSchema.shape)
+	.extend(customThemeSchema.shape);
+
 const getValidationResult = (
 	activeStep: number,
 	values: Record<string, unknown>,
-): SafeParseReturnType<unknown, unknown> | undefined => {
+): ZodSafeParseResult<unknown> | undefined => {
 	if (activeStep === 0) {
 		return backgroundColorSchema.safeParse(values, { errorMap: themeErrorMap });
 	}
@@ -25,7 +32,7 @@ const getValidationResult = (
 	}
 
 	if (activeStep === 3) {
-		return customThemeSchema.safeParse(values, { errorMap: themeErrorMap });
+		return completeCustomThemeFormSchema.safeParse(values, { errorMap: themeErrorMap });
 	}
 
 	return undefined;

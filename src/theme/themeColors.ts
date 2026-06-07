@@ -1,3 +1,5 @@
+import type { MantineColorsTuple } from '@mantine/core';
+
 /**
  * theme colors used across the whole extension:
  * - "background":
@@ -18,9 +20,11 @@
  *
  * - "text" - main text color
  */
-
 export const themeColors = {
 	light: {
+		other: {
+			text: '#101113',
+		},
 		colors: {
 			background: [
 				'#ffffff', // [0]
@@ -33,12 +37,14 @@ export const themeColors = {
 				'#495057', // [7]
 				'pink', // [8]
 				'pink', // [9]
-			],
-
-			text: '#101113',
+			] satisfies MantineColorsTuple,
 		},
 	},
+
 	dark: {
+		other: {
+			text: '#ffffff',
+		},
 		colors: {
 			background: [
 				'#181818', // [0]
@@ -51,9 +57,7 @@ export const themeColors = {
 				'#bababa', // [7]
 				'#d1d1d1', // [8]
 				'#e8e8e8', // [9]
-			],
-
-			text: '#ffffff',
+			] satisfies MantineColorsTuple,
 		},
 	},
 };

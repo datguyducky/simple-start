@@ -11,8 +11,8 @@ import {
 	Text,
 	Divider,
 } from '@mantine/core';
-import { useForm, zodResolver } from '@mantine/form';
-import { showNotification } from '@mantine/notifications';
+import { useForm, schemaResolver } from '@mantine/form';
+import { notifications } from '@mantine/notifications';
 
 import { type ListSettings } from '@/types/settingsValues';
 
@@ -34,7 +34,7 @@ export const ListSettingsForm = ({ openResetModal }: ListSettingsFormProps) => {
 
 	const { getInputProps, setValues, onSubmit, values, resetDirty, isDirty, isValid } =
 		useForm<ListSettings>({
-			validate: zodResolver(listSettingsSchema),
+			validate: schemaResolver(listSettingsSchema),
 			validateInputOnChange: true,
 		});
 
@@ -64,7 +64,7 @@ export const ListSettingsForm = ({ openResetModal }: ListSettingsFormProps) => {
 				await wait(600);
 				await saveExtensionSettings(formValues);
 
-				showNotification({
+				notifications.show({
 					color: 'dark',
 					message: 'Settings for list view were successfully saved!',
 					autoClose: 3000,
@@ -81,15 +81,11 @@ export const ListSettingsForm = ({ openResetModal }: ListSettingsFormProps) => {
 	return (
 		<Stack>
 			<Box>
-				<Text weight={700} mb={8}>
+				<Text fw={700} mb={8}>
 					Preview:
 				</Text>
 
-				<Stack
-					justify="flex-start"
-					spacing={values.listSpacing}
-					sx={{ overflow: 'hidden' }}
-				>
+				<Stack justify="flex-start" gap={values.listSpacing} style={{ overflow: 'hidden' }}>
 					{constants.exampleBookmarks.map((bookmark, index) => (
 						<BookmarkListRow
 							key={bookmark.id}
@@ -105,12 +101,12 @@ export const ListSettingsForm = ({ openResetModal }: ListSettingsFormProps) => {
 			<Divider />
 
 			<Box component="form" onSubmit={onSubmit(handleSaveExtensionSettings)} noValidate>
-				<Text weight={700} mb={8}>
+				<Text fw={700} mb={8}>
 					Customize:
 				</Text>
 
 				<SimpleGrid cols={2} spacing={16} mb={24}>
-					<Stack spacing={12} align="flex-start">
+					<Stack gap={12} align="flex-start">
 						<Checkbox
 							label="Use striped rows"
 							{...getInputProps('listUseStrippedRows', {
@@ -150,7 +146,7 @@ export const ListSettingsForm = ({ openResetModal }: ListSettingsFormProps) => {
 						</Group>
 					</Stack>
 
-					<Stack spacing={12} align="flex-start">
+					<Stack gap={12} align="flex-start">
 						<Group align="flex-start">
 							<ColorInput
 								{...getInputProps('listNameColor')}
@@ -166,7 +162,7 @@ export const ListSettingsForm = ({ openResetModal }: ListSettingsFormProps) => {
 						</Group>
 
 						<Group align="flex-start">
-							<Stack spacing={12} align="flex-start">
+							<Stack gap={12} align="flex-start">
 								<Checkbox
 									label="Use bold text for bookmark name"
 									{...getInputProps('listNameBold', {
@@ -196,7 +192,7 @@ export const ListSettingsForm = ({ openResetModal }: ListSettingsFormProps) => {
 								/>
 							</Stack>
 
-							<Stack spacing={12} align="flex-start">
+							<Stack gap={12} align="flex-start">
 								<Checkbox
 									label="Hide bookmarks name"
 									{...getInputProps('listHiddenName', {
@@ -214,7 +210,7 @@ export const ListSettingsForm = ({ openResetModal }: ListSettingsFormProps) => {
 					</Stack>
 				</SimpleGrid>
 
-				<Group position="center" sx={{ width: '100%', marginLeft: '-28px' }} mt={0}>
+				<Group justify="center" w="100%" ml={-28} mt={0}>
 					<Button
 						variant="outline"
 						onClick={openResetModal}

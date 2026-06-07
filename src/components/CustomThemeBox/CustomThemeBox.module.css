@@ -1,0 +1,46 @@
+.customThemeBox {
+	width: 64px;
+	height: 64px;
+	border-radius: var(--mantine-radius-sm);
+	border: 1px solid var(--settings-border-color);
+	cursor: pointer;
+	position: relative;
+	background-color: var(--settings-bg-color);
+	
+	&:hover {
+		background-color: var(--settings-border-color);
+	}
+	
+	&:hover .removeAction, &:hover .editAction {
+		display: flex;
+	}
+	
+}
+
+.absoluteWrapper {
+	position: absolute;
+	top: 0;
+	right: 0;
+	margin-top: 1px;
+	margin-right: 1px;
+}
+
+.active {
+	border-color: var(--mantine-primary-color-6);
+}
+
+.removeAction {
+	display: none;
+	
+	&:hover {
+		background-color: var(--mantine-color-red-9);
+	}
+}
+
+.editAction {
+	display: none;
+	
+	&:hover {
+		background-color: var(--mantine-color-blue-9);
+	}
+}

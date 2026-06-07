@@ -1,0 +1,22 @@
+.settingsLayout {
+	min-height: 100vh;
+	display: flex;
+	flex-direction: column;
+	box-sizing: border-box;
+	padding: 32px 96px;
+	background-color: var(--mantine-color-background-0);
+	transition: background-color 1s ease;
+	transition-delay: 0.1s;
+	
+	@media (max-width: $mantine-breakpoint-xl) {
+		padding: 32px 64px;
+	}
+	
+	@media (max-width: $mantine-breakpoint-md) {
+		padding: 32px 48px;
+	}
+	
+	@media (max-width: $mantine-breakpoint-sm) {
+		padding: 32px 24px;
+	}
+}

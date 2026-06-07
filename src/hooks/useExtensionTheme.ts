@@ -4,6 +4,7 @@ import { browser } from 'wxt/browser';
 import {
 	type CustomTheme,
 	type CustomThemeColors,
+	type CustomThemeSaveValues,
 	type CustomThemesByName,
 } from '@/types/customTheme';
 import {
@@ -18,6 +19,9 @@ type UseExtensionThemeProps = {
 
 type StoredCustomTheme = {
 	colors: CustomThemeColors;
+	other?: {
+		text?: string;
+	};
 };
 
 const isStoredCustomTheme = (value: unknown): value is StoredCustomTheme => {
@@ -63,7 +67,13 @@ export const useExtensionTheme = ({ defaultValue = 'light' }: UseExtensionThemeP
 
 			legacyCustomThemes[storageKey] = {
 				name: storageKey,
-				colors: value.colors,
+				colors: {
+					background: value.colors.background,
+					'custom-primary': value.colors['custom-primary'],
+				},
+				other: {
+					text: value.other?.text ?? value.colors.text ?? '#101113',
+				},
 			};
 		}
 
@@ -120,7 +130,7 @@ export const useExtensionTheme = ({ defaultValue = 'light' }: UseExtensionThemeP
 		};
 	}, []);
 
-	const saveCustomTheme = async (name: string, themeColors: CustomThemeColors) => {
+	const saveCustomTheme = async (name: string, themeColors: CustomThemeSaveValues) => {
 		const formattedName = formatCustomThemeName(name);
 		const customThemes = await customThemesStorage.getValue();
 
@@ -132,7 +142,13 @@ export const useExtensionTheme = ({ defaultValue = 'light' }: UseExtensionThemeP
 			...customThemes,
 			[formattedName]: {
 				name: formattedName,
-				colors: themeColors,
+				colors: {
+					background: themeColors.background,
+					'custom-primary': themeColors['custom-primary'],
+				},
+				other: {
+					text: themeColors.text,
+				},
 			},
 		});
 	};
@@ -140,7 +156,7 @@ export const useExtensionTheme = ({ defaultValue = 'light' }: UseExtensionThemeP
 	const editCustomTheme = async (
 		name: string,
 		oldName: string,
-		themeColors: CustomThemeColors,
+		themeColors: CustomThemeSaveValues,
 	) => {
 		const formattedName = formatCustomThemeName(name);
 		const customThemes = await customThemesStorage.getValue();
@@ -153,7 +169,13 @@ export const useExtensionTheme = ({ defaultValue = 'light' }: UseExtensionThemeP
 			...removeCustomThemeFromRecord(customThemes, oldName),
 			[formattedName]: {
 				name: formattedName,
-				colors: themeColors,
+				colors: {
+					background: themeColors.background,
+					'custom-primary': themeColors['custom-primary'],
+				},
+				other: {
+					text: themeColors.text,
+				},
 			},
 		};
 

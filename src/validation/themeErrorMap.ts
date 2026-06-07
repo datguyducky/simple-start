@@ -1,20 +1,21 @@
 import { z } from 'zod';
 
-export const themeErrorMap: z.ZodErrorMap = (error, ctx) => {
-	// if error.message is passed then we don't try to overwrite it
-	if (error.message) return { message: error.message };
+export const themeErrorMap: z.core.$ZodErrorMap = (issue) => {
+	// if issue.message is passed then we don't try to overwrite it
+	if (issue.message) return { message: issue.message };
 
-	switch (error.code) {
-		case z.ZodIssueCode.too_small:
-			if (error.minimum === 4) {
+	switch (issue.code) {
+		case 'too_small':
+			if (issue.minimum === 4) {
 				return {
 					message:
 						'The color must be at least in shorthand hex format, for example: #333',
 				};
 			}
 			break;
-		case z.ZodIssueCode.invalid_string:
-			if (error.validation === 'regex') {
+
+		case 'invalid_format':
+			if (issue.format === 'regex') {
 				return {
 					message: 'Color must be in a HEX format, for example "#000000"',
 				};
@@ -22,6 +23,6 @@ export const themeErrorMap: z.ZodErrorMap = (error, ctx) => {
 			break;
 	}
 
-	// fall back to default message
-	return { message: ctx.defaultError };
+	// fall back to Zod's default message
+	return undefined;
 };

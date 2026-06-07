@@ -11,10 +11,11 @@ export const getExtensionRootId = async () => {
 	}
 
 	extensionRootIdPromise = (async () => {
-		const existingRoot = await browser.bookmarks.search({ title: EXTENSION_ROOT_TITLE });
+		const searchResults = await browser.bookmarks.search({ title: EXTENSION_ROOT_TITLE });
+		const existingRoot = searchResults.find((result) => !result.url);
 
-		if (existingRoot.length > 0) {
-			return existingRoot[0].id;
+		if (existingRoot) {
+			return existingRoot.id;
 		}
 
 		const createdRoot = await browser.bookmarks.create({ title: EXTENSION_ROOT_TITLE });
@@ -29,11 +30,12 @@ export const getExtensionRootId = async () => {
 };
 
 export const findExtensionRoot = async (): Promise<BookmarkTreeNode | null> => {
-	const root = await browser.bookmarks.search({ title: EXTENSION_ROOT_TITLE });
+	const searchResults = await browser.bookmarks.search({ title: EXTENSION_ROOT_TITLE });
+	const root = searchResults.find((result) => !result.url);
 
-	if (root.length === 0) {
+	if (!root) {
 		return null;
 	}
 
-	return root[0];
+	return root;
 };

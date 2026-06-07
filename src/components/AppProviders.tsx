@@ -1,12 +1,15 @@
-import { MantineProvider, Global, MantineThemeOverride } from '@mantine/core';
-import { NotificationsProvider } from '@mantine/notifications';
+import { createTheme, MantineProvider, v8CssVariablesResolver } from '@mantine/core';
+import { Notifications } from '@mantine/notifications';
 import { type ReactNode } from 'react';
 
 import { ExtensionSettingsProvider } from '@/context/ExtensionSettingsContext';
 import { ExtensionProvider } from '@/context/ExtensionRootContext';
 import { useExtensionTheme } from '@/hooks/useExtensionTheme';
-import { themeComponents } from '@/theme/themeComponents';
 import { themeColors } from '@/theme/themeColors';
+
+import '@mantine/core/styles.css';
+import '@mantine/notifications/styles.css';
+import { componentsOverrides } from '@/theme/themeComponents.ts';
 
 type BuiltInTheme = keyof typeof themeColors;
 
@@ -27,42 +30,67 @@ export const AppProviders = ({ children }: { children: ReactNode }) => {
 				? themeColors[theme]
 				: themeColors.light;
 
-	const mantineTheme = {
-		...themeComponents,
-		...selectedTheme,
-		primaryColor:
-			theme === 'dark' || theme === 'light' || selectedCustomTheme === undefined
-				? 'blue'
-				: 'custom-primary',
-	} as unknown as MantineThemeOverride;
+	const mantineTheme = createTheme({
+		components: componentsOverrides,
+		colors: selectedTheme.colors,
+		other: {
+			text: selectedTheme.other.text,
+		},
+		primaryColor: selectedCustomTheme !== undefined ? 'custom-primary' : 'blue',
+		defaultRadius: 'sm',
+		fontWeights: {
+			medium: '500',
+		},
+	});
 
 	return (
-		<MantineProvider theme={mantineTheme}>
-			<Global
-				styles={(theme) => ({
-					html: {
-						color: theme.colors.text,
-						margin: 0,
-						padding: 0,
-						height: '100%',
-					},
-					body: {
-						backgroundColor: theme.colors.background[0],
-						margin: 0,
-						padding: 0,
-						height: '100%',
-					},
-					'#root': {
-						height: '100%',
-					},
-				})}
-			/>
+		<MantineProvider
+			theme={mantineTheme}
+			cssVariablesResolver={(theme) => {
+				const textColor = theme.other.text as string;
 
-			<NotificationsProvider position="top-center">
-				<ExtensionSettingsProvider>
-					<ExtensionProvider>{children}</ExtensionProvider>
-				</ExtensionSettingsProvider>
-			</NotificationsProvider>
+				return {
+					variables: {
+						'--mantine-color-text': textColor,
+						'--mantine-color-dimmed': theme.colors.background[6],
+					},
+					light: {
+						'--mantine-color-text': textColor,
+						'--mantine-color-dimmed': theme.colors.background[6],
+					},
+					dark: {
+						'--mantine-color-text': textColor,
+						'--mantine-color-dimmed': theme.colors.background[6],
+					},
+				};
+			}}
+			// cssVariablesResolver={(theme) => {
+			// 	const base = v8CssVariablesResolver(theme);
+			// 	const textColor = theme.other.text as string;
+			//
+			// 	return {
+			// 		variables: {
+			// 			...base.variables,
+			// 			'--mantine-color-text': textColor,
+			// 			'--mantine-color-dimmed': theme.colors.background[6],
+			// 		},
+			// 		light: {
+			// 			...base.light,
+			// 			'--mantine-color-text': textColor,
+			// 			'--mantine-color-dimmed': theme.colors.background[6],
+			// 		},
+			// 		dark: {
+			// 			...base.dark,
+			// 			'--mantine-color-text': textColor,
+			// 			'--mantine-color-dimmed': theme.colors.background[6],
+			// 		},
+			// 	};
+			// }}
+		>
+			<Notifications position="top-center" />
+			<ExtensionSettingsProvider>
+				<ExtensionProvider>{children}</ExtensionProvider>
+			</ExtensionSettingsProvider>
 		</MantineProvider>
 	);
 };

@@ -6,15 +6,13 @@ import { BookmarkListRow } from '@/components/BookmarkListRow';
 import { useExtensionSettings } from '@/hooks/useExtensionSettings';
 import { BookmarkTreeNode } from '@/types/browserExtend';
 
-import { useBookmarksStyles } from './Bookmarks.styles';
+import classes from './Bookmarks.module.css';
 
 type BookmarksProps = {
 	bookmarks: BookmarkTreeNode[];
 };
 
 export const Bookmarks = ({ bookmarks }: BookmarksProps) => {
-	const { classes } = useBookmarksStyles();
-
 	const { currentView, extensionSettings } = useExtensionSettings();
 
 	const currentViewTitle = constants.availableViews.find(
@@ -23,7 +21,7 @@ export const Bookmarks = ({ bookmarks }: BookmarksProps) => {
 
 	if (currentViewTitle === 'Capsules') {
 		return (
-			<Group spacing={extensionSettings.capsuleSpacing}>
+			<Group gap={extensionSettings.capsuleSpacing}>
 				{bookmarks.map((bookmark) => (
 					<BookmarkCapsule
 						key={bookmark.id}
@@ -40,7 +38,7 @@ export const Bookmarks = ({ bookmarks }: BookmarksProps) => {
 		return (
 			<Stack
 				justify="flex-start"
-				spacing={extensionSettings.listSpacing}
+				gap={extensionSettings.listSpacing}
 				className={classes.bookmarksListWrap}
 			>
 				{bookmarks.map((bookmark, index) => (
