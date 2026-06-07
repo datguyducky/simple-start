@@ -30,13 +30,14 @@ This is something that I use daily across different devices so there's no reason
 I strongly encourage to contribute to development of Simple Start extension. Bugs reports and new features suggestions can be made by creating a new issue - with appropriate title and description please.
 
 **To test it locally, you need to follow this steps:**
-* Make sure you have `yarn` installed on your machine.
-* Run `yarn install` in the root of the extension.
-* To start in development mode (with watcher aka "auto-refresh"), run `yarn dev` in the root of the extension.
-  * When developing for Chrome you need to run `BROWSER=chrome yarn dev` instead.
-* Add the extension to your Firefox, by going to `about:debugging` page, `This Firefox` tab and loading *Simple Start* as a temporary add-on by choosing the `dist/manifest.json` file. 
+* This extension is built with the [WXT](https://wxt.dev/) framework.
+* Make sure you have `npm` installed on your machine.
+* Run `npm install` in the root of the extension.
+* To start in development mode, run `npm run dev` in the root of the extension (`npm run dev:chrome` for Chrome).
+  * In development mode, WXT launches a temporary/restricted browser profile with the extension loaded and handles reloads automatically when files change.
+* If needed, you can still load the extension manually in Firefox via `about:debugging` → `This Firefox` by choosing `dist/manifest.json`.
 
-* Run `yarn build` to create a "production" build or `BROWSER=chrome yarn build` for Chrome. Keep in mind that it may be required to delete the `dist` folder before running the build command for a different browser.
+* Run `npm run build` to create a Firefox production build or `npm run build:chrome` for Chrome. Keep in mind that it may be required to delete the `dist` folder before running the build command for a different browser.
 
 ## 📦 Favicon Service
 Simple Start uses [Besticon](https://github.com/mat/besticon) to provide users with correct icons for each and every website. It's an open-source favicon service, written in Go.
