@@ -112,3 +112,87 @@ export const defaultCapsuleSettings: CapsuleSettings = {
 	capsuleLabelColor: constants.defaultExtensionSettings.capsuleLabelColor,
 	capsuleHiddenName: constants.defaultExtensionSettings.capsuleHiddenName,
 };
+
+// Keyboard shortcuts, to be used with Mantine's useHotkeys hook, make sure to capitalize keys and labels. Label is used only on the KeyboardShortcutsPopover component.
+// https://mantine.dev/hooks/use-hotkeys/
+export const SHORTCUTS = {
+	openBookmarks: {
+		keys: 'mod + Number',
+		label: 'Open bookmarks 1–10',
+	},
+
+	addBookmark: {
+		keys: 'mod + B',
+		label: 'Add bookmark',
+	},
+
+	createCategory: {
+		keys: 'mod + Shift + B',
+		label: 'Create category',
+	},
+
+	switchView: {
+		keys: 'mod + S',
+		label: 'Switch view',
+	},
+
+	toggleOneView: {
+		keys: 'mod + Shift + S',
+		label: 'Toggle one view',
+	},
+
+	settings: {
+		keys: 'mod + ,',
+		label: 'Open settings',
+	},
+
+	displayShortcuts: {
+		keys: 'mod + /',
+		label: 'Show shortcuts',
+	},
+} as const;
+
+export const OPEN_BOOKMARK_SHORTCUTS = [
+	{
+		keys: 'mod + 1',
+		bookmarkIndex: 0,
+	},
+	{
+		keys: 'mod + 2',
+		bookmarkIndex: 1,
+	},
+	{
+		keys: 'mod + 3',
+		bookmarkIndex: 2,
+	},
+	{
+		keys: 'mod + 4',
+		bookmarkIndex: 3,
+	},
+	{
+		keys: 'mod + 5',
+		bookmarkIndex: 4,
+	},
+	{
+		keys: 'mod + 6',
+		bookmarkIndex: 5,
+	},
+	{
+		keys: 'mod + 7',
+		bookmarkIndex: 6,
+	},
+	{
+		keys: 'mod + 8',
+		bookmarkIndex: 7,
+	},
+	{
+		keys: 'mod + 9',
+		bookmarkIndex: 8,
+	},
+	{
+		keys: 'mod + 0',
+		bookmarkIndex: 9,
+	},
+] as const;
+
+export const ALL_SHORTCUTS = Object.values(SHORTCUTS);
