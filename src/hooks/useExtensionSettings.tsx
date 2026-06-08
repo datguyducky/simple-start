@@ -188,6 +188,16 @@ export const useExtensionSettings = () => {
 		return hasGeneralSettingsChangedFromDefault(getGeneralSettings(currentSettings));
 	};
 
+	const toggleOneView = async () => {
+		const currentGeneralSettings = getGeneralSettings(currentSettings);
+		const nextGeneralSettings = {
+			...currentGeneralSettings,
+			oneView: !currentGeneralSettings.oneView,
+		};
+
+		await saveExtensionSettings(nextGeneralSettings);
+	};
+
 	return {
 		extensionSettings: currentSettings,
 		currentView: currentSettings.currentView,
@@ -197,5 +207,6 @@ export const useExtensionSettings = () => {
 		hasCapsuleSettingsChanged,
 		hasListSettingsChanged,
 		hasGeneralSettingsChanged,
+		toggleOneView,
 	};
 };

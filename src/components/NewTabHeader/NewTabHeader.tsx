@@ -1,10 +1,12 @@
 import { Button, Grid, Group, Menu, Title, Text } from '@mantine/core';
 import { IconPlus, IconBookmark, IconBoxMultiple, IconSettings } from '@tabler/icons-react';
 import { browser } from 'wxt/browser';
+import { useHotkeys } from '@mantine/hooks';
 
-import { constants } from '@/common/constants';
+import { constants, SHORTCUTS } from '@/common/constants';
 import { useExtensionSettings } from '@/hooks/useExtensionSettings';
 import { handleAsyncAction } from '@/utils/handleAsyncAction';
+import { KeyboardShortcutsPopover } from '@/components/KeyboardShortcutsPopover';
 
 import classes from './NewTabHeader.module.css';
 
@@ -14,7 +16,7 @@ type NewTabHeaderProps = {
 };
 
 export const NewTabHeader = ({ onNewBookmarkClick, onNewCategoryClick }: NewTabHeaderProps) => {
-	const { currentView, handleNextView, viewLoading } = useExtensionSettings();
+	const { currentView, handleNextView, viewLoading, toggleOneView } = useExtensionSettings();
 
 	const currentViewIndex = constants.availableViews.findIndex((view) => view.id === currentView);
 	const nextView =
@@ -31,6 +33,20 @@ export const NewTabHeader = ({ onNewBookmarkClick, onNewCategoryClick }: NewTabH
 			errorTitle: 'Settings could not be opened',
 		});
 	};
+
+	const handleToggleOneView = () => {
+		handleAsyncAction(toggleOneView, {
+			errorTitle: 'One view could not be toggled',
+		});
+	};
+
+	useHotkeys([
+		[SHORTCUTS.settings.keys, handleSettingsClick],
+		[SHORTCUTS.switchView.keys, handleNextViewClick],
+		[SHORTCUTS.addBookmark.keys, onNewBookmarkClick],
+		[SHORTCUTS.createCategory.keys, onNewCategoryClick],
+		[SHORTCUTS.toggleOneView.keys, handleToggleOneView],
+	]);
 
 	return (
 		<Grid columns={3} style={{ marginBottom: 32 }}>
@@ -92,6 +108,8 @@ export const NewTabHeader = ({ onNewBookmarkClick, onNewCategoryClick }: NewTabH
 						>
 							<Text inline size="sm" fw={600}>{`${nextView.title} view`}</Text>
 						</Button>
+
+						<KeyboardShortcutsPopover />
 
 						<Button
 							variant="subtle"
