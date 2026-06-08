@@ -108,6 +108,7 @@ export const CategoryForm = ({
 				label="Category name"
 				required
 				placeholder="e.g. Home"
+				data-autofocus="true"
 				{...getInputProps('categoryName')}
 			/>
 
