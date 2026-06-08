@@ -138,6 +138,7 @@ export const BookmarkForm = ({
 				label="Bookmark name"
 				required
 				placeholder="e.g. DuckDuckGo"
+				data-autofocus="true"
 				{...getInputProps('bookmarkName')}
 			/>
 			<TextInput
