@@ -1,11 +1,13 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import {
 	ColorInput,
+	Collapse,
 	Modal,
 	Stepper,
 	SimpleGrid,
 	Group,
 	Button,
+	UnstyledButton,
 	Text,
 	Divider,
 	Box,
@@ -14,6 +16,7 @@ import {
 } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { notifications } from '@mantine/notifications';
+import { generateColors } from '@mantine/colors-generator';
 
 import {
 	type CustomTheme,
@@ -62,28 +65,40 @@ const getEditThemeValues = (theme: CustomTheme): Partial<ModalCustomThemeValues>
 
 	return {
 		customThemeName: theme.name.replace('created-theme-', '').replace(/-/g, ' '),
+		backgroundBase: theme.colors.background[6],
 		...backgroundColors,
+		primaryBase: theme.colors['custom-primary'][6],
 		...primaryColors,
 		text: theme.other.text,
 		oldCustomThemeName: theme.name,
 	};
 };
 
-const getThemeColorValues = (values: ModalCustomThemeValues): CustomThemeFormColors => {
-	const backgroundArray = Array.from(
-		{ length: 10 },
-		(_, index) => values[`background${index}` as keyof ModalCustomThemeValues] ?? '',
-	);
+const getThemeColorValues = (
+	values: ModalCustomThemeValues,
+	isAdvancedSettingsOpen: boolean,
+): CustomThemeFormColors => {
+	const backgroundArray = isAdvancedSettingsOpen
+		? Array.from(
+				{ length: 10 },
+				(_, index) => values[`background${index}` as keyof ModalCustomThemeValues] ?? '',
+			)
+		: [...generateColors(values.backgroundBase ?? '#1c1f24')];
 
-	const primaryArray = Array.from(
-		{ length: 10 },
-		(_, index) => values[`primary${index}` as keyof ModalCustomThemeValues] ?? '',
-	);
+	const primaryArray = isAdvancedSettingsOpen
+		? Array.from(
+				{ length: 10 },
+				(_, index) => values[`primary${index}` as keyof ModalCustomThemeValues] ?? '',
+			)
+		: [...generateColors(values.primaryBase ?? '#228be6')];
 
 	return {
-		'background-local': backgroundArray.slice(0, 8) as CustomThemeColors['background'],
-		background: backgroundArray as CustomThemeColors['background'],
-		'custom-primary': primaryArray as CustomThemeColors['custom-primary'],
+		'background-local': backgroundArray.slice(
+			0,
+			8,
+		) as unknown as CustomThemeColors['background'],
+		background: backgroundArray as unknown as CustomThemeColors['background'],
+		'custom-primary': primaryArray as unknown as CustomThemeColors['custom-primary'],
 		text: values.text ?? '',
 	};
 };
@@ -96,6 +111,14 @@ const getThemeColorsForSave = (themeColors: CustomThemeFormColors): CustomThemeS
 	};
 };
 
+const getGeneratedBackgroundColors = (backgroundBase?: string) => {
+	return [...generateColors(backgroundBase ?? '#1c1f24')];
+};
+
+const getGeneratedPrimaryColors = (primaryBase?: string) => {
+	return [...generateColors(primaryBase ?? '#228be6')];
+};
+
 export const ModalCustomTheme = ({
 	opened,
 	onClose,
@@ -106,17 +129,21 @@ export const ModalCustomTheme = ({
 	editCustomTheme,
 }: ModalCustomThemeProps) => {
 	const [activeStep, setActive] = useState(0);
+	const [isAdvancedSettingsOpen, setIsAdvancedSettingsOpen] = useState(false);
 	const isSmall = useMediaQuery('(max-width: 48em)');
 
 	const { values, getInputProps, onSubmit, validate, setValues, reset, isValid } =
 		useForm<ModalCustomThemeValues>({
 			initialValues: {
+				backgroundBase: '#1c1f24',
+				primaryBase: '#228be6',
 				text: '#101113',
 				background8: '#ff00ff',
 				background9: '#ff00ff',
 				customThemeName: '',
 			},
-			validate: (formValues) => themeValidation(activeStep, formValues),
+			validate: (formValues) =>
+				themeValidation(activeStep, formValues, isAdvancedSettingsOpen),
 		});
 
 	const themeColors = useMemo(() => {
@@ -124,19 +151,59 @@ export const ModalCustomTheme = ({
 			return undefined;
 		}
 
-		return getThemeColorValues(values);
-	}, [activeStep, values]);
+		return getThemeColorValues(values, isAdvancedSettingsOpen);
+	}, [activeStep, isAdvancedSettingsOpen, values]);
 
 	useEffect(() => {
 		if (mode === 'edit' && initialValues) {
 			setValues(getEditThemeValues(initialValues));
+			setIsAdvancedSettingsOpen(false);
 		} else {
 			// making sure that the custom theme form is empty when going from the "edit" mode to the "create"
 			reset();
+			setIsAdvancedSettingsOpen(false);
 		}
 
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [mode, initialValues]);
+
+	const previousBaseColorsRef = useRef<{
+		backgroundBase?: string;
+		primaryBase?: string;
+	} | null>(null);
+
+	useEffect(() => {
+		const previousBaseColors = previousBaseColorsRef.current;
+		const isSameBaseColors =
+			previousBaseColors?.backgroundBase === values.backgroundBase &&
+			previousBaseColors?.primaryBase === values.primaryBase;
+
+		if (isSameBaseColors) {
+			return;
+		}
+
+		previousBaseColorsRef.current = {
+			backgroundBase: values.backgroundBase,
+			primaryBase: values.primaryBase,
+		};
+
+		const generatedBackground = getGeneratedBackgroundColors(values.backgroundBase);
+		const generatedPrimary = getGeneratedPrimaryColors(values.primaryBase);
+
+		const nextValues: Partial<ModalCustomThemeValues> = {};
+
+		generatedBackground.forEach((color, index) => {
+			const field = `background${String(index)}` as keyof ModalCustomThemeValues;
+			nextValues[field] = color;
+		});
+
+		generatedPrimary.forEach((color, index) => {
+			const field = `primary${String(index)}` as keyof ModalCustomThemeValues;
+			nextValues[field] = color;
+		});
+
+		setValues(nextValues);
+	}, [values.backgroundBase, values.primaryBase]);
 
 	const nextStep = () => {
 		setActive((current) => {
@@ -231,86 +298,106 @@ export const ModalCustomTheme = ({
 					<Stepper.Step
 						label="Background color"
 						allowStepSelect={activeStep > 0}
-						description="8 shades of background color"
+						description="Generated from base color"
 					>
 						<Divider my={16} />
 
 						<Text size="sm" mb={12}>
-							In order to create your own theme you need to input a couple of colors
-							of your choice, and in some cases you may also be required to generate a
-							couple of shades per color.
-							<br />
-							<br />
-							Although I will not list any tools for that, you may easily find shade
-							generators on the internet, so when needed please use that and remember
-							that you can tweak every color separately for your needs.
+							Pick one background base color and the other shades will be generated
+							automatically.
 						</Text>
 
-						<Text size="sm" fw={700}>
-							Shade for this should look like this: Background 1(lightest) -
-							Background 8(darkest)
-						</Text>
+						<Box maw={360}>
+							<ColorInput
+								{...getInputProps('backgroundBase')}
+								format="hex"
+								label="Background base"
+								description="Main color used to generate all background shades"
+							/>
+						</Box>
+
+						<Group justify="space-between" mt={12}>
+							<Text size="sm" fw={700}>
+								Need full control? Open advanced settings.
+							</Text>
+							<UnstyledButton
+								type="button"
+								onClick={() => {
+									setIsAdvancedSettingsOpen((current) => !current);
+								}}
+								style={{
+									color: 'var(--mantine-color-blue-6)',
+									fontSize: 'var(--mantine-font-size-sm)',
+								}}
+							>
+								{isAdvancedSettingsOpen
+									? 'Hide advanced settings'
+									: 'Show advanced settings'}
+							</UnstyledButton>
+						</Group>
 
 						<Divider my={16} />
 
-						<SimpleGrid cols={3} spacing={24} style={{ alignItems: 'flex-start' }}>
-							<ColorInput
-								{...getInputProps('background0')}
-								format="hex"
-								label="Background 1"
-								description="Main background color"
-							/>
-							<ColorInput
-								{...getInputProps('background1')}
-								format="hex"
-								label="Background 2"
-								description="Bookmarks cards, capsules and list"
-							/>
-							<ColorInput
-								{...getInputProps('background2')}
-								format="hex"
-								label="Background 3"
-								description="Hover, select and borders"
-							/>
+						<Collapse expanded={isAdvancedSettingsOpen}>
+							<SimpleGrid cols={3} spacing={24} style={{ alignItems: 'flex-start' }}>
+								<ColorInput
+									{...getInputProps('background0')}
+									format="hex"
+									label="Background 1"
+									description="Main background color"
+								/>
+								<ColorInput
+									{...getInputProps('background1')}
+									format="hex"
+									label="Background 2"
+									description="Bookmarks cards, capsules and list"
+								/>
+								<ColorInput
+									{...getInputProps('background2')}
+									format="hex"
+									label="Background 3"
+									description="Hover, select and borders"
+								/>
 
-							<ColorInput
-								{...getInputProps('background3')}
-								format="hex"
-								label="Background 4"
-								description="Background color on icons hover"
-							/>
-							<ColorInput
-								{...getInputProps('background4')}
-								format="hex"
-								label="Background 5"
-								description="Inputs border"
-							/>
-							<ColorInput
-								{...getInputProps('background5')}
-								format="hex"
-								label="Background 6"
-								description="Nothing found on select"
-							/>
+								<ColorInput
+									{...getInputProps('background3')}
+									format="hex"
+									label="Background 4"
+									description="Background color on icons hover"
+								/>
+								<ColorInput
+									{...getInputProps('background4')}
+									format="hex"
+									label="Background 5"
+									description="Inputs border"
+								/>
+								<ColorInput
+									{...getInputProps('background5')}
+									format="hex"
+									label="Background 6"
+									description="Nothing found on select"
+								/>
 
-							<ColorInput
-								{...getInputProps('background6')}
-								format="hex"
-								label="Background 7"
-								description="Dimmed text color"
-							/>
-							<ColorInput
-								{...getInputProps('background7')}
-								format="hex"
-								label="Background 8"
-								description="Up and down icon on select component"
-							/>
-						</SimpleGrid>
+								<ColorInput
+									{...getInputProps('background6')}
+									format="hex"
+									label="Background 7"
+									description="Dimmed text color"
+								/>
+								<ColorInput
+									{...getInputProps('background7')}
+									format="hex"
+									label="Background 8"
+									description="Up and down icon on select component"
+								/>
+							</SimpleGrid>
+						</Collapse>
 					</Stepper.Step>
 
 					<Stepper.Step
 						label="Primary color"
 						allowStepSelect={activeStep > 1}
-						description="10 shades of primary color"
+						description="Generated from base color"
 					>
 						<Divider my={16} />
 
@@ -319,77 +406,104 @@ export const ModalCustomTheme = ({
 							other actionable elements in the extension. Also keep in mind that
 							Primary 7 is the main shade that you will see the most often across the
 							extension.
-							<br />
-							<br />
-							As you can see in the built-in themes the primary color is set as a blue
-							color.
 						</Text>
+
+						<Box maw={360}>
+							<ColorInput
+								{...getInputProps('primaryBase')}
+								format="hex"
+								label="Primary base"
+								description="Base color used to generate all primary shades"
+							/>
+						</Box>
+
+						<Group justify="space-between" mt={12}>
+							<Text size="sm" fw={700}>
+								Need full control? Open advanced settings.
+							</Text>
+							<UnstyledButton
+								type="button"
+								onClick={() => {
+									setIsAdvancedSettingsOpen((current) => !current);
+								}}
+								style={{
+									color: 'var(--mantine-color-blue-6)',
+									fontSize: 'var(--mantine-font-size-sm)',
+								}}
+							>
+								{isAdvancedSettingsOpen
+									? 'Hide advanced settings'
+									: 'Show advanced settings'}
+							</UnstyledButton>
+						</Group>
 
 						<Divider my={16} />
 
-						<SimpleGrid
-							cols={3}
-							spacing={24}
-							style={{ alignItems: 'flex-start', rowGap: 16 }}
-						>
-							<ColorInput
-								{...getInputProps('primary0')}
-								format="hex"
-								label="Primary 1"
-							/>
-							<ColorInput
-								{...getInputProps('primary1')}
-								format="hex"
-								label="Primary 2"
-							/>
-							<ColorInput
-								{...getInputProps('primary2')}
-								format="hex"
-								label="Primary 3"
-							/>
+						<Collapse expanded={isAdvancedSettingsOpen}>
+							<SimpleGrid
+								cols={3}
+								spacing={24}
+								style={{ alignItems: 'flex-start', rowGap: 16 }}
+							>
+								<ColorInput
+									{...getInputProps('primary0')}
+									format="hex"
+									label="Primary 1"
+								/>
+								<ColorInput
+									{...getInputProps('primary1')}
+									format="hex"
+									label="Primary 2"
+								/>
+								<ColorInput
+									{...getInputProps('primary2')}
+									format="hex"
+									label="Primary 3"
+								/>
 
-							<ColorInput
-								{...getInputProps('primary3')}
-								format="hex"
-								label="Primary 4"
-							/>
-							<ColorInput
-								{...getInputProps('primary4')}
-								format="hex"
-								label="Primary 5"
-							/>
-							<ColorInput
-								{...getInputProps('primary5')}
-								format="hex"
-								label="Primary 6"
-							/>
+								<ColorInput
+									{...getInputProps('primary3')}
+									format="hex"
+									label="Primary 4"
+								/>
+								<ColorInput
+									{...getInputProps('primary4')}
+									format="hex"
+									label="Primary 5"
+								/>
+								<ColorInput
+									{...getInputProps('primary5')}
+									format="hex"
+									label="Primary 6"
+								/>
 
-							<ColorInput
-								{...getInputProps('primary6')}
-								format="hex"
-								label="Primary 7"
-								styles={(theme) => ({
-									input: {
-										borderColor: theme.colors[theme.primaryColor][6],
-									},
-								})}
-							/>
-							<ColorInput
-								{...getInputProps('primary7')}
-								format="hex"
-								label="Primary 8"
-							/>
-							<ColorInput
-								{...getInputProps('primary8')}
-								format="hex"
-								label="Primary 9"
-							/>
-							<ColorInput
-								{...getInputProps('primary9')}
-								format="hex"
-								label="Primary 10"
-							/>
-						</SimpleGrid>
+								<ColorInput
+									{...getInputProps('primary6')}
+									format="hex"
+									label="Primary 7"
+									styles={(theme) => ({
+										input: {
+											borderColor: theme.colors[theme.primaryColor][6],
+										},
+									})}
+								/>
+								<ColorInput
+									{...getInputProps('primary7')}
+									format="hex"
+									label="Primary 8"
+								/>
+								<ColorInput
+									{...getInputProps('primary8')}
+									format="hex"
+									label="Primary 9"
+								/>
+								<ColorInput
+									{...getInputProps('primary9')}
+									format="hex"
+									label="Primary 10"
+								/>
+							</SimpleGrid>
+						</Collapse>
 					</Stepper.Step>
 
 					<Stepper.Step
@@ -420,16 +534,18 @@ export const ModalCustomTheme = ({
 									<div>
 										<Text size="sm">Background colors:</Text>
 										<Group gap={2}>
-											{themeColors?.['background-local'].map((color) => (
-												<Box
-													key={color}
-													style={{
-														backgroundColor: color,
-														width: 24,
-														height: 24,
-													}}
-												/>
-											))}
+											{(themeColors?.['background-local'] ?? []).map(
+												(color, index) => (
+													<Box
+														key={`${color}-${String(index)}`}
+														style={{
+															backgroundColor: color,
+															width: 24,
+															height: 24,
+														}}
+													/>
+												),
+											)}
 										</Group>
 
 										<Text size="sm">Primary colors:</Text>

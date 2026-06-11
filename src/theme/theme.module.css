@@ -35,7 +35,7 @@
 }
 
 .inputSection {
-	color: var(--mantine-color-background-6);
+	color: var(--mantine-color-background-6) !important;
 	
 	& > svg {
 		color: inherit !important;
@@ -130,6 +130,10 @@
 .selectOption {
 	color: var(--mantine-color-text);
 
+	&[data-checked] {
+		background-color: var(--mantine-color-background-2) !important;
+	}
+	
 	&:hover,
 	&[data-selected],
 	&[data-combobox-selected] {
@@ -154,7 +158,30 @@
 }
 
 .selectSection {
-	& > button {
-		color: var(--mantine-color-background-7);
+	button {
+		color: var(--mantine-color-background-7) !important;
+	}
+	
+	svg {
+		color: var(--mantine-color-background-7) !important;
+	}
+}
+
+.notificationRoot {
+	background-color: var(--mantine-color-background-0) !important;
+	color: var(--mantine-color-text) !important;
+	border-color: var(--mantine-color-background-3) !important;
+}
+
+.notificationDescription, .notificationTitle {
+	color: var(--mantine-color-text) !important;
+}
+
+.notificationCloseButton {
+	color: var(--mantine-color-text) !important;
+	background-color: var(--mantine-color-background-1) !important;
+	
+	&:hover {
+		background-color: var(--mantine-color-background-2) !important;
 	}
 }

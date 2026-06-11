@@ -193,7 +193,6 @@ export const NewTab = () => {
 				centered
 				title="Add new bookmark"
 				size="lg"
-				zIndex={1000}
 			>
 				<BookmarkForm
 					mode="create"
@@ -208,7 +207,6 @@ export const NewTab = () => {
 				centered
 				title="Add new category"
 				size="lg"
-				zIndex={1000}
 			>
 				<CategoryForm
 					mode="create"

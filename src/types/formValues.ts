@@ -1,4 +1,5 @@
 export type ModalCustomThemeValues = {
+	backgroundBase?: string;
 	background0?: string;
 	background1?: string;
 	background2?: string;
@@ -9,6 +10,7 @@ export type ModalCustomThemeValues = {
 	background7?: string;
 	background8?: string;
 	background9?: string;
+	primaryBase?: string;
 	primary0?: string;
 	primary1?: string;
 	primary2?: string;

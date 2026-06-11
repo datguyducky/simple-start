@@ -3,6 +3,7 @@ import { browser } from 'wxt/browser';
 
 import { isChrome } from '../utils/isChrome';
 import { useExtensionRoot } from './useExtensionRoot';
+import { normalizeBookmarkUrl } from '@/utils/bookmarkUrl';
 import {
 	findExtensionRoot,
 	getExtensionRootId as resolveExtensionRootId,
@@ -190,11 +191,12 @@ export const useExtensionBookmarks = ({ categoryId }: UseExtensionBookmarksProps
 
 	const createBookmark = async ({ name, url, bookmarkCategoryId }: CreateBookmarkValues) => {
 		const extensionRootId = await getExtensionRootId();
+		const normalizedBookmarkUrl = normalizeBookmarkUrl(url);
 
 		await browser.bookmarks.create({
 			parentId: bookmarkCategoryId ?? extensionRootId,
 			title: name,
-			url,
+			url: normalizedBookmarkUrl,
 		});
 
 		if (categoryId) {
@@ -210,9 +212,11 @@ export const useExtensionBookmarks = ({ categoryId }: UseExtensionBookmarksProps
 		bookmarkUrl,
 		bookmarkCategoryId,
 	}: EditBookmarkValues) => {
+		const normalizedBookmarkUrl = normalizeBookmarkUrl(bookmarkUrl);
+
 		await browser.bookmarks.update(id, {
 			title: bookmarkName,
-			url: bookmarkUrl,
+			url: normalizedBookmarkUrl,
 		});
 
 		if (bookmarkCategoryId) {
