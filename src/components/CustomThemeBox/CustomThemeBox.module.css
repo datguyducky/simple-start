@@ -6,15 +6,15 @@
 	cursor: pointer;
 	position: relative;
 	background-color: var(--settings-bg-color);
-	
+
 	&:hover {
 		background-color: var(--settings-border-color);
 	}
-	
-	&:hover .removeAction, &:hover .editAction {
+
+	&:hover .removeAction,
+	&:hover .editAction {
 		display: flex;
 	}
-	
 }
 
 .absoluteWrapper {
@@ -31,7 +31,7 @@
 
 .removeAction {
 	display: none;
-	
+
 	&:hover {
 		background-color: var(--mantine-color-red-9);
 	}
@@ -39,7 +39,7 @@
 
 .editAction {
 	display: none;
-	
+
 	&:hover {
 		background-color: var(--mantine-color-blue-9);
 	}

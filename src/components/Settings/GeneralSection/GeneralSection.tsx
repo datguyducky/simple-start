@@ -44,8 +44,8 @@ export const GeneralSection = () => {
 				size="lg"
 			>
 				<Text mb={16}>
-					Are you sure you want to reset general settings? This action cannot be
-					undone and all your custom settings will be replaced by the default values!
+					Are you sure you want to reset general settings? This action cannot be undone
+					and all your custom settings will be replaced by the default values!
 				</Text>
 
 				<Group justify="flex-end">

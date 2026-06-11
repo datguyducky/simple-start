@@ -5,6 +5,6 @@ export const customThemeSchema = z.object({
 		.string()
 		.min(1)
 		.regex(/^[a-zA-Z\s]*$/, {
-            error: 'No special characters are allowed, except spaces'
-        }),
+			error: 'No special characters are allowed, except spaces',
+		}),
 });

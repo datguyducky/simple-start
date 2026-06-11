@@ -1,4 +1,5 @@
-.bookmarksListWrap {}
+.bookmarksListWrap {
+}
 
 .bookmarksListWrap > a:first-of-type {
 	border-top-left-radius: 5px;
