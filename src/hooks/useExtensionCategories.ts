@@ -132,7 +132,7 @@ export const useExtensionCategories = () => {
 			browser.bookmarks.onRemoved.removeListener(handleCategoryDeletion);
 			browser.bookmarks.onMoved.removeListener(handleCategoryMove);
 		};
-	}, []);
+	}, [syncCategoryChanges, syncCategoryCreation, syncCategoryDeletion, syncCategoryMove]);
 
 	const createCategory = async ({ name, setAsDefault = false }: CreateCategoryValues) => {
 		const rootId = await retrieveRootId();
