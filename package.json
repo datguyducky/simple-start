@@ -19,6 +19,7 @@
 	},
 	"dependencies": {
 		"@hello-pangea/dnd": "18.0.1",
+		"@mantine/colors-generator": "9.3.0",
 		"@mantine/core": "9.3.0",
 		"@mantine/form": "9.3.0",
 		"@mantine/hooks": "9.3.0",

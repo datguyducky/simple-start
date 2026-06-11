@@ -1,13 +1,18 @@
 import { z } from 'zod';
 
+import { isSupportedBookmarkUrl } from '@/utils/bookmarkUrl';
+
 export const bookmarkSchema = z.object({
 	bookmarkName: z.string().min(1, {
-        error: 'Bookmark name is required'
-    }),
+		error: 'Bookmark name is required',
+	}),
 	bookmarkUrl: z
 		.string()
-		.min(1)
-		.regex(/^(ht)tps?:\/\//, {
-            error: 'Bookmark URL needs to start with "https://" or "http://'
-        }),
+		.trim()
+		.min(1, {
+			error: 'Bookmark URL is required',
+		})
+		.refine((url) => isSupportedBookmarkUrl(url), {
+			error: 'Enter a valid website URL',
+		}),
 });

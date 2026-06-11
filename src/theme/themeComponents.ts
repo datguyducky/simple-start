@@ -10,6 +10,7 @@ import {
 	NumberInput,
 	Overlay,
 	Select,
+	Notification,
 } from '@mantine/core';
 
 import classes from './theme.module.css';
@@ -39,6 +40,14 @@ export const componentsOverrides = {
 			input: classes.input,
 			section: classes.inputSection,
 		},
+		styles: {},
+		vars: (theme, props) => ({
+			wrapper: {},
+			section: {
+				'--input-bg':
+					props.variant === 'transparent' ? 'transparent' : theme.colors.background[0],
+			},
+		}),
 	}),
 	NumberInput: NumberInput.extend({
 		classNames: {
@@ -92,5 +101,21 @@ export const componentsOverrides = {
 		classNames: {
 			dropdown: classes.colorInputDropdown,
 		},
+	}),
+	Notification: Notification.extend({
+		classNames: {
+			root: classes.notificationRoot,
+			description: classes.notificationDescription,
+			closeButton: classes.notificationCloseButton,
+			title: classes.notificationTitle,
+		},
+		defaultProps: {
+			withBorder: true,
+		},
+		vars: (theme) => ({
+			root: {
+				'--notification-color': theme.colors[theme.primaryColor][6],
+			},
+		}),
 	}),
 };

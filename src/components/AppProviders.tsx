@@ -53,14 +53,17 @@ export const AppProviders = ({ children }: { children: ReactNode }) => {
 					variables: {
 						'--mantine-color-text': textColor,
 						'--mantine-color-dimmed': theme.colors.background[6],
+						'--mantine-color-disabled': theme.colors.background[1],
 					},
 					light: {
 						'--mantine-color-text': textColor,
 						'--mantine-color-dimmed': theme.colors.background[6],
+						'--mantine-color-disabled': theme.colors.background[1],
 					},
 					dark: {
 						'--mantine-color-text': textColor,
 						'--mantine-color-dimmed': theme.colors.background[6],
+						'--mantine-color-disabled': theme.colors.background[1],
 					},
 				};
 			}}
