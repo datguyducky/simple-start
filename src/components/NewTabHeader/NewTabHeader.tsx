@@ -1,5 +1,12 @@
 import { Button, Grid, Group, Menu, Title, Text } from '@mantine/core';
-import { IconPlus, IconBookmark, IconBoxMultiple, IconSettings } from '@tabler/icons-react';
+import {
+	IconPlus,
+	IconBookmark,
+	IconBoxMultiple,
+	IconSettings,
+	IconCapsuleHorizontal,
+	IconMenu2,
+} from '@tabler/icons-react';
 import { browser } from 'wxt/browser';
 import { useHotkeys } from '@mantine/hooks';
 
@@ -21,6 +28,13 @@ export const NewTabHeader = ({ onNewBookmarkClick, onNewCategoryClick }: NewTabH
 	const currentViewIndex = constants.availableViews.findIndex((view) => view.id === currentView);
 	const nextView =
 		constants.availableViews[(currentViewIndex + 1) % constants.availableViews.length];
+
+	const nextViewIcon =
+		nextView.icon === 'capsules' ? (
+			<IconCapsuleHorizontal size={18} />
+		) : (
+			<IconMenu2 size={18} />
+		);
 
 	const handleNextViewClick = () => {
 		handleAsyncAction(handleNextView, {
@@ -102,7 +116,7 @@ export const NewTabHeader = ({ onNewBookmarkClick, onNewCategoryClick }: NewTabH
 							variant="subtle"
 							color="text"
 							size="compact-md"
-							leftSection={nextView.icon}
+							leftSection={nextViewIcon}
 							onClick={handleNextViewClick}
 							className={classes.headerButton}
 						>

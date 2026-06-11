@@ -19,6 +19,12 @@ export default [
 	{
 		files: ['**/*.{ts,tsx}'],
 
+		settings: {
+			react: {
+				version: 'detect',
+			},
+		},
+
 		languageOptions: {
 			parserOptions: {
 				project: true,
