@@ -28,7 +28,7 @@
 	background-color: var(--mantine-color-background-0);
 	border-color: var(--mantine-color-background-4);
 	color: var(--mantine-color-text);
-	
+
 	::placeholder {
 		color: var(--mantine-color-background-5);
 	}
@@ -36,7 +36,7 @@
 
 .inputSection {
 	color: var(--mantine-color-background-6) !important;
-	
+
 	& > svg {
 		color: inherit !important;
 	}
@@ -45,11 +45,11 @@
 .numberInputControl {
 	border-color: var(--mantine-color-background-4);
 	color: var(--mantine-color-text);
-	
+
 	&:hover {
 		background-color: var(--mantine-color-background-4) !important;
 	}
-	
+
 	& > svg {
 		color: inherit !important;
 	}
@@ -69,7 +69,7 @@
 }
 
 .accordionChevron {
-	color: var(--mantine-color-text)
+	color: var(--mantine-color-text);
 }
 
 .accordionRoot {
@@ -78,7 +78,7 @@
 
 .accordionControl {
 	background-color: var(--mantine-color-background-1);
-	
+
 	&:hover {
 		background-color: var(--mantine-color-background-2);
 	}
@@ -97,11 +97,10 @@
 	border-bottom: 1px solid var(--mantine-color-background-3);
 }
 
-
 .accordionItem [data-mantine-accordion-control][data-active] {
 	border-bottom: 1px solid var(--mantine-color-background-3);
 	background-color: var(--mantine-color-background-1);
-	
+
 	&:hover {
 		background-color: var(--mantine-color-background-2);
 	}
@@ -133,7 +132,7 @@
 	&[data-checked] {
 		background-color: var(--mantine-color-background-2) !important;
 	}
-	
+
 	&:hover,
 	&[data-selected],
 	&[data-combobox-selected] {
@@ -161,7 +160,7 @@
 	button {
 		color: var(--mantine-color-background-7) !important;
 	}
-	
+
 	svg {
 		color: var(--mantine-color-background-7) !important;
 	}
@@ -173,14 +172,15 @@
 	border-color: var(--mantine-color-background-3) !important;
 }
 
-.notificationDescription, .notificationTitle {
+.notificationDescription,
+.notificationTitle {
 	color: var(--mantine-color-text) !important;
 }
 
 .notificationCloseButton {
 	color: var(--mantine-color-text) !important;
 	background-color: var(--mantine-color-background-1) !important;
-	
+
 	&:hover {
 		background-color: var(--mantine-color-background-2) !important;
 	}

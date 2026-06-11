@@ -11,7 +11,7 @@
 .menuDropdown {
 	border-color: var(--mantine-color-background-2) !important;
 	font-weight: 600;
-	background:var(--mantine-color-background-0) !important;
+	background: var(--mantine-color-background-0) !important;
 }
 
 .menuArrow {

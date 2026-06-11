@@ -1,7 +1,8 @@
 .bookmarkListRowWrap {
 	display: flex;
 	align-items: center;
-	padding: calc(var(--settings-vertical-padding) * 1px) calc(var(--settings-horizontal-padding) * 1px);
+	padding: calc(var(--settings-vertical-padding) * 1px)
+		calc(var(--settings-horizontal-padding) * 1px);
 	cursor: pointer;
 	text-decoration: none;
 	color: inherit;

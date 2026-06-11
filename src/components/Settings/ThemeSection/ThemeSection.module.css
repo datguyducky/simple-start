@@ -9,7 +9,7 @@
 .light {
 	background-color: #ffffff;
 	border-color: #e9ecef;
-	
+
 	&:hover {
 		background-color: #e9ecef;
 	}
@@ -18,7 +18,7 @@
 .dark {
 	background-color: #181818;
 	border-color: #464646;
-	
+
 	&:hover {
 		background-color: #464646;
 	}
@@ -35,7 +35,7 @@
 	background-color: var(--mantine-color-background-1);
 	border-color: var(--mantine-color-background-2);
 	color: var(--mantine-color-background-6);
-	
+
 	&:hover {
 		background-color: var(--mantine-color-background-2);
 	}
