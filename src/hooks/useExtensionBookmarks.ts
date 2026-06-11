@@ -79,10 +79,6 @@ export const useExtensionBookmarks = ({ categoryId }: UseExtensionBookmarksProps
 
 	const syncBookmarkChanges = useCallback(
 		async (id: string, changeInfo: BookmarkChangeInfo) => {
-			if (changeInfo.url === undefined) {
-				return;
-			}
-
 			setBookmarks((prevBookmarks) =>
 				prevBookmarks.map((bookmark) =>
 					bookmark.id === id ? { ...bookmark, ...changeInfo } : bookmark,
@@ -131,13 +127,13 @@ export const useExtensionBookmarks = ({ categoryId }: UseExtensionBookmarksProps
 					...prevUncategorizedBookmarks,
 					bookmark,
 				]);
-			} else {
+			} else if (categoryId === bookmark.parentId) {
 				setBookmarks((prevBookmarks) => [...prevBookmarks, bookmark]);
 			}
 
 			await getExtensionTree();
 		},
-		[getExtensionTree],
+		[categoryId, getExtensionTree],
 	);
 
 	const syncBookmarkMove = useCallback(
@@ -148,15 +144,28 @@ export const useExtensionBookmarks = ({ categoryId }: UseExtensionBookmarksProps
 				return;
 			}
 
-			if (extensionRoot?.id === moveInfo.parentId) {
+			const extensionRootId = extensionRoot?.id;
+
+			if (extensionRootId === moveInfo.parentId || extensionRootId === moveInfo.oldParentId) {
 				await retrieveExtensionRoot();
-			} else {
-				await retrieveCategoryBookmarks(moveInfo.parentId);
+			}
+
+			if (
+				categoryId &&
+				(categoryId === moveInfo.parentId || categoryId === moveInfo.oldParentId)
+			) {
+				await retrieveCategoryBookmarks(categoryId);
 			}
 
 			await getExtensionTree();
 		},
-		[extensionRoot?.id, getExtensionTree, retrieveCategoryBookmarks, retrieveExtensionRoot],
+		[
+			categoryId,
+			extensionRoot?.id,
+			getExtensionTree,
+			retrieveCategoryBookmarks,
+			retrieveExtensionRoot,
+		],
 	);
 
 	useEffect(() => {
@@ -187,7 +196,7 @@ export const useExtensionBookmarks = ({ categoryId }: UseExtensionBookmarksProps
 			browser.bookmarks.onRemoved.removeListener(handleBookmarkDeletion);
 			browser.bookmarks.onMoved.removeListener(handleBookmarkMove);
 		};
-	}, [bookmarks.length, uncategorizedBookmarks.length]);
+	}, [syncBookmarkChanges, syncBookmarkCreation, syncBookmarkDeletion, syncBookmarkMove]);
 
 	const createBookmark = async ({ name, url, bookmarkCategoryId }: CreateBookmarkValues) => {
 		const extensionRootId = await getExtensionRootId();
