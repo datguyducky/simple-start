@@ -24,8 +24,42 @@ type StoredCustomTheme = {
 	};
 };
 
+const isString = (value: unknown): value is string => {
+	return typeof value === 'string';
+};
+
+const isStringTuple = (value: unknown): value is CustomThemeColors['background'] => {
+	return Array.isArray(value) && value.length === 10 && value.every(isString);
+};
+
 const isStoredCustomTheme = (value: unknown): value is StoredCustomTheme => {
-	return typeof value === 'object' && value !== null && 'colors' in value;
+	if (typeof value !== 'object' || value === null) {
+		return false;
+	}
+
+	const valueRecord = value as Record<string, unknown>;
+	const colors = valueRecord.colors;
+	if (typeof colors !== 'object' || colors === null) {
+		return false;
+	}
+
+	const colorsRecord = colors as Record<string, unknown>;
+	return isStringTuple(colorsRecord.background) && isStringTuple(colorsRecord['custom-primary']);
+};
+
+const toStoredCustomTheme = (value: unknown): StoredCustomTheme | null => {
+	if (!isStoredCustomTheme(value)) {
+		return null;
+	}
+
+	const otherText = value.other?.text;
+	return {
+		colors: {
+			background: value.colors.background,
+			'custom-primary': value.colors['custom-primary'],
+		},
+		other: isString(otherText) ? { text: otherText } : undefined,
+	};
 };
 
 const formatCustomThemeName = (name: string) => {
@@ -61,18 +95,21 @@ export const useExtensionTheme = ({ defaultValue = 'light' }: UseExtensionThemeP
 		const legacyCustomThemes: CustomThemesByName = {};
 
 		for (const [storageKey, value] of Object.entries(legacyStorage)) {
-			if (!storageKey.startsWith('created-theme-') || !isStoredCustomTheme(value)) {
+			const storedTheme = toStoredCustomTheme(value);
+			if (!storageKey.startsWith('created-theme-') || !storedTheme) {
 				continue;
 			}
+
+			const fallbackText = '#101113';
 
 			legacyCustomThemes[storageKey] = {
 				name: storageKey,
 				colors: {
-					background: value.colors.background,
-					'custom-primary': value.colors['custom-primary'],
+					background: storedTheme.colors.background,
+					'custom-primary': storedTheme.colors['custom-primary'],
 				},
 				other: {
-					text: value.other?.text ?? value.colors.text ?? '#101113',
+					text: storedTheme.other?.text ?? fallbackText,
 				},
 			};
 		}

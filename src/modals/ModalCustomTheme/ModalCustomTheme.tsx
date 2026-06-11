@@ -81,14 +81,16 @@ const getThemeColorValues = (
 	const backgroundArray = isAdvancedSettingsOpen
 		? Array.from(
 				{ length: 10 },
-				(_, index) => values[`background${index}` as keyof ModalCustomThemeValues] ?? '',
+				(_, index) =>
+					values[`background${String(index)}` as keyof ModalCustomThemeValues] ?? '',
 			)
 		: [...generateColors(values.backgroundBase ?? '#1c1f24')];
 
 	const primaryArray = isAdvancedSettingsOpen
 		? Array.from(
 				{ length: 10 },
-				(_, index) => values[`primary${index}` as keyof ModalCustomThemeValues] ?? '',
+				(_, index) =>
+					values[`primary${String(index)}` as keyof ModalCustomThemeValues] ?? '',
 			)
 		: [...generateColors(values.primaryBase ?? '#228be6')];
 
@@ -157,12 +159,14 @@ export const ModalCustomTheme = ({
 	useEffect(() => {
 		if (mode === 'edit' && initialValues) {
 			setValues(getEditThemeValues(initialValues));
-			setIsAdvancedSettingsOpen(false);
 		} else {
 			// making sure that the custom theme form is empty when going from the "edit" mode to the "create"
 			reset();
-			setIsAdvancedSettingsOpen(false);
 		}
+
+		setTimeout(() => {
+			setIsAdvancedSettingsOpen(false);
+		}, 0);
 
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [mode, initialValues]);
