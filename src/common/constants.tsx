@@ -1,4 +1,4 @@
-import { IconCapsuleHorizontal, IconMenu2 } from '@tabler/icons-react';
+/* eslint-disable react-refresh/only-export-components */
 
 import {
 	type AllExtensionSettings,
@@ -7,9 +7,11 @@ import {
 	type GeneralSettings,
 } from '@/types/settingsValues';
 
+export type AvailableViewIcon = 'capsules' | 'list';
+
 type AvailableView = {
 	id: number;
-	icon: JSX.Element;
+	icon: AvailableViewIcon;
 	title: 'Capsules' | 'List';
 };
 
@@ -29,12 +31,12 @@ export const constants: Constants = {
 	availableViews: [
 		{
 			id: 1,
-			icon: <IconCapsuleHorizontal size={18} />,
+			icon: 'capsules',
 			title: 'Capsules',
 		},
 		{
 			id: 3,
-			icon: <IconMenu2 size={18} />,
+			icon: 'list',
 			title: 'List',
 		},
 	],
