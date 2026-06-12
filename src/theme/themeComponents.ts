@@ -11,6 +11,8 @@ import {
 	Overlay,
 	Select,
 	Notification,
+	Popover,
+	Kbd,
 } from '@mantine/core';
 
 import classes from './theme.module.css';
@@ -117,5 +119,15 @@ export const componentsOverrides = {
 				'--notification-color': theme.colors[theme.primaryColor][6],
 			},
 		}),
+	}),
+	Popover: Popover.extend({
+		classNames: {
+			dropdown: classes.popoverDropdown,
+		},
+	}),
+	Kbd: Kbd.extend({
+		classNames: {
+			root: classes.kbdRoot,
+		},
 	}),
 };
