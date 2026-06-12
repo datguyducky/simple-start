@@ -3,6 +3,7 @@ import { Box, Text } from '@mantine/core';
 import { type CapsuleSettings } from '@/types/settingsValues';
 
 import classes from './BookmarkCapsule.module.css';
+import { FAVICONS_API_URL } from '@/common/constants.tsx';
 
 type BookmarkCapsuleProps = {
 	title: string;
@@ -27,7 +28,7 @@ export const BookmarkCapsule = ({ title, url, settings }: BookmarkCapsuleProps) 
 		>
 			<Box className={classes.faviconWrap}>
 				<img
-					src={`https://simple-start-api.fly.dev/icon?url=${cleanedUrl}&size=8..${perfectIconSize}..${maxIconSize}`}
+					src={`${FAVICONS_API_URL}/icon?url=${cleanedUrl}&size=8..${perfectIconSize}..${maxIconSize}`}
 					height={settings.capsuleIconSize}
 					width={settings.capsuleIconSize}
 					alt=""

@@ -198,3 +198,5 @@ export const OPEN_BOOKMARK_SHORTCUTS = [
 ] as const;
 
 export const ALL_SHORTCUTS = Object.values(SHORTCUTS);
+
+export const FAVICONS_API_URL = 'https://simple-start-api.duckybox.mytymon.com';
