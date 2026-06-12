@@ -3,6 +3,7 @@ import { Box, Text, Group } from '@mantine/core';
 import { ListSettings } from '@/types/settingsValues';
 
 import classes from './BookmarkListRow.module.css';
+import { FAVICONS_API_URL } from '@/common/constants.tsx';
 
 type BookmarkListRowProps = {
 	title: string;
@@ -30,7 +31,7 @@ export const BookmarkListRow = ({ title, url, isOdd, settings }: BookmarkListRow
 			<Group gap={24} align="center" style={{ width: '100%' }}>
 				<Box className={classes.faviconWrap} flex={1}>
 					<img
-						src={`https://simple-start-api.fly.dev/icon?url=${cleanedUrl}&size=8..${perfectIconSize}..${maxIconSize}`}
+						src={`${FAVICONS_API_URL}/icon?url=${cleanedUrl}&size=8..${perfectIconSize}..${maxIconSize}`}
 						height={settings.listIconSize}
 						width={settings.listIconSize}
 						style={{ marginRight: 8 }}
