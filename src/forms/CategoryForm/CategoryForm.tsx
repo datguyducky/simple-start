@@ -35,7 +35,7 @@ export const CategoryForm = ({
 	editCategory,
 	initialValues,
 }: CategoryFormProps) => {
-	const { onSubmit, getInputProps, isValid, isDirty } = useForm<CategoryFormValues>({
+	const form = useForm<CategoryFormValues>({
 		initialValues: initialValues ?? {
 			categoryName: '',
 			defaultCategory: false,
@@ -100,7 +100,7 @@ export const CategoryForm = ({
 
 	return (
 		<form
-			onSubmit={onSubmit(mode === 'create' ? handleCreateCategory : handleEditCategory)}
+			onSubmit={form.onSubmit(mode === 'create' ? handleCreateCategory : handleEditCategory)}
 			noValidate
 		>
 			<TextInput
@@ -109,17 +109,17 @@ export const CategoryForm = ({
 				required
 				placeholder="e.g. Home"
 				data-autofocus="true"
-				{...getInputProps('categoryName')}
+				{...form.getInputProps('categoryName')}
 			/>
 
 			<Checkbox
 				label="Set this category as a default one"
 				mb="xl"
-				{...getInputProps('defaultCategory', { type: 'checkbox' })}
+				{...form.getInputProps('defaultCategory', { type: 'checkbox' })}
 			/>
 
 			<Group justify="flex-end">
-				<Button type="submit" disabled={!isValid() || !isDirty()}>
+				<Button type="submit" disabled={!form.isValid() || !form.isDirty()}>
 					{mode === 'create' ? 'Create new category' : 'Save changes'}
 				</Button>
 			</Group>

@@ -31,11 +31,10 @@ export const CapsulesSettingsForm = ({ openResetModal }: CapsulesSettingsFormPro
 	const { extensionSettings, saveExtensionSettings, hasCapsuleSettingsChanged } =
 		useExtensionSettings();
 
-	const { getInputProps, setValues, onSubmit, values, resetDirty, isDirty, isValid } =
-		useForm<CapsuleSettings>({
-			validate: schemaResolver(capsulesSettingsSchema),
-			validateInputOnChange: true,
-		});
+	const form = useForm<CapsuleSettings>({
+		validate: schemaResolver(capsulesSettingsSchema),
+		validateInputOnChange: true,
+	});
 
 	useEffect(() => {
 		if (Object.keys(extensionSettings).length) {
@@ -43,20 +42,21 @@ export const CapsulesSettingsForm = ({ openResetModal }: CapsulesSettingsFormPro
 				Object.entries(extensionSettings).filter(([key]) => key.includes('capsule')),
 			) as CapsuleSettings;
 
-			setValues({
+			const values = {
 				...capsuleSettings,
 				capsuleLabelColor:
 					capsuleSettings.capsuleLabelColor === null
 						? ''
 						: capsuleSettings.capsuleLabelColor,
-			});
+			};
 
-			resetDirty();
+			form.setValues(values);
+			form.resetDirty(values);
 		}
 	}, [extensionSettings]);
 
-	const handleSaveExtensionSettings = (formValues: typeof values) => {
-		if (!isDirty()) {
+	const handleSaveExtensionSettings = (formValues: CapsuleSettings) => {
+		if (!form.isDirty()) {
 			return;
 		}
 
@@ -76,27 +76,30 @@ export const CapsulesSettingsForm = ({ openResetModal }: CapsulesSettingsFormPro
 			},
 		);
 
-		resetDirty();
+		form.resetDirty();
 	};
 
 	return (
-		<Box onSubmit={onSubmit(handleSaveExtensionSettings)} noValidate component="form">
+		<Box onSubmit={form.onSubmit(handleSaveExtensionSettings)} noValidate component="form">
 			<SimpleGrid cols={2} spacing={16} mb={24}>
 				<Stack gap={12} align="flex-start">
-					<NumberInput label="Capsule size" {...getInputProps('capsuleSize')} />
+					<NumberInput label="Capsule size" {...form.getInputProps('capsuleSize')} />
 
 					<NumberInput
 						label="Space between capsules"
-						{...getInputProps('capsuleSpacing')}
+						{...form.getInputProps('capsuleSpacing')}
 					/>
 
-					<NumberInput label="Favicon size" {...getInputProps('capsuleIconSize')} />
+					<NumberInput label="Favicon size" {...form.getInputProps('capsuleIconSize')} />
 
 					<Group align="flex-start">
-						<NumberInput label="Labels size" {...getInputProps('capsuleLabelSize')} />
+						<NumberInput
+							label="Labels size"
+							{...form.getInputProps('capsuleLabelSize')}
+						/>
 
 						<ColorInput
-							{...getInputProps('capsuleLabelColor')}
+							{...form.getInputProps('capsuleLabelColor')}
 							format="hex"
 							label="Label color"
 						/>
@@ -104,21 +107,21 @@ export const CapsulesSettingsForm = ({ openResetModal }: CapsulesSettingsFormPro
 
 					<Checkbox
 						label="Use bold text for labels"
-						{...getInputProps('capsuleLabelBold', {
+						{...form.getInputProps('capsuleLabelBold', {
 							type: 'checkbox',
 						})}
 					/>
 
 					<Checkbox
 						label="Use italic text for labels"
-						{...getInputProps('capsuleLabelItalic', {
+						{...form.getInputProps('capsuleLabelItalic', {
 							type: 'checkbox',
 						})}
 					/>
 
 					<Checkbox
 						label="Hide labels for bookmarks"
-						{...getInputProps('capsuleHiddenName', {
+						{...form.getInputProps('capsuleHiddenName', {
 							type: 'checkbox',
 						})}
 					/>
@@ -127,13 +130,13 @@ export const CapsulesSettingsForm = ({ openResetModal }: CapsulesSettingsFormPro
 				<Group gap={0}>
 					<Divider orientation="vertical" mr={16} />
 
-					<Group gap={values.capsuleSpacing} mx="auto">
+					<Group gap={form.values.capsuleSpacing} mx="auto">
 						{constants.exampleBookmarks.map((bookmark) => (
 							<BookmarkCapsule
 								key={bookmark.id}
 								title={bookmark.name}
 								url={bookmark.url}
-								settings={values}
+								settings={form.values}
 							/>
 						))}
 					</Group>
@@ -148,7 +151,7 @@ export const CapsulesSettingsForm = ({ openResetModal }: CapsulesSettingsFormPro
 				>
 					Reset to default
 				</Button>
-				<Button type="submit" disabled={!isValid() || !isDirty()}>
+				<Button type="submit" disabled={!form.isValid() || !form.isDirty()}>
 					Save
 				</Button>
 			</Group>

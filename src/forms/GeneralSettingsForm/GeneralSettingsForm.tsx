@@ -26,25 +26,26 @@ export const GeneralSettingsForm = ({ openResetModal }: GeneralSettingsFormProps
 	const { extensionSettings, saveExtensionSettings, hasGeneralSettingsChanged } =
 		useExtensionSettings();
 
-	const { getInputProps, setValues, onSubmit, values, resetDirty, isDirty, isValid } =
-		useForm<GeneralSettings>({
-			validate: schemaResolver(generalSettingsSchema),
-			validateInputOnChange: true,
-		});
+	const form = useForm<GeneralSettings>({
+		validate: schemaResolver(generalSettingsSchema),
+		validateInputOnChange: true,
+	});
 
 	useEffect(() => {
 		if (Object.keys(extensionSettings).length) {
-			setValues({
+			const values = {
 				oneView: extensionSettings.oneView,
 				oneViewHeadingGap: extensionSettings.oneViewHeadingGap,
 				oneViewCategoriesGap: extensionSettings.oneViewCategoriesGap,
-			});
-			resetDirty();
+			};
+
+			form.setValues(values);
+			form.resetDirty(values);
 		}
 	}, [extensionSettings]);
 
-	const handleSaveExtensionSettings = (formValues: typeof values) => {
-		if (!isDirty()) {
+	const handleSaveExtensionSettings = (formValues: GeneralSettings) => {
+		if (!form.isDirty()) {
 			return;
 		}
 
@@ -64,32 +65,32 @@ export const GeneralSettingsForm = ({ openResetModal }: GeneralSettingsFormProps
 			},
 		);
 
-		resetDirty();
+		form.resetDirty();
 	};
 
 	return (
 		<Stack>
-			<Box component="form" onSubmit={onSubmit(handleSaveExtensionSettings)} noValidate>
+			<Box component="form" onSubmit={form.onSubmit(handleSaveExtensionSettings)} noValidate>
 				<Stack gap={16} mb={24}>
 					<Checkbox
 						label="One view mode"
 						description="Display all categories and their bookmarks in a single view"
-						{...getInputProps('oneView', { type: 'checkbox' })}
+						{...form.getInputProps('oneView', { type: 'checkbox' })}
 					/>
 
-					{values.oneView && (
+					{form.values.oneView && (
 						<SimpleGrid cols={2} spacing={16}>
 							<NumberInput
 								label="Heading gap"
 								description="Spacing below the category title"
 								min={0}
-								{...getInputProps('oneViewHeadingGap')}
+								{...form.getInputProps('oneViewHeadingGap')}
 							/>
 							<NumberInput
 								label="Categories gap"
 								description="Spacing between categories"
 								min={0}
-								{...getInputProps('oneViewCategoriesGap')}
+								{...form.getInputProps('oneViewCategoriesGap')}
 							/>
 						</SimpleGrid>
 					)}
@@ -105,7 +106,7 @@ export const GeneralSettingsForm = ({ openResetModal }: GeneralSettingsFormProps
 					>
 						Reset to default
 					</Button>
-					<Button type="submit" disabled={!isValid() || !isDirty()}>
+					<Button type="submit" disabled={!form.isValid() || !form.isDirty()}>
 						Save
 					</Button>
 				</Group>

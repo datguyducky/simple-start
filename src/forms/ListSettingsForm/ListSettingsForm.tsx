@@ -32,11 +32,10 @@ export const ListSettingsForm = ({ openResetModal }: ListSettingsFormProps) => {
 	const { extensionSettings, saveExtensionSettings, hasListSettingsChanged } =
 		useExtensionSettings();
 
-	const { getInputProps, setValues, onSubmit, values, resetDirty, isDirty, isValid } =
-		useForm<ListSettings>({
-			validate: schemaResolver(listSettingsSchema),
-			validateInputOnChange: true,
-		});
+	const form = useForm<ListSettings>({
+		validate: schemaResolver(listSettingsSchema),
+		validateInputOnChange: true,
+	});
 
 	useEffect(() => {
 		if (Object.keys(extensionSettings).length) {
@@ -44,18 +43,20 @@ export const ListSettingsForm = ({ openResetModal }: ListSettingsFormProps) => {
 				Object.entries(extensionSettings).filter(([key]) => key.includes('list')),
 			) as ListSettings;
 
-			setValues({
+			const values = {
 				...listSettings,
 				listUrlColor: listSettings.listUrlColor === null ? '' : listSettings.listUrlColor,
 				listNameColor:
 					listSettings.listNameColor === null ? '' : listSettings.listNameColor,
-			});
-			resetDirty();
+			};
+
+			form.setValues(values);
+			form.resetDirty(values);
 		}
 	}, [extensionSettings]);
 
-	const handleSaveExtensionSettings = (formValues: typeof values) => {
-		if (!isDirty()) {
+	const handleSaveExtensionSettings = (formValues: ListSettings) => {
+		if (!form.isDirty()) {
 			return;
 		}
 
@@ -75,7 +76,7 @@ export const ListSettingsForm = ({ openResetModal }: ListSettingsFormProps) => {
 			},
 		);
 
-		resetDirty();
+		form.resetDirty();
 	};
 
 	return (
@@ -85,13 +86,17 @@ export const ListSettingsForm = ({ openResetModal }: ListSettingsFormProps) => {
 					Preview:
 				</Text>
 
-				<Stack justify="flex-start" gap={values.listSpacing} style={{ overflow: 'hidden' }}>
+				<Stack
+					justify="flex-start"
+					gap={form.values.listSpacing}
+					style={{ overflow: 'hidden' }}
+				>
 					{constants.exampleBookmarks.map((bookmark, index) => (
 						<BookmarkListRow
 							key={bookmark.id}
 							title={bookmark.name}
 							url={bookmark.url}
-							settings={values}
+							settings={form.values}
 							isOdd={index % 2 === 0}
 						/>
 					))}
@@ -100,7 +105,7 @@ export const ListSettingsForm = ({ openResetModal }: ListSettingsFormProps) => {
 
 			<Divider />
 
-			<Box component="form" onSubmit={onSubmit(handleSaveExtensionSettings)} noValidate>
+			<Box component="form" onSubmit={form.onSubmit(handleSaveExtensionSettings)} noValidate>
 				<Text fw={700} mb={8}>
 					Customize:
 				</Text>
@@ -109,7 +114,7 @@ export const ListSettingsForm = ({ openResetModal }: ListSettingsFormProps) => {
 					<Stack gap={12} align="flex-start">
 						<Checkbox
 							label="Use striped rows"
-							{...getInputProps('listUseStrippedRows', {
+							{...form.getInputProps('listUseStrippedRows', {
 								type: 'checkbox',
 							})}
 						/>
@@ -117,45 +122,48 @@ export const ListSettingsForm = ({ openResetModal }: ListSettingsFormProps) => {
 						<Group align="flex-start">
 							<NumberInput
 								label="Vertical padding for each bookmark"
-								{...getInputProps('listVerticalPadding')}
+								{...form.getInputProps('listVerticalPadding')}
 							/>
 
 							<NumberInput
 								label="Horizontal padding for each bookmark"
-								{...getInputProps('listHorizontalPadding')}
+								{...form.getInputProps('listHorizontalPadding')}
 							/>
 						</Group>
 
 						<NumberInput
 							label="Spacing between bookmarks"
-							{...getInputProps('listSpacing')}
+							{...form.getInputProps('listSpacing')}
 						/>
 
 						<Group align="flex-start">
 							<NumberInput
 								label="Bookmark name size"
-								{...getInputProps('listNameSize')}
+								{...form.getInputProps('listNameSize')}
 							/>
 
 							<NumberInput
 								label="Bookmark url size"
-								{...getInputProps('listUrlSize')}
+								{...form.getInputProps('listUrlSize')}
 							/>
 
-							<NumberInput label="Icon size" {...getInputProps('listIconSize')} />
+							<NumberInput
+								label="Icon size"
+								{...form.getInputProps('listIconSize')}
+							/>
 						</Group>
 					</Stack>
 
 					<Stack gap={12} align="flex-start">
 						<Group align="flex-start">
 							<ColorInput
-								{...getInputProps('listNameColor')}
+								{...form.getInputProps('listNameColor')}
 								format="hex"
 								label="Color for bookmark name"
 							/>
 
 							<ColorInput
-								{...getInputProps('listUrlColor')}
+								{...form.getInputProps('listUrlColor')}
 								format="hex"
 								label="Color for bookmark url"
 							/>
@@ -165,28 +173,28 @@ export const ListSettingsForm = ({ openResetModal }: ListSettingsFormProps) => {
 							<Stack gap={12} align="flex-start">
 								<Checkbox
 									label="Use bold text for bookmark name"
-									{...getInputProps('listNameBold', {
+									{...form.getInputProps('listNameBold', {
 										type: 'checkbox',
 									})}
 								/>
 
 								<Checkbox
 									label="Use bold text for bookmark url"
-									{...getInputProps('listUrlBold', {
+									{...form.getInputProps('listUrlBold', {
 										type: 'checkbox',
 									})}
 								/>
 
 								<Checkbox
 									label="Use italic text for bookmark name"
-									{...getInputProps('listNameItalic', {
+									{...form.getInputProps('listNameItalic', {
 										type: 'checkbox',
 									})}
 								/>
 
 								<Checkbox
 									label="Use italic text for bookmark url"
-									{...getInputProps('listUrlItalic', {
+									{...form.getInputProps('listUrlItalic', {
 										type: 'checkbox',
 									})}
 								/>
@@ -195,13 +203,13 @@ export const ListSettingsForm = ({ openResetModal }: ListSettingsFormProps) => {
 							<Stack gap={12} align="flex-start">
 								<Checkbox
 									label="Hide bookmarks name"
-									{...getInputProps('listHiddenName', {
+									{...form.getInputProps('listHiddenName', {
 										type: 'checkbox',
 									})}
 								/>
 								<Checkbox
 									label="Hide bookmarks url"
-									{...getInputProps('listHiddenUrl', {
+									{...form.getInputProps('listHiddenUrl', {
 										type: 'checkbox',
 									})}
 								/>
@@ -218,7 +226,7 @@ export const ListSettingsForm = ({ openResetModal }: ListSettingsFormProps) => {
 					>
 						Reset to default
 					</Button>
-					<Button type="submit" disabled={!isValid() || !isDirty()}>
+					<Button type="submit" disabled={!form.isValid() || !form.isDirty()}>
 						Save
 					</Button>
 				</Group>
