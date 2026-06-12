@@ -18,6 +18,7 @@ export interface CapsuleSettings {
 	capsuleLabelBold: boolean;
 	capsuleLabelColor: string | null;
 	capsuleHiddenName: boolean;
+	capsuleIsHeart?: boolean;
 }
 
 export interface ListSettings {

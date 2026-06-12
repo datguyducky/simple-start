@@ -1,4 +1,4 @@
-import { Button, Grid, Group, Menu, Title, Text } from '@mantine/core';
+import { Button, Grid, Group, Menu, Title, Text, Box } from '@mantine/core';
 import {
 	IconPlus,
 	IconBookmark,
@@ -9,6 +9,7 @@ import {
 } from '@tabler/icons-react';
 import { browser } from 'wxt/browser';
 import { useHotkeys } from '@mantine/hooks';
+import { useState } from 'react';
 
 import { constants, SHORTCUTS } from '@/common/constants';
 import { useExtensionSettings } from '@/hooks/useExtensionSettings';
@@ -23,7 +24,23 @@ type NewTabHeaderProps = {
 };
 
 export const NewTabHeader = ({ onNewBookmarkClick, onNewCategoryClick }: NewTabHeaderProps) => {
-	const { currentView, handleNextView, viewLoading, toggleOneView } = useExtensionSettings();
+	const { currentView, handleNextView, viewLoading, toggleOneView, toggleCapsuleIsHeart } =
+		useExtensionSettings();
+
+	const [_clickCount, setClickCount] = useState(0);
+
+	const handleTitleClick = () => {
+		setClickCount((prev) => {
+			const nextCount = prev + 1;
+			if (nextCount === 7) {
+				handleAsyncAction(toggleCapsuleIsHeart, {
+					errorTitle: 'Heart capsules could not be toggled',
+				});
+				return 0;
+			}
+			return nextCount;
+		});
+	};
 
 	const currentViewIndex = constants.availableViews.findIndex((view) => view.id === currentView);
 	const nextView =
@@ -65,7 +82,9 @@ export const NewTabHeader = ({ onNewBookmarkClick, onNewCategoryClick }: NewTabH
 	return (
 		<Grid columns={3} style={{ marginBottom: 32 }}>
 			<Grid.Col span={1}>
-				<Title>Simple Start</Title>
+				<Box onClick={handleTitleClick} style={{ cursor: 'pointer', userSelect: 'none' }}>
+					<Title>Simple Start</Title>
+				</Box>
 			</Grid.Col>
 
 			{!viewLoading && (

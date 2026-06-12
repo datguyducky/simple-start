@@ -56,6 +56,7 @@ export const constants: Constants = {
 		capsuleLabelBold: false,
 		capsuleLabelColor: null,
 		capsuleHiddenName: false,
+		capsuleIsHeart: false,
 		// settings for the list view
 		listHiddenName: false,
 		listHiddenUrl: false,
@@ -113,6 +114,7 @@ export const defaultCapsuleSettings: CapsuleSettings = {
 	capsuleLabelBold: constants.defaultExtensionSettings.capsuleLabelBold,
 	capsuleLabelColor: constants.defaultExtensionSettings.capsuleLabelColor,
 	capsuleHiddenName: constants.defaultExtensionSettings.capsuleHiddenName,
+	capsuleIsHeart: constants.defaultExtensionSettings.capsuleIsHeart,
 };
 
 // Keyboard shortcuts, to be used with Mantine's useHotkeys hook, make sure to capitalize keys and labels. Label is used only on the KeyboardShortcutsPopover component.

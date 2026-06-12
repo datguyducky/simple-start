@@ -26,7 +26,9 @@ export const BookmarkCapsule = ({ title, url, settings }: BookmarkCapsuleProps) 
 			}}
 			c={settings.capsuleLabelColor ?? 'var(--mantine-color-text)'}
 		>
-			<Box className={classes.faviconWrap}>
+			<Box
+				className={`${classes.faviconWrap} ${settings.capsuleIsHeart ? classes.faviconWrapHeart : ''}`}
+			>
 				<img
 					src={`${FAVICONS_API_URL}/icon?url=${cleanedUrl}&size=8..${perfectIconSize}..${maxIconSize}`}
 					height={settings.capsuleIconSize}
