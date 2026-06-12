@@ -185,3 +185,14 @@
 		background-color: var(--mantine-color-background-2) !important;
 	}
 }
+
+.popoverDropdown {
+	background-color: var(--mantine-color-background-0);
+	border-color: var(--mantine-color-background-2);
+}
+
+.kbdRoot {
+	background-color: var(--mantine-color-background-2);
+	color: var(--mantine-color-text);
+	border-color: var(--mantine-color-background-3);
+}
