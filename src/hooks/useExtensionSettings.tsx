@@ -30,6 +30,7 @@ const getCapsuleSettings = (settings: AllExtensionSettings): CapsuleSettings => 
 	capsuleLabelBold: settings.capsuleLabelBold,
 	capsuleLabelColor: settings.capsuleLabelColor,
 	capsuleHiddenName: settings.capsuleHiddenName,
+	capsuleIsHeart: settings.capsuleIsHeart,
 });
 
 const getListSettings = (settings: AllExtensionSettings): ListSettings => ({
@@ -65,7 +66,8 @@ const hasCapsuleSettingsChangedFromDefault = (settings: CapsuleSettings) => {
 		settings.capsuleLabelItalic !== defaultCapsuleSettings.capsuleLabelItalic ||
 		settings.capsuleLabelBold !== defaultCapsuleSettings.capsuleLabelBold ||
 		settings.capsuleLabelColor !== defaultCapsuleSettings.capsuleLabelColor ||
-		settings.capsuleHiddenName !== defaultCapsuleSettings.capsuleHiddenName
+		settings.capsuleHiddenName !== defaultCapsuleSettings.capsuleHiddenName ||
+		settings.capsuleIsHeart !== defaultCapsuleSettings.capsuleIsHeart
 	);
 };
 
@@ -198,6 +200,12 @@ export const useExtensionSettings = () => {
 		await saveExtensionSettings(nextGeneralSettings);
 	};
 
+	const toggleCapsuleIsHeart = async () => {
+		await saveExtensionSettings({
+			capsuleIsHeart: !currentSettings.capsuleIsHeart,
+		});
+	};
+
 	return {
 		extensionSettings: currentSettings,
 		currentView: currentSettings.currentView,
@@ -208,5 +216,6 @@ export const useExtensionSettings = () => {
 		hasListSettingsChanged,
 		hasGeneralSettingsChanged,
 		toggleOneView,
+		toggleCapsuleIsHeart,
 	};
 };

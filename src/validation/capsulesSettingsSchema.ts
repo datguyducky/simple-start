@@ -9,4 +9,5 @@ export const capsulesSettingsSchema = z.object({
 	capsuleLabelBold: z.boolean(),
 	capsuleLabelItalic: z.boolean(),
 	capsuleHiddenName: z.boolean(),
+	capsuleIsHeart: z.boolean().optional(),
 });
