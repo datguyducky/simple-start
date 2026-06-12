@@ -1,7 +1,7 @@
 {
 	"name": "simple-start",
 	"private": true,
-	"version": "2.2.0",
+	"version": "2.3.0",
 	"description": "Highly customizable new tab extension with categorized bookmark groups",
 	"type": "module",
 	"scripts": {
