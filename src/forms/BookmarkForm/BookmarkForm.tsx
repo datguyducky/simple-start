@@ -47,7 +47,7 @@ export const BookmarkForm = ({
 	onEditBookmark,
 	initialValues,
 }: BookmarkFormProps) => {
-	const { onSubmit, getInputProps, isValid, isDirty } = useForm<BookmarkFormValues>({
+	const form = useForm<BookmarkFormValues>({
 		initialValues: initialValues ?? {
 			bookmarkName: '',
 			bookmarkUrl: '',
@@ -130,7 +130,9 @@ export const BookmarkForm = ({
 
 	return (
 		<form
-			onSubmit={onSubmit(mode === 'create' ? handleCreateNewBookmark : handleEditBookmark)}
+			onSubmit={form.onSubmit(
+				mode === 'create' ? handleCreateNewBookmark : handleEditBookmark,
+			)}
 			noValidate
 		>
 			<TextInput
@@ -139,14 +141,14 @@ export const BookmarkForm = ({
 				required
 				placeholder="e.g. DuckDuckGo"
 				data-autofocus="true"
-				{...getInputProps('bookmarkName')}
+				{...form.getInputProps('bookmarkName')}
 			/>
 			<TextInput
 				mb="xl"
 				label="Bookmark url"
 				required
 				placeholder="e.g. https://duckduckgo.com/"
-				{...getInputProps('bookmarkUrl')}
+				{...form.getInputProps('bookmarkUrl')}
 			/>
 
 			{categories.length > 0 ? (
@@ -160,7 +162,7 @@ export const BookmarkForm = ({
 					nothingFoundMessage="Category not found"
 					clearable
 					mb="xl"
-					{...getInputProps('bookmarkCategoryId')}
+					{...form.getInputProps('bookmarkCategoryId')}
 				/>
 			) : (
 				<>
@@ -172,7 +174,7 @@ export const BookmarkForm = ({
 			)}
 
 			<Group justify="flex-end">
-				<Button type="submit" disabled={!isValid() || !isDirty()}>
+				<Button type="submit" disabled={!form.isValid() || !form.isDirty()}>
 					{mode === 'create' ? 'Create new bookmark' : 'Save changes'}
 				</Button>
 			</Group>
