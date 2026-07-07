@@ -7,6 +7,9 @@ export default defineConfig({
 	manifest: {
 		name: 'Simple Start',
 		permissions: ['bookmarks', 'storage'],
+		chrome_settings_overrides: {
+			homepage: 'newtab.html',
+		},
 		browser_specific_settings: {
 			gecko: {
 				id: '{6938c509-173c-416e-b440-69a7218af76f}',
