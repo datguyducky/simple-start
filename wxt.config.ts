@@ -4,11 +4,11 @@ export default defineConfig({
 	modules: ['@wxt-dev/module-react'],
 	srcDir: 'src',
 	imports: false,
-	manifest: {
+	manifest: ({ browser }) => ({
 		name: 'Simple Start',
 		permissions: ['bookmarks', 'storage'],
 		chrome_settings_overrides: {
-			homepage: 'newtab.html',
+			homepage: browser === 'firefox' ? 'newtab.html' : undefined,
 		},
 		browser_specific_settings: {
 			gecko: {
@@ -19,5 +19,5 @@ export default defineConfig({
 				},
 			},
 		},
-	},
+	}),
 });
