@@ -38,7 +38,7 @@ export const ThemeSection = () => {
 							)}
 						/>
 
-						<Text size="sm" align="center">
+						<Text size="sm" ta="center">
 							Light Theme
 						</Text>
 					</Stack>
@@ -58,7 +58,7 @@ export const ThemeSection = () => {
 							)}
 						/>
 
-						<Text size="sm" align="center">
+						<Text size="sm" ta="center">
 							Dark Theme
 						</Text>
 					</Stack>
@@ -108,7 +108,7 @@ export const ThemeSection = () => {
 							<IconPlus size={32} />
 						</Box>
 
-						<Text size="sm" align="center">
+						<Text size="sm" ta="center">
 							Add Theme
 						</Text>
 					</Stack>
